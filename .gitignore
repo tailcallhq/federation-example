@@ -7,3 +7,7 @@
 /dataSources/
 /dataSources.local.xml
 .idea
+employees/target/
+products/target/
+hobbies/target
+family/target

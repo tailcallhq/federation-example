@@ -1,0 +1,401 @@
+[
+  {
+    "id": 1,
+    "details": {
+      "forename": "Jens",
+      "surname": "Neuse",
+      "location": {
+        "key": {
+          "name": "Germany"
+        }
+      },
+      "past_locations": [
+        {
+          "type": "city",
+          "name": "Ohio",
+          "country": {
+            "key": {
+              "name": "America"
+            }
+          }
+        },
+        {
+          "type": "city",
+          "name": "London",
+          "country": {
+            "key": {
+              "name": "England"
+            }
+          }
+        }
+      ]
+    },
+    "role": {
+      "departments": ["ENGINEERING", "MARKETING"],
+      "engineer_type": "BACKEND",
+      "title": ["Founder", "CEO"]
+    },
+    "notes": "Jens notes resolved by employees",
+    "start_date": "January 2020",
+    "updated_at": "2021-09-01T00:00:00Z"
+  },
+  {
+    "id": 2,
+    "details": {
+      "forename": "Dustin",
+      "surname": "Deus",
+      "location": {
+        "key": {
+          "name": "Germany"
+        }
+      },
+      "past_locations": [
+        {
+          "type": "city",
+          "name": "Ohio",
+          "country": {
+            "key": {
+              "name": "America"
+            }
+          }
+        },
+        {
+          "type": "city",
+          "name": "London",
+          "country": {
+            "key": {
+              "name": "England"
+            }
+          }
+        }
+      ]
+    },
+    "role": {
+      "departments": ["ENGINEERING"],
+      "engineer_type": "FULLSTACK",
+      "title": ["Co-founder", "Tech Lead"]
+    },
+    "notes": "Dustin notes resolved by employees",
+    "start_date": "July 2022",
+    "updated_at": "2021-09-01T00:00:00Z"
+  },
+  {
+    "id": 3,
+    "details": {
+      "forename": "Stefan",
+      "surname": "Avram",
+      "location": {
+        "key": {
+          "name": "America"
+        }
+      },
+      "past_locations": [
+        {
+          "type": "city",
+          "name": "Ohio",
+          "country": {
+            "key": {
+              "name": "America"
+            }
+          }
+        },
+        {
+          "type": "city",
+          "name": "London",
+          "country": {
+            "key": {
+              "name": "England"
+            }
+          }
+        }
+      ]
+    },
+    "role": {
+      "departments": ["MARKETING"],
+      "title": ["Co-founder", "Head of Growth"]
+    },
+    "notes": "Stefan notes resolved by employees",
+    "start_date": "June 2021",
+    "updated_at": "2021-09-01T00:00:00Z"
+  },
+  {
+    "id": 4,
+    "details": {
+      "forename": "Björn",
+      "surname": "Schwenzer",
+      "location": {
+        "key": {
+          "name": "Germany"
+        }
+      },
+      "past_locations": [
+        {
+          "type": "city",
+          "name": "Ohio",
+          "country": {
+            "key": {
+              "name": "America"
+            }
+          }
+        },
+        {
+          "type": "city",
+          "name": "London",
+          "country": {
+            "key": {
+              "name": "England"
+            }
+          }
+        }
+      ]
+    },
+    "role": {
+      "departments": ["OPERATIONS", "MARKETING"],
+      "operator_type": ["HUMAN_RESOURCES", "FINANCE"],
+      "title": ["Co-founder", "COO"]
+    },
+    "notes": "Björn notes resolved by employees",
+    "start_date": "July 2022",
+    "updated_at": "2021-09-01T00:00:00Z"
+  },
+  {
+    "id": 5,
+    "details": {
+      "forename": "Sergiy",
+      "surname": "Petrunin",
+      "location": {
+        "key": {
+          "name": "Ukraine"
+        }
+      },
+      "past_locations": [
+        {
+          "type": "city",
+          "name": "Ohio",
+          "country": {
+            "key": {
+              "name": "America"
+            }
+          }
+        },
+        {
+          "type": "city",
+          "name": "London",
+          "country": {
+            "key": {
+              "name": "England"
+            }
+          }
+        }
+      ]
+    },
+    "role": {
+      "departments": ["ENGINEERING"],
+      "engineer_type": "BACKEND",
+      "title": ["Senior GO Engineer"]
+    },
+    "notes": "Serigy notes resolved by employees",
+    "start_date": "July 2022",
+    "updated_at": "2021-09-01T00:00:00Z"
+  },
+  {
+    "id": 7,
+    "details": {
+      "forename": "Suvij",
+      "surname": "Surya",
+      "location": {
+        "key": {
+          "name": "India"
+        }
+      },
+      "past_locations": [
+        {
+          "type": "city",
+          "name": "Ohio",
+          "country": {
+            "key": {
+              "name": "America"
+            }
+          }
+        },
+        {
+          "type": "city",
+          "name": "London",
+          "country": {
+            "key": {
+              "name": "England"
+            }
+          }
+        }
+      ]
+    },
+    "role": {
+      "departments": ["ENGINEERING"],
+      "engineer_type": "FULLSTACK",
+      "title": ["Software Engineer"]
+    },
+    "notes": "Suvij notes resolved by employees",
+    "start_date": "September 2022",
+    "updated_at": "2021-09-01T00:00:00Z"
+  },
+  {
+    "id": 8,
+    "details": {
+      "forename": "Nithin",
+      "surname": "Kumar",
+      "location": {
+        "key": {
+          "name": "India"
+        }
+      },
+      "past_locations": [
+        {
+          "type": "city",
+          "name": "Ohio",
+          "country": {
+            "key": {
+              "name": "America"
+            }
+          }
+        },
+        {
+          "type": "city",
+          "name": "London",
+          "country": {
+            "key": {
+              "name": "England"
+            }
+          }
+        }
+      ]
+    },
+    "role": {
+      "departments": ["ENGINEERING"],
+      "engineer_type": "FULLSTACK",
+      "title": ["Software Engineer"]
+    },
+    "notes": "Nithin notes resolved by employees",
+    "start_date": "September 2022",
+    "updated_at": "2021-09-01T00:00:00Z"
+  },
+  {
+    "id": 10,
+    "details": {
+      "forename": "Eelco",
+      "surname": "Wiersma",
+      "location": {
+        "key": {
+          "name": "Netherlands"
+        }
+      },
+      "past_locations": [
+        {
+          "type": "city",
+          "name": "Ohio",
+          "country": {
+            "key": {
+              "name": "America"
+            }
+          }
+        },
+        {
+          "type": "city",
+          "name": "London",
+          "country": {
+            "key": {
+              "name": "England"
+            }
+          }
+        }
+      ]
+    },
+    "role": {
+      "departments": ["ENGINEERING"],
+      "engineer_type": "FRONTEND",
+      "title": ["Senior Frontend Engineer"]
+    },
+    "notes": "Eelco notes resolved by employees",
+    "start_date": "November 2022",
+    "updated_at": "2021-09-01T00:00:00Z"
+  },
+  {
+    "id": 11,
+    "details": {
+      "forename": "Alexandra",
+      "surname": "Neuse",
+      "location": {
+        "key": {
+          "name": "Germany"
+        }
+      },
+      "past_locations": [
+        {
+          "type": "city",
+          "name": "Ohio",
+          "country": {
+            "key": {
+              "name": "America"
+            }
+          }
+        },
+        {
+          "type": "city",
+          "name": "London",
+          "country": {
+            "key": {
+              "name": "England"
+            }
+          }
+        }
+      ]
+    },
+    "role": {
+      "departments": ["OPERATIONS"],
+      "operator_type": ["FINANCE"],
+      "title": ["Accounting & Finance"]
+    },
+    "notes": "Alexandra notes resolved by employees",
+    "start_date": "November 2022",
+    "updated_at": "2021-09-01T00:00:00Z"
+  },
+  {
+    "id": 12,
+    "details": {
+      "forename": "Nicole",
+      "surname": "Neuse",
+      "location": {
+        "key": {
+          "name": "Germany"
+        }
+      },
+      "past_locations": [
+        {
+          "type": "city",
+          "name": "Ohio",
+          "country": {
+            "key": {
+              "name": "America"
+            }
+          }
+        },
+        {
+          "type": "city",
+          "name": "London",
+          "country": {
+            "key": {
+              "name": "England"
+            }
+          }
+        }
+      ]
+    },
+    "role": {
+      "departments": ["OPERATIONS"],
+      "operator_type": ["HUMAN_RESOURCES"],
+      "title": ["HR Manager"]
+    },
+    "notes": "Nicole notes resolved by employees",
+    "start_date": "November 2022",
+    "updated_at": "2021-09-01T00:00:00Z"
+  }
+]

@@ -1,0 +1,239 @@
+[
+  {
+    "id": 1,
+    "hobbies": [
+      {
+        "type": "Exercise",
+        "category": "Sport"
+      },
+      {
+        "type": "Gaming",
+        "genres": ["Fps"],
+        "name": "Counter Strike",
+        "years_of_experience": 20.0
+      },
+      {
+        "type": "Other",
+        "name": "WunderGraph"
+      },
+      {
+        "type": "Programming",
+        "languages": ["Go", "Typescript"]
+      },
+      {
+        "type": "Travelling",
+        "countries_lived": [
+          {"key": {"name": "England"}},
+          {"key": {"name": "Germany"}}
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "hobbies": [
+      {
+        "type": "Exercise",
+        "category": "StrengthTraining"
+      },
+      {
+        "type": "Gaming",
+        "genres": ["Fps"],
+        "name": "Counter Strike",
+        "years_of_experience": 0.5
+      },
+      {
+        "type": "Programming",
+        "languages": ["Go", "Rust"]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "hobbies": [
+      {
+        "type": "Exercise",
+        "category": "Hiking"
+      },
+      {
+        "type": "Exercise",
+        "category": "Sport"
+      },
+      {
+        "type": "Other",
+        "name": "Reading"
+      },
+      {
+        "type": "Travelling",
+        "countries_lived": [
+          {"key": {"name": "America"}},
+          {"key": {"name": "Serbia"}}
+        ]
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "hobbies": [
+      {
+        "type": "Exercise",
+        "category": "Hiking"
+      },
+      {
+        "type": "Flying",
+        "plane_models": [
+          "Aquila AT01",
+          "Cessna C172",
+          "Cessna C206",
+          "Cirrus SR20",
+          "Cirrus SR22",
+          "Diamond DA40",
+          "Diamond HK36",
+          "Diamond DA20",
+          "Piper Cub",
+          "Pitts Special",
+          "Robin DR400"
+        ],
+        "years_of_experience": 20.0
+      },
+      {
+        "type": "Travelling",
+        "countries_lived": [
+          {"key": {"name": "America"}},
+          {"key": {"name": "Germany"}}
+        ]
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "hobbies": [
+      {
+        "type": "Other",
+        "name": "Building a house"
+      },
+      {
+        "type": "Other",
+        "name": "Formula 1"
+      },
+      {
+        "type": "Other",
+        "name": "Raising cats"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "hobbies": [
+      {
+        "type": "Gaming",
+        "genres": ["Board"],
+        "name": "Chess",
+        "years_of_experience": 9.5
+      },
+      {
+        "type": "Other",
+        "name": "Watching anime"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "hobbies": [
+      {
+        "type": "Exercise",
+        "category": "StrengthTraining"
+      },
+      {
+        "type": "Gaming",
+        "genres": ["Adventure", "Rpg", "Simulation", "Strategy"],
+        "name": "Miscellaneous",
+        "years_of_experience": 17.0
+      },
+      {
+        "type": "Other",
+        "name": "Watching anime"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "hobbies": [
+      {
+        "type": "Programming",
+        "languages": ["Typescript"]
+      },
+      {
+        "type": "Exercise",
+        "category": "Calisthenics"
+      },
+      {
+        "type": "Exercise",
+        "category": "Hiking"
+      },
+      {
+        "type": "Exercise",
+        "category": "StrengthTraining"
+      },
+      {
+        "type": "Other",
+        "name": "saas-ui"
+      },
+      {
+        "type": "Travelling",
+        "countries_lived": [
+          {"key": {"name": "Germany"}},
+          {"key": {"name": "Indonesia"}},
+          {"key": {"name": "Netherlands"}},
+          {"key": {"name": "Portugal"}},
+          {"key": {"name": "Spain"}},
+          {"key": {"name": "Thailand"}}
+        ]
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "hobbies": [
+      {
+        "type": "Other",
+        "name": "Spending time with the family"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "hobbies": [
+      {
+        "type": "Programming",
+        "languages": ["All"]
+      },
+      {
+        "type": "Exercise",
+        "category": "StrengthTraining"
+      },
+      {
+        "type": "Gaming",
+        "genres": [
+          "Adventure",
+          "Board",
+          "Card",
+          "Roguelite",
+          "Rpg",
+          "Simulation",
+          "Strategy"
+        ],
+        "name": "Miscellaneous",
+        "years_of_experience": 25.5
+      },
+      {
+        "type": "Travelling",
+        "countries_lived": [
+          {"key": {"name": "England"}},
+          {"key": {"name": "Korea"}},
+          {"key": {"name": "Taiwan"}}
+        ]
+      }
+    ]
+  }
+]
