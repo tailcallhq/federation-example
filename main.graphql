@@ -1,0 +1,7 @@
+schema @server @upstream {
+  query: Query
+}
+
+type Query {
+  greet: String! @expr(body: "Hello, World!")
+}
