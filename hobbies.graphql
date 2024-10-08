@@ -1,8 +1,17 @@
+schema @server(port: 8002) @upstream(baseURL: "http://localhost:8082") {
+  query: Query
+}
+
+type Query {
+  employeeHobbies(id: Int!): Employee @http(path: "/employees/{{.args.id}}/hobbies")
+  sdk(upc: String!): SDK @http(path: "/sdk/{{.args.upc}}")
+}
+
 enum ExerciseType {
-  CALISTHENICS
-  HIKING
-  SPORT
-  STRENGTH_TRAINING
+  CALISTHENICS @alias(options: ["Calisthenics"])
+  HIKING @alias(options: ["Hiking"])
+  SPORT @alias(options: ["FishSport"])
+  STRENGTH_TRAINING @alias(options: ["Strength Training"])
 }
 
 type Exercise {
@@ -19,14 +28,14 @@ type Flying implements Experience {
 }
 
 enum GameGenre {
-  ADVENTURE
-  BOARD
-  FPS
-  CARD
-  RPG
-  ROGUELITE
-  SIMULATION
-  STRATEGY
+  ADVENTURE @alias(options: ["Adventure"])
+  BOARD @alias(options: ["Board"])
+  FPS @alias(options: ["Fps"])
+  CARD @alias(options: ["Card"])
+  RPG @alias(options: ["Rpg"])
+  ROGUELITE @alias(options: ["Roguelite"])
+  SIMULATION @alias(options: ["Simulation"])
+  STRATEGY @alias(options: ["Strategy"])
 }
 
 type Gaming implements Experience {
@@ -40,10 +49,10 @@ type Other {
 }
 
 enum ProgrammingLanguage {
-  CSHARP
-  GO
-  RUST
-  TYPESCRIPT
+  CSHARP @alias(options: ["CSharp"])
+  GO @alias(options: ["Go"])
+  RUST @alias(options: ["Rust"])
+  TYPESCRIPT @alias(options: ["Typescript"])
 }
 
 type Programming {
@@ -51,17 +60,17 @@ type Programming {
 }
 
 enum Country {
-  AMERICA
-  ENGLAND
-  GERMANY
-  INDONESIA
-  KOREA
-  NETHERLANDS
-  PORTUGAL
-  SERBIA
-  SPAIN
-  TAIWAN
-  THAILAND
+  AMERICA @alias(options: ["America"])
+  ENGLAND @alias(options: ["England"])
+  GERMANY @alias(options: ["Germany"])
+  INDONESIA @alias(options: ["Indonesia"])
+  KOREA @alias(options: ["Korea"])
+  NETHERLANDS @alias(options: ["Netherlands"])
+  PORTUGAL @alias(options: ["Portugal"])
+  SERBIA @alias(options: ["Serbian"])
+  SPAIN @alias(options: ["Spain"])
+  TAIWAN @alias(options: ["Taiwan"])
+  THAILAND @alias(options: ["Thailand"])
 }
 
 type Travelling {
@@ -77,5 +86,5 @@ type Employee @key(fields: "id") {
 
 type SDK @key(fields: "upc") {
   upc: ID!
-  clientLanguages: [ProgrammingLanguage!]!
+  client_languages: [ProgrammingLanguage!]! @modify(name: "clientLanguages")
 }

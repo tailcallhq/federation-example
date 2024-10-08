@@ -1,6 +1,5 @@
-use axum::http::StatusCode;
 use axum::{
-    extract::{Path, Query, State},
+    extract::{Query, State},
     response::IntoResponse,
     routing::get,
     Json, Router,
@@ -9,7 +8,7 @@ use hyper::Server;
 use serde::{Deserialize, Serialize};
 use std::env;
 use std::path::PathBuf;
-use std::{collections::HashMap, fs, net::SocketAddr, sync::Arc};
+use std::{fs, net::SocketAddr, sync::Arc};
 
 #[derive(Debug, Deserialize)]
 struct SearchInput {

@@ -1,11 +1,13 @@
-schema {
-  query: Queries
+schema @server(port: 8003) @upstream(baseURL: "http://localhost:8083") {
+  query: Query
 }
 
 type Queries {
-  productTypes: [Products!]!
-  topSecretFederationFacts: [TopSecretFact!]! @requiresScopes(scopes: [["read:fact"], ["read:all"]])
-  factTypes: [TopSecretFactType!]
+  productTypes: [Products!]! @http(path: "/products")
+  topSecretFederationFacts: [TopSecretFact!]!
+    @requiresScopes(scopes: [["read:fact"], ["read:all"]])
+    @http(path: "/top_secret_facts")
+  factTypes: [TopSecretFactType!] @http(path: "/top_secret_facts")
 }
 
 enum TopSecretFactType @authenticated {

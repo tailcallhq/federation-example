@@ -1,17 +1,29 @@
+schema @server(port: 8001) @upstream(baseURL: "http://localhost:8081") {
+  query: Query
+}
+
 type Query {
   findEmployees(criteria: SearchInput): [Employee!]!
+    @http(
+      path: "/employees/family"
+      query: [
+        { key: "has_pets", value: "{{.args.criteria.hasPets}}", skipEmpty: true }
+        { key: "nationality", value: "{{.args.criteria.nationality}}", skipEmpty: true }
+        { key: "nested", value: "{{.args.criteria.nested}}", skipEmpty: true }
+      ]
+    )
 }
 
 enum Class {
-  FISH
-  MAMMAL
-  REPTILE
+  FISH @alias(options: ["Fish"])
+  MAMMAL @alias(options: ["Mammal"])
+  REPTILE @alias(options: ["Reptile"])
 }
 
 enum Gender {
-  FEMALE
-  MALE
-  UNKNOWN
+  FEMALE @alias(options: ["Male"])
+  MALE @alias(options: ["Female"])
+  UNKNOWN @alias(options: ["Unknown"])
 }
 
 interface Animal {
@@ -26,8 +38,8 @@ interface Pet implements Animal {
 }
 
 enum CatType {
-  HOME
-  STREET
+  HOME @alias(options: ["Home"])
+  STREET @alias(options: ["Street"])
 }
 
 type Alligator implements Pet & Animal {
@@ -45,10 +57,10 @@ type Cat implements Pet & Animal {
 }
 
 enum DogBreed {
-  GOLDEN_RETRIEVER
-  POODLE
-  ROTTWEILER
-  YORKSHIRE_TERRIER
+  GOLDEN_RETRIEVER @alias(options: ["Golden Retriever"])
+  POODLE @alias(options: ["Poodle"])
+  ROTTWEILER @alias(options: ["Rottweiler"])
+  YORKSHIRE_TERRIER @alias(options: ["Yorkshire Terrier"])
 }
 
 type Dog implements Pet & Animal {
@@ -62,35 +74,37 @@ type Mouse implements Pet & Animal {
   class: Class!
   gender: Gender!
   name: String!
+  _mouse: String
 }
 
 type Pony implements Pet & Animal {
   class: Class!
   gender: Gender!
   name: String!
+  _pony: String
 }
 
 enum MaritalStatus {
-  ENGAGED
-  MARRIED
+  ENGAGED @alias(options: ["Engaged"])
+  MARRIED @alias(options: ["Married"])
 }
 
 enum Nationality {
-  AMERICAN
-  DUTCH
-  ENGLISH
-  GERMAN
-  INDIAN
-  SPANISH
-  UKRAINIAN
+  AMERICAN @alias(options: ["American"])
+  DUTCH @alias(options: ["Dutch"])
+  ENGLISH @alias(options: ["English"])
+  GERMAN @alias(options: ["German"])
+  INDIAN @alias(options: ["Indian"])
+  SPANISH @alias(options: ["Spanish"])
+  UKRAINIAN @alias(options: ["Ukrainian"])
 }
 
 type Details {
   forename: String! @shareable
   middlename: String @deprecated
   surname: String! @shareable
-  hasChildren: Boolean!
-  maritalStatus: MaritalStatus
+  has_children: Boolean! @modify(name: "hasChildren")
+  marital_status: MaritalStatus @modify(name: "maritalStatus")
   nationality: Nationality!
   pets: [Pet]
 }

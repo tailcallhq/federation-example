@@ -1,7 +1,7 @@
 use axum::{
     extract::{Json, Path, State},
     response::IntoResponse,
-    routing::{get, post},
+    routing::get,
     Router,
 };
 use hyper::Server;
@@ -123,9 +123,9 @@ async fn get_top_secret_facts(State(state): State<Arc<AppState>>) -> impl IntoRe
     Json(facts.clone()).into_response()
 }
 
-#[derive(Debug, Deserialize)]
-struct AddFactInput {
-    title: String,
-    description: String,
-    fact_type: String,
-}
+// #[derive(Debug, Deserialize)]
+// struct AddFactInput {
+//     pub title: String,
+//     pub description: String,
+//     pub fact_type: String,
+// }
