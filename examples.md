@@ -65,3 +65,24 @@
   }
 }
 ```
+
+```gql
+{
+  findEmployees {
+    id
+    details {
+      forename
+      surname
+      middlename
+      hasChildren
+      maritalStatus
+      nationality
+      pets {
+        name
+        gender
+        class
+      }
+    }
+  }
+}
+```
