@@ -1,34 +1,11 @@
 [
   {
     "id": 1,
+    "tag": "eng",
     "details": {
       "forename": "Jens",
       "surname": "Neuse",
-      "location": {
-        "key": {
-          "name": "Germany"
-        }
-      },
-      "past_locations": [
-        {
-          "type": "city",
-          "name": "Ohio",
-          "country": {
-            "key": {
-              "name": "America"
-            }
-          }
-        },
-        {
-          "type": "city",
-          "name": "London",
-          "country": {
-            "key": {
-              "name": "England"
-            }
-          }
-        }
-      ]
+      "location": "Germany"
     },
     "role": {
       "departments": ["ENGINEERING", "MARKETING"],
@@ -41,34 +18,11 @@
   },
   {
     "id": 2,
+    "tag": "eng",
     "details": {
       "forename": "Dustin",
       "surname": "Deus",
-      "location": {
-        "key": {
-          "name": "Germany"
-        }
-      },
-      "past_locations": [
-        {
-          "type": "city",
-          "name": "Ohio",
-          "country": {
-            "key": {
-              "name": "America"
-            }
-          }
-        },
-        {
-          "type": "city",
-          "name": "London",
-          "country": {
-            "key": {
-              "name": "England"
-            }
-          }
-        }
-      ]
+      "location": "Germany"
     },
     "role": {
       "departments": ["ENGINEERING"],
@@ -81,34 +35,11 @@
   },
   {
     "id": 3,
+    "tag": "cf",
     "details": {
       "forename": "Stefan",
       "surname": "Avram",
-      "location": {
-        "key": {
-          "name": "America"
-        }
-      },
-      "past_locations": [
-        {
-          "type": "city",
-          "name": "Ohio",
-          "country": {
-            "key": {
-              "name": "America"
-            }
-          }
-        },
-        {
-          "type": "city",
-          "name": "London",
-          "country": {
-            "key": {
-              "name": "England"
-            }
-          }
-        }
-      ]
+      "location": "America"
     },
     "role": {
       "departments": ["MARKETING"],
@@ -120,34 +51,11 @@
   },
   {
     "id": 4,
+    "tag": "hr",
     "details": {
       "forename": "Björn",
       "surname": "Schwenzer",
-      "location": {
-        "key": {
-          "name": "Germany"
-        }
-      },
-      "past_locations": [
-        {
-          "type": "city",
-          "name": "Ohio",
-          "country": {
-            "key": {
-              "name": "America"
-            }
-          }
-        },
-        {
-          "type": "city",
-          "name": "London",
-          "country": {
-            "key": {
-              "name": "England"
-            }
-          }
-        }
-      ]
+      "location": "Germany"
     },
     "role": {
       "departments": ["OPERATIONS", "MARKETING"],
@@ -160,34 +68,11 @@
   },
   {
     "id": 5,
+    "tag": "eng",
     "details": {
       "forename": "Sergiy",
       "surname": "Petrunin",
-      "location": {
-        "key": {
-          "name": "Ukraine"
-        }
-      },
-      "past_locations": [
-        {
-          "type": "city",
-          "name": "Ohio",
-          "country": {
-            "key": {
-              "name": "America"
-            }
-          }
-        },
-        {
-          "type": "city",
-          "name": "London",
-          "country": {
-            "key": {
-              "name": "England"
-            }
-          }
-        }
-      ]
+      "location": "Ukraine"
     },
     "role": {
       "departments": ["ENGINEERING"],
@@ -200,34 +85,11 @@
   },
   {
     "id": 7,
+    "tag": "eng",
     "details": {
       "forename": "Suvij",
       "surname": "Surya",
-      "location": {
-        "key": {
-          "name": "India"
-        }
-      },
-      "past_locations": [
-        {
-          "type": "city",
-          "name": "Ohio",
-          "country": {
-            "key": {
-              "name": "America"
-            }
-          }
-        },
-        {
-          "type": "city",
-          "name": "London",
-          "country": {
-            "key": {
-              "name": "England"
-            }
-          }
-        }
-      ]
+      "location": "India"
     },
     "role": {
       "departments": ["ENGINEERING"],
@@ -240,34 +102,11 @@
   },
   {
     "id": 8,
+    "tag": "eng",
     "details": {
       "forename": "Nithin",
       "surname": "Kumar",
-      "location": {
-        "key": {
-          "name": "India"
-        }
-      },
-      "past_locations": [
-        {
-          "type": "city",
-          "name": "Ohio",
-          "country": {
-            "key": {
-              "name": "America"
-            }
-          }
-        },
-        {
-          "type": "city",
-          "name": "London",
-          "country": {
-            "key": {
-              "name": "England"
-            }
-          }
-        }
-      ]
+      "location": "India"
     },
     "role": {
       "departments": ["ENGINEERING"],
@@ -280,34 +119,11 @@
   },
   {
     "id": 10,
+    "tag": "eng",
     "details": {
       "forename": "Eelco",
       "surname": "Wiersma",
-      "location": {
-        "key": {
-          "name": "Netherlands"
-        }
-      },
-      "past_locations": [
-        {
-          "type": "city",
-          "name": "Ohio",
-          "country": {
-            "key": {
-              "name": "America"
-            }
-          }
-        },
-        {
-          "type": "city",
-          "name": "London",
-          "country": {
-            "key": {
-              "name": "England"
-            }
-          }
-        }
-      ]
+      "location": "Netherlands"
     },
     "role": {
       "departments": ["ENGINEERING"],
@@ -320,34 +136,11 @@
   },
   {
     "id": 11,
+    "tag": "finance",
     "details": {
       "forename": "Alexandra",
       "surname": "Neuse",
-      "location": {
-        "key": {
-          "name": "Germany"
-        }
-      },
-      "past_locations": [
-        {
-          "type": "city",
-          "name": "Ohio",
-          "country": {
-            "key": {
-              "name": "America"
-            }
-          }
-        },
-        {
-          "type": "city",
-          "name": "London",
-          "country": {
-            "key": {
-              "name": "England"
-            }
-          }
-        }
-      ]
+      "location": "Germany"
     },
     "role": {
       "departments": ["OPERATIONS"],
@@ -360,34 +153,11 @@
   },
   {
     "id": 12,
+    "tag": "hr",
     "details": {
       "forename": "Nicole",
       "surname": "Neuse",
-      "location": {
-        "key": {
-          "name": "Germany"
-        }
-      },
-      "past_locations": [
-        {
-          "type": "city",
-          "name": "Ohio",
-          "country": {
-            "key": {
-              "name": "America"
-            }
-          }
-        },
-        {
-          "type": "city",
-          "name": "London",
-          "country": {
-            "key": {
-              "name": "England"
-            }
-          }
-        }
-      ]
+      "location": "Germany"
     },
     "role": {
       "departments": ["OPERATIONS"],
