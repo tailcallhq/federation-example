@@ -3,8 +3,8 @@ schema @server(port: 8002) @upstream(baseURL: "http://localhost:8082") {
 }
 
 type Query {
-  employeeHobbies(id: Int!): Employee @http(path: "/employees/{{.args.id}}/hobbies")
-  sdk(upc: String!): SDK @http(path: "/sdk/{{.args.upc}}")
+  _employeeHobbies(id: Int!): Employee @http(path: "/employees/{{.args.id}}/hobbies")
+  _sdk(upc: String!): SDK @http(path: "/sdk/{{.args.upc}}")
 }
 
 enum ExerciseType {

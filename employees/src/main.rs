@@ -69,8 +69,8 @@ struct SDK {
 
 // Define the shared application state
 struct AppState {
-    employees: Arc<Vec<Employee>>,
-    products: Arc<Vec<Product>>,
+    employees: Vec<Employee>,
+    products: Vec<Product>,
 }
 
 // Define the handler to return an employee by ID
@@ -208,8 +208,8 @@ async fn main() {
 
     // Create shared application state
     let shared_state = Arc::new(AppState {
-        employees: Arc::new(employees),
-        products: Arc::new(products),
+        employees: employees,
+        products: products,
     });
 
     // Build the router with the state and new routes

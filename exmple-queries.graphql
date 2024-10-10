@@ -9,11 +9,7 @@ query {
       forename
       surname
       # resolved through employees subgraph
-      location {
-        key {
-          name
-        }
-      }
+      location
       # resolved through family subgraph
       hasChildren
       # maritalStatus can return null

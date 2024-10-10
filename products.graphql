@@ -2,18 +2,19 @@ schema @server(port: 8003) @upstream(baseURL: "http://localhost:8083") {
   query: Query
 }
 
-type Queries {
+type Query {
   productTypes: [Products!]! @http(path: "/products")
   topSecretFederationFacts: [TopSecretFact!]!
     @requiresScopes(scopes: [["read:fact"], ["read:all"]])
     @http(path: "/top_secret_facts")
-  factTypes: [TopSecretFactType!] @http(path: "/top_secret_facts")
+  factTypes: [TopSecretFactType!] @http(path: "/fact_types")
+  _productEmployees: [Employee!]! @http(path: "/products/employees")
 }
 
 enum TopSecretFactType @authenticated {
-  DIRECTIVE
-  ENTITY
-  MISCELLANEOUS
+  DIRECTIVE @alias(options: ["Directive"])
+  ENTITY @alias(options: ["Entity"])
+  MISCELLANEOUS @alias(options: ["Miscellaneous"])
 }
 
 interface TopSecretFact @authenticated {
@@ -27,28 +28,31 @@ type DirectiveFact implements TopSecretFact @authenticated {
   title: String!
   description: FactContent!
   factType: TopSecretFactType
+  _directiveFact: Boolean
 }
 
 type EntityFact implements TopSecretFact @requiresScopes(scopes: [["read:entity"]]) {
   title: String!
   description: FactContent!
   factType: TopSecretFactType
+  _entityFact: Boolean
 }
 
 type MiscellaneousFact implements TopSecretFact {
   title: String!
   description: FactContent! @requiresScopes(scopes: [["read:miscellaneous"]])
   factType: TopSecretFactType
+  _miscellaneousFact: Boolean
 }
 
 enum ProductName {
-  CONSULTANCY
-  COSMO
-  ENGINE
-  FINANCE
-  HUMAN_RESOURCES
-  MARKETING
-  SDK
+  CONSULTANCY @alias(options: ["Consultancy"])
+  COSMO @alias(options: ["Cosmo"])
+  ENGINE @alias(options: ["Engine"])
+  FINANCE @alias(options: ["Finance"])
+  HUMAN_RESOURCES @alias(options: ["HumanResources"])
+  MARKETING @alias(options: ["Marketing"])
+  SDK @alias(options: ["Sdk"])
 }
 
 type Employee @key(fields: "id") {
