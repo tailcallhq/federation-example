@@ -103,14 +103,51 @@ async fn get_department_employees(
     (StatusCode::OK, Json(employees)).into_response()
 }
 
-async fn get_products_employees(State(state): State<Arc<AppState>>) -> impl IntoResponse {
+async fn get_products_employees(
+    State(state): State<Arc<AppState>>,
+    Query(params): Query<Vec<(String, String)>>,
+) -> impl IntoResponse {
+    // Create a map to handle multiple occurrences of the same key
+    let mut param_map: HashMap<String, Vec<String>> = HashMap::new();
+
+    // Collect all query parameters into param_map
+    for (key, value) in params {
+        param_map.entry(key).or_default().push(value);
+    }
+
     let products: Vec<_> = state.products.iter().cloned().collect();
     let products = products
         .into_iter()
-        .map(|product| match product {
-            Product::Consultancy(consultancy) => serde_json::to_value(consultancy).unwrap(),
-            Product::Cosmo(cosmo) => serde_json::to_value(cosmo).unwrap(),
-            Product::SDK(sdk) => serde_json::to_value(sdk).unwrap(),
+        .filter_map(|product| {
+            let include = param_map.iter().all(|(key, values)| match key.as_str() {
+                "type" => {
+                    let product_type = match &product {
+                        Product::Consultancy(_) => "consultancy",
+                        Product::Cosmo(_) => "cosmo",
+                        Product::SDK(_) => "sdk",
+                    }
+                    .to_string();
+                    values.contains(&product_type)
+                }
+                "upc" => {
+                    let product_upc = match &product {
+                        Product::Consultancy(c) => &c.upc,
+                        Product::Cosmo(c) => &c.upc,
+                        Product::SDK(c) => &c.upc,
+                    };
+                    values.contains(product_upc)
+                }
+                _ => true,
+            });
+            if include {
+                Some(match product {
+                    Product::Consultancy(consultancy) => serde_json::to_value(consultancy).unwrap(),
+                    Product::Cosmo(cosmo) => serde_json::to_value(cosmo).unwrap(),
+                    Product::SDK(sdk) => serde_json::to_value(sdk).unwrap(),
+                })
+            } else {
+                None
+            }
         })
         .collect::<Vec<_>>();
     (StatusCode::OK, Json(products)).into_response()

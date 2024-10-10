@@ -49,7 +49,11 @@ struct Pet {
     pet_type: Option<String>,
 }
 
-async fn filter_employees(Query(params): Query<SearchInput>, State(state): State<Arc<AppState>>) -> impl IntoResponse {
+async fn filter_employees(
+    Query(params): Query<SearchInput>,
+    Query(query): Query<Vec<(String, String)>>,
+    State(state): State<Arc<AppState>>,
+) -> impl IntoResponse {
     let mut employees = (*state.employees).clone(); // Dereference Arc to get Vec<Employee>
 
     // Apply filters based on SearchInput
@@ -78,9 +82,17 @@ async fn filter_employees(Query(params): Query<SearchInput>, State(state): State
         }
     }
 
+    let ids = query
+        .into_iter()
+        .filter_map(|(key, value)| if key == "id" { Some(value) } else { None })
+        .collect::<Vec<_>>();
+
+    if ids.len() > 0 {
+        employees.retain(|e| ids.contains(&e.id.to_string()));
+    }
+
     Json(employees) // Return filtered employees
 }
-
 
 // Define the shared application state
 struct AppState {

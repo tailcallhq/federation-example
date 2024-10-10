@@ -86,3 +86,17 @@
   }
 }
 ```
+
+```gql
+{
+  _consultancy_resolver(upcs: ["consultancy"]) {
+    upc
+  }
+  _cosmo_resolver(upcs: ["cosmo"]) {
+    upc
+  }
+  _sdk_resolver(upcs: ["sdk"]) {
+    upc
+  }
+}
+```

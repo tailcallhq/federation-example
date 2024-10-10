@@ -5,10 +5,29 @@ schema @server(port: 8000) @upstream(baseURL: "http://localhost:8080") {
 type Query {
   employee(id: Int!): Employee @http(path: "/employees/{{.args.id}}")
   employees: [Employee!]! @http(path: "/employees")
-  products: [Products!]!
-    @http(path: "/products/employees")
+  products: [Products!]! @http(path: "/products/employees")
   teammates(team: Department!): [Employee!]!
     @http(path: "/department/{{.args.team}}/employees")
+  _employee_resolver(ids: [Int!]!): [Employee!]!
+    @http(
+      path: "/employees"
+      query: [{ key: "id", value: "{{.args.ids}}", skipEmpty: true }]
+    )
+  _consultancy_resolver(upcs: [ID!]!): [Consultancy!]!
+    @http(
+      path: "/products/employees?type=consultancy"
+      query: [{ key: "upc", value: "{{.args.upcs}}", skipEmpty: true }]
+    )
+  _cosmo_resolver(upcs: [ID!]!): [Cosmo!]!
+    @http(
+      path: "/products/employees?type=cosmo"
+      query: [{ key: "upc", value: "{{.args.upcs}}", skipEmpty: true }]
+    )
+  _sdk_resolver(upcs: [ID!]!): [SDK!]!
+    @http(
+      path: "/products/employees?type=sdk"
+      query: [{ key: "upc", value: "{{.args.upcs}}", skipEmpty: true }]
+    )
 }
 
 type Mutation {
@@ -91,7 +110,8 @@ type Employee implements Identifiable @key(fields: "id") {
   role: RoleType!
   notes: String
   updated_at: String! @modify(name: "updatedAt")
-  start_date: String! @modify(name: "startDate")
+  start_date: String!
+    @modify(name: "startDate")
     @requiresScopes(scopes: [["read:employee", "read:private"], ["read:all"]])
 }
 

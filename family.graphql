@@ -7,10 +7,24 @@ type Query {
     @http(
       path: "/employees/family"
       query: [
-        { key: "has_pets", value: "{{.args.criteria.hasPets}}", skipEmpty: true }
-        { key: "nationality", value: "{{.args.criteria.nationality}}", skipEmpty: true }
+        {
+          key: "has_pets"
+          value: "{{.args.criteria.hasPets}}"
+          skipEmpty: true
+        }
+        {
+          key: "nationality"
+          value: "{{.args.criteria.nationality}}"
+          skipEmpty: true
+        }
         { key: "nested", value: "{{.args.criteria.nested}}", skipEmpty: true }
       ]
+    )
+  _employee_resolver(ids: [Int!]!): [Employee!]!
+    @http(
+      path: "/employees/family"
+
+      query: [{ key: "id", value: "{{.args.ids}}", skipEmpty: true }]
     )
 }
 
