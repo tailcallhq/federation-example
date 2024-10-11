@@ -94,6 +94,20 @@ async fn filter_employees(
     Json(employees) // Return filtered employees
 }
 
+async fn get_employees_by_ids(
+    Query(ids): Query<Vec<(String, u32)>>,
+    State(state): State<Arc<AppState>>,
+) -> impl IntoResponse {
+    let employees = state.employees.clone();
+    let filtered_employees: Vec<Employee> = employees
+        .iter()
+        .filter(|e| ids.iter().any(|(key, id)| key == "id" && e.id == *id))
+        .cloned()
+        .collect();
+    
+    Json(filtered_employees)
+}
+
 // Define the shared application state
 struct AppState {
     employees: Arc<Vec<Employee>>,
@@ -125,6 +139,7 @@ async fn main() {
     // Build the router with the state and new routes
     let app = Router::new()
         .route("/family/employees", get(filter_employees))
+        .route("/family/employees-batch", get(get_employees_by_ids)) // New route for batch employee details
         .with_state(shared_state);
 
     // Define the address to serve the application
