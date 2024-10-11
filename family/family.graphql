@@ -1,5 +1,5 @@
 schema
-  @server(port: 8001, enableFederation: true)
+  @server(port: 8001)
   @upstream(baseURL: "http://localhost:8081", batch: { delay: 10 }) {
   query: Query
 }
@@ -111,23 +111,17 @@ enum Nationality {
 }
 
 type Details {
-  forename: String! @shareable
-  middlename: String @deprecated
-  surname: String! @shareable
+  forename: String! 
+  middlename: String
+  surname: String! 
   has_children: Boolean! @modify(name: "hasChildren")
   marital_status: MaritalStatus @modify(name: "maritalStatus")
   nationality: Nationality!
   pets: [Pet]
 }
 
-type Employee
-  @key(fields: "id")
-  @http(
-    baseURL: "http://localhost:8081"
-    path: "/family/employees"
-    query: [{ key: "id", value: "{{.value.id}}", batchKey: ["id"] }]
-  ) {
-  details: Details @shareable
+type Employee {
+  details: Details 
   id: Int!
 }
 
