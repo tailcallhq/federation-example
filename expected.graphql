@@ -1,558 +1,1121 @@
-
-schema
-  @link(url: "https://specs.apollo.dev/link/v1.0")
-  @link(url: "https://specs.apollo.dev/join/v0.5", for: EXECUTION)
-  @link(url: "https://specs.apollo.dev/requiresScopes/v0.1", import: ["@requiresScopes"], for: SECURITY)
-  @link(url: "https://specs.apollo.dev/authenticated/v0.1", import: ["@authenticated"], for: SECURITY)
-{
+schema {
   query: Query
   mutation: Mutation
   subscription: Subscription
 }
-
-directive @authenticated on FIELD_DEFINITION | OBJECT | INTERFACE | SCALAR | ENUM
-
-directive @join__directive(graphs: [join__Graph!], name: String!, args: join__DirectiveArguments) repeatable on SCHEMA | OBJECT | INTERFACE | FIELD_DEFINITION
-
-directive @join__enumValue(graph: join__Graph!) repeatable on ENUM_VALUE
-
-directive @join__field(graph: join__Graph, requires: join__FieldSet, provides: join__FieldSet, type: String, external: Boolean, override: String, usedOverridden: Boolean, overrideLabel: String, contextArguments: [join__ContextArgument!]) repeatable on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
-
-directive @join__graph(name: String!, url: String!) on ENUM_VALUE
-
-directive @join__implements(graph: join__Graph!, interface: String!) repeatable on OBJECT | INTERFACE
-
-directive @join__type(graph: join__Graph!, key: join__FieldSet, extension: Boolean! = false, resolvable: Boolean! = true, isInterfaceObject: Boolean! = false) repeatable on OBJECT | INTERFACE | UNION | ENUM | INPUT_OBJECT | SCALAR
-
-directive @join__unionMember(graph: join__Graph!, member: String!) repeatable on UNION
-
-directive @link(url: String, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
-
-directive @requiresScopes(scopes: [[requiresScopes__Scope!]!]!) on FIELD_DEFINITION | OBJECT | INTERFACE | SCALAR | ENUM
-
-type Alligator implements Pet & Animal
-  @join__implements(graph: FAMILY, interface: "Pet")
-  @join__implements(graph: FAMILY, interface: "Animal")
-  @join__type(graph: FAMILY)
-{
+scalar FactContent
+scalar Map
+scalar Upload
+type ABigObject {
+  aFieldOnABigObject: String!
+  bFieldOnABigObject: Int!
+  cFieldOnABigObject: Boolean!
+  dFieldOnABigObject: Float!
+  eFieldOnABigObject: String!
+  fFieldOnABigObject: Int!
+  gFieldOnABigObject: Boolean!
+  hFieldOnABigObject: Float!
+  iFieldOnABigObject: String!
+  jFieldOnABigObject: Int!
+  kFieldOnABigObject: Boolean!
+  lFieldOnABigObject: Float!
+  mFieldOnABigObject: String!
+  nFieldOnABigObject: Int!
+  oFieldOnABigObject: Boolean!
+  pFieldOnABigObject: Float!
+  qFieldOnABigObject: String!
+  rFieldOnABigObject: Int!
+  sFieldOnABigObject: Boolean!
+  tFieldOnABigObject: Float!
+  uFieldOnABigObject: String!
+  vFieldOnABigObject: Int!
+  wFieldOnABigObject: Boolean!
+  xFieldOnABigObject: Float!
+  yFieldOnABigObject: String!
+  zFieldOnABigObject: Int!
+}
+type Alligator implements Pet & Animal {
   class: Class!
   dangerous: String!
   gender: Gender!
   name: String!
 }
-
-interface Animal
-  @join__type(graph: FAMILY)
-{
-  class: Class!
-  gender: Gender!
+type BBigObject {
+  aFieldOnBBigObject: String!
+  bFieldOnBBigObject: Int!
+  cFieldOnBBigObject: Boolean!
+  dFieldOnBBigObject: Float!
+  eFieldOnBBigObject: String!
+  fFieldOnBBigObject: Int!
+  gFieldOnBBigObject: Boolean!
+  hFieldOnBBigObject: Float!
+  iFieldOnBBigObject: String!
+  jFieldOnBBigObject: Int!
+  kFieldOnBBigObject: Boolean!
+  lFieldOnBBigObject: Float!
+  mFieldOnBBigObject: String!
+  nFieldOnBBigObject: Int!
+  oFieldOnBBigObject: Boolean!
+  pFieldOnBBigObject: Float!
+  qFieldOnBBigObject: String!
+  rFieldOnBBigObject: Int!
+  sFieldOnBBigObject: Boolean!
+  tFieldOnBBigObject: Float!
+  uFieldOnBBigObject: String!
+  vFieldOnBBigObject: Int!
+  wFieldOnBBigObject: Boolean!
+  xFieldOnBBigObject: Float!
+  yFieldOnBBigObject: String!
+  zFieldOnBBigObject: Int!
 }
-
-type Cat implements Pet & Animal
-  @join__implements(graph: FAMILY, interface: "Pet")
-  @join__implements(graph: FAMILY, interface: "Animal")
-  @join__type(graph: FAMILY)
-{
+type BigObject {
+  nestedObjects: [NestedObject!]!
+}
+type Cat implements Pet & Animal {
   class: Class!
   gender: Gender!
   name: String!
   type: CatType!
 }
-
-enum CatType
-  @join__type(graph: FAMILY)
-{
-  HOME @join__enumValue(graph: FAMILY)
-  STREET @join__enumValue(graph: FAMILY)
+type CBigObject {
+  aFieldOnCBigObject: String!
+  bFieldOnCBigObject: Int!
+  cFieldOnCBigObject: Boolean!
+  dFieldOnCBigObject: Float!
+  eFieldOnCBigObject: String!
+  fFieldOnCBigObject: Int!
+  gFieldOnCBigObject: Boolean!
+  hFieldOnCBigObject: Float!
+  iFieldOnCBigObject: String!
+  jFieldOnCBigObject: Int!
+  kFieldOnCBigObject: Boolean!
+  lFieldOnCBigObject: Float!
+  mFieldOnCBigObject: String!
+  nFieldOnCBigObject: Int!
+  oFieldOnCBigObject: Boolean!
+  pFieldOnCBigObject: Float!
+  qFieldOnCBigObject: String!
+  rFieldOnCBigObject: Int!
+  sFieldOnCBigObject: Boolean!
+  tFieldOnCBigObject: Float!
+  uFieldOnCBigObject: String!
+  vFieldOnCBigObject: Int!
+  wFieldOnCBigObject: Boolean!
+  xFieldOnCBigObject: Float!
+  yFieldOnCBigObject: String!
+  zFieldOnCBigObject: Int!
 }
-
-enum Class
-  @join__type(graph: FAMILY)
-{
-  FISH @join__enumValue(graph: FAMILY)
-  MAMMAL @join__enumValue(graph: FAMILY)
-  REPTILE @join__enumValue(graph: FAMILY)
+type City {
+  type: String!
+  name: String!
+  country: Country
 }
-
-type Consultancy
-  @join__type(graph: EMPLOYEES, key: "upc")
-  @join__type(graph: PRODUCTS, key: "upc")
-{
+type Consultancy {
   upc: ID!
-  lead: Employee! @join__field(graph: EMPLOYEES)
-  name: ProductName! @join__field(graph: PRODUCTS)
+  lead: Employee!
+  isLeadAvailable: Boolean
+  name: ProductName!
 }
-
-type Cosmo implements IProduct
-  @join__implements(graph: EMPLOYEES, interface: "IProduct")
-  @join__type(graph: EMPLOYEES, key: "upc")
-  @join__type(graph: PRODUCTS, key: "upc")
-{
+type Cosmo implements IProduct {
   upc: ID!
-  engineers: [Employee!]! @join__field(graph: EMPLOYEES)
-  lead: Employee! @join__field(graph: EMPLOYEES)
-  name: ProductName! @join__field(graph: PRODUCTS)
-  repositoryURL: String! @join__field(graph: PRODUCTS)
+  engineers: [Employee!]!
+  lead: Employee!
+  name: ProductName!
+  repositoryURL: String!
 }
-
-enum Country
-  @join__type(graph: EMPLOYEES)
-  @join__type(graph: HOBBIES)
-{
-  AMERICA @join__enumValue(graph: EMPLOYEES) @join__enumValue(graph: HOBBIES)
-  ENGLAND @join__enumValue(graph: EMPLOYEES) @join__enumValue(graph: HOBBIES)
-  GERMANY @join__enumValue(graph: EMPLOYEES) @join__enumValue(graph: HOBBIES)
-  INDIA @join__enumValue(graph: EMPLOYEES)
-  NETHERLANDS @join__enumValue(graph: EMPLOYEES) @join__enumValue(graph: HOBBIES)
-  PORTUGAL @join__enumValue(graph: EMPLOYEES) @join__enumValue(graph: HOBBIES)
-  SPAIN @join__enumValue(graph: EMPLOYEES) @join__enumValue(graph: HOBBIES)
-  UKRAINE @join__enumValue(graph: EMPLOYEES)
-  INDONESIA @join__enumValue(graph: HOBBIES)
-  KOREA @join__enumValue(graph: HOBBIES)
-  SERBIA @join__enumValue(graph: HOBBIES)
-  TAIWAN @join__enumValue(graph: HOBBIES)
-  THAILAND @join__enumValue(graph: HOBBIES)
+type Country {
+  key: CountryKey!
 }
-
-enum Department
-  @join__type(graph: EMPLOYEES)
-{
-  ENGINEERING @join__enumValue(graph: EMPLOYEES)
-  MARKETING @join__enumValue(graph: EMPLOYEES)
-  OPERATIONS @join__enumValue(graph: EMPLOYEES)
+type CountryKey {
+  name: String!
 }
-
-type Details
-  @join__type(graph: EMPLOYEES)
-  @join__type(graph: FAMILY)
-{
+type DBigObject {
+  aFieldOnDBigObject: String!
+  bFieldOnDBigObject: Int!
+  cFieldOnDBigObject: Boolean!
+  dFieldOnDBigObject: Float!
+  eFieldOnDBigObject: String!
+  fFieldOnDBigObject: Int!
+  gFieldOnDBigObject: Boolean!
+  hFieldOnDBigObject: Float!
+  iFieldOnDBigObject: String!
+  jFieldOnDBigObject: Int!
+  kFieldOnDBigObject: Boolean!
+  lFieldOnDBigObject: Float!
+  mFieldOnDBigObject: String!
+  nFieldOnDBigObject: Int!
+  oFieldOnDBigObject: Boolean!
+  pFieldOnDBigObject: Float!
+  qFieldOnDBigObject: String!
+  rFieldOnDBigObject: Int!
+  sFieldOnDBigObject: Boolean!
+  tFieldOnDBigObject: Float!
+  uFieldOnDBigObject: String!
+  vFieldOnDBigObject: Int!
+  wFieldOnDBigObject: Boolean!
+  xFieldOnDBigObject: Float!
+  yFieldOnDBigObject: String!
+  zFieldOnDBigObject: Int!
+}
+type DeeplyNestedObject {
+  aFieldOnDeeplyNestedObject: String!
+  bFieldOnDeeplyNestedObject: Int!
+  cFieldOnDeeplyNestedObject: Boolean!
+  dFieldOnDeeplyNestedObject: Float!
+  eFieldOnDeeplyNestedObject: String!
+  fFieldOnDeeplyNestedObject: Int!
+  gFieldOnDeeplyNestedObject: Boolean!
+  hFieldOnDeeplyNestedObject: Float!
+  iFieldOnDeeplyNestedObject: String!
+  jFieldOnDeeplyNestedObject: Int!
+  kFieldOnDeeplyNestedObject: Boolean!
+  lFieldOnDeeplyNestedObject: Float!
+  mFieldOnDeeplyNestedObject: String!
+  nFieldOnDeeplyNestedObject: Int!
+  oFieldOnDeeplyNestedObject: Boolean!
+  pFieldOnDeeplyNestedObject: Float!
+  qFieldOnDeeplyNestedObject: String!
+  rFieldOnDeeplyNestedObject: Int!
+  sFieldOnDeeplyNestedObject: Boolean!
+  tFieldOnDeeplyNestedObject: Float!
+  uFieldOnDeeplyNestedObject: String!
+  vFieldOnDeeplyNestedObject: Int!
+  wFieldOnDeeplyNestedObject: Boolean!
+  xFieldOnDeeplyNestedObject: Float!
+  yFieldOnDeeplyNestedObject: String!
+  zFieldOnDeeplyNestedObject: Int!
+}
+type Details {
   forename: String!
-  location: Country! @join__field(graph: EMPLOYEES)
+  location: Country!
   surname: String!
-  middlename: String @join__field(graph: FAMILY) @deprecated
-  hasChildren: Boolean! @join__field(graph: FAMILY)
-  maritalStatus: MaritalStatus @join__field(graph: FAMILY)
-  nationality: Nationality! @join__field(graph: FAMILY)
-  pets: [Pet] @join__field(graph: FAMILY)
+  pastLocations: [City!]!
+  middlename: String @deprecated(reason: "No longer supported")
+  hasChildren: Boolean!
+  maritalStatus: MaritalStatus
+  nationality: Nationality!
+  pets: [Pet]
 }
-
-type DirectiveFact implements TopSecretFact
-  @join__implements(graph: PRODUCTS, interface: "TopSecretFact")
-  @join__type(graph: PRODUCTS)
-  @authenticated
-{
+type DirectiveFact implements TopSecretFact {
   title: String!
   description: FactContent!
   factType: TopSecretFactType
 }
-
-type Documentation
-  @join__type(graph: PRODUCTS)
-{
+type Documentation {
   url(product: ProductName!): String!
   urls(products: [ProductName!]!): [String!]!
 }
-
-type Dog implements Pet & Animal
-  @join__implements(graph: FAMILY, interface: "Pet")
-  @join__implements(graph: FAMILY, interface: "Animal")
-  @join__type(graph: FAMILY)
-{
+type Dog implements Pet & Animal {
   breed: DogBreed!
   class: Class!
   gender: Gender!
   name: String!
 }
-
-enum DogBreed
-  @join__type(graph: FAMILY)
-{
-  GOLDEN_RETRIEVER @join__enumValue(graph: FAMILY)
-  POODLE @join__enumValue(graph: FAMILY)
-  ROTTWEILER @join__enumValue(graph: FAMILY)
-  YORKSHIRE_TERRIER @join__enumValue(graph: FAMILY)
+type EBigObject {
+  aFieldOnEBigObject: String!
+  bFieldOnEBigObject: Int!
+  cFieldOnEBigObject: Boolean!
+  dFieldOnEBigObject: Float!
+  eFieldOnEBigObject: String!
+  fFieldOnEBigObject: Int!
+  gFieldOnEBigObject: Boolean!
+  hFieldOnEBigObject: Float!
+  iFieldOnEBigObject: String!
+  jFieldOnEBigObject: Int!
+  kFieldOnEBigObject: Boolean!
+  lFieldOnEBigObject: Float!
+  mFieldOnEBigObject: String!
+  nFieldOnEBigObject: Int!
+  oFieldOnEBigObject: Boolean!
+  pFieldOnEBigObject: Float!
+  qFieldOnEBigObject: String!
+  rFieldOnEBigObject: Int!
+  sFieldOnEBigObject: Boolean!
+  tFieldOnEBigObject: Float!
+  uFieldOnEBigObject: String!
+  vFieldOnEBigObject: Int!
+  wFieldOnEBigObject: Boolean!
+  xFieldOnEBigObject: Float!
+  yFieldOnEBigObject: String!
+  zFieldOnEBigObject: Int!
 }
-
-type Employee implements Identifiable
-  @join__implements(graph: EMPLOYEES, interface: "Identifiable")
-  @join__type(graph: EMPLOYEES, key: "id")
-  @join__type(graph: FAMILY, key: "id")
-  @join__type(graph: HOBBIES, key: "id")
-  @join__type(graph: PRODUCTS, key: "id")
-{
-  details: Details @join__field(graph: EMPLOYEES, type: "Details!") @join__field(graph: FAMILY, type: "Details")
+type Employee implements Identifiable {
   id: Int!
-  tag: String! @join__field(graph: EMPLOYEES)
-  role: RoleType! @join__field(graph: EMPLOYEES)
-  notes: String @join__field(graph: PRODUCTS, override: "employees")
-  updatedAt: String! @join__field(graph: EMPLOYEES)
-  startDate: String! @join__field(graph: EMPLOYEES) @requiresScopes(scopes: [["read:employee", "read:private"], ["read:all"]])
-  hobbies: [Hobby!]! @join__field(graph: HOBBIES)
-  products: [ProductName!]! @join__field(graph: PRODUCTS)
+  isAvailable: Boolean!
+  details: Details
+  tag: String!
+  role: RoleType!
+  notes: String
+  updatedAt: String!
+  startDate: String!
+  currentMood: Mood!
+  derivedMood: Mood!
+  rootFieldThrowsError: String
+  rootFieldErrorWrapper: ErrorWrapper
+  hobbies: [Hobby!]
+  products: [ProductName!]!
+  fieldThrowsError: String
 }
-
-type Engineer implements RoleType
-  @join__implements(graph: EMPLOYEES, interface: "RoleType")
-  @join__type(graph: EMPLOYEES)
-{
+type Engineer implements RoleType {
   departments: [Department!]!
-  engineerType: EngineerType!
   title: [String!]!
+  employees: [Employee!]!
+  engineerType: EngineerType!
 }
-
-enum EngineerType
-  @join__type(graph: EMPLOYEES)
-{
-  BACKEND @join__enumValue(graph: EMPLOYEES)
-  FRONTEND @join__enumValue(graph: EMPLOYEES)
-  FULLSTACK @join__enumValue(graph: EMPLOYEES)
-}
-
-type EntityFact implements TopSecretFact
-  @join__implements(graph: PRODUCTS, interface: "TopSecretFact")
-  @join__type(graph: PRODUCTS)
-  @requiresScopes(scopes: [["read:entity"]])
-{
+type EntityFact implements TopSecretFact {
   title: String!
   description: FactContent!
   factType: TopSecretFactType
 }
-
-type Exercise
-  @join__type(graph: HOBBIES)
-{
+type ErrorWrapper {
+  okField: String
+  errorField: String
+}
+type Exercise implements Hobby {
+  employees: [Employee!]!
   category: ExerciseType!
 }
-
-enum ExerciseType
-  @join__type(graph: HOBBIES)
-{
-  CALISTHENICS @join__enumValue(graph: HOBBIES)
-  HIKING @join__enumValue(graph: HOBBIES)
-  SPORT @join__enumValue(graph: HOBBIES)
-  STRENGTH_TRAINING @join__enumValue(graph: HOBBIES)
+type FBigObject {
+  aFieldOnFBigObject: String!
+  bFieldOnFBigObject: Int!
+  cFieldOnFBigObject: Boolean!
+  dFieldOnFBigObject: Float!
+  eFieldOnFBigObject: String!
+  fFieldOnFBigObject: Int!
+  gFieldOnFBigObject: Boolean!
+  hFieldOnFBigObject: Float!
+  iFieldOnFBigObject: String!
+  jFieldOnFBigObject: Int!
+  kFieldOnFBigObject: Boolean!
+  lFieldOnFBigObject: Float!
+  mFieldOnFBigObject: String!
+  nFieldOnFBigObject: Int!
+  oFieldOnFBigObject: Boolean!
+  pFieldOnFBigObject: Float!
+  qFieldOnFBigObject: String!
+  rFieldOnFBigObject: Int!
+  sFieldOnFBigObject: Boolean!
+  tFieldOnFBigObject: Float!
+  uFieldOnFBigObject: String!
+  vFieldOnFBigObject: Int!
+  wFieldOnFBigObject: Boolean!
+  xFieldOnFBigObject: Float!
+  yFieldOnFBigObject: String!
+  zFieldOnFBigObject: Int!
 }
-
-interface Experience
-  @join__type(graph: HOBBIES)
-{
-  yearsOfExperience: Float!
-}
-
-scalar FactContent
-  @join__type(graph: PRODUCTS)
-  @requiresScopes(scopes: [["read:scalar"], ["read:all"]])
-
-type Flying implements Experience
-  @join__implements(graph: HOBBIES, interface: "Experience")
-  @join__type(graph: HOBBIES)
-{
+type Flying implements Experience & Hobby {
+  employees: [Employee!]!
   planeModels: [String!]!
   yearsOfExperience: Float!
 }
-
-enum GameGenre
-  @join__type(graph: HOBBIES)
-{
-  ADVENTURE @join__enumValue(graph: HOBBIES)
-  BOARD @join__enumValue(graph: HOBBIES)
-  FPS @join__enumValue(graph: HOBBIES)
-  CARD @join__enumValue(graph: HOBBIES)
-  RPG @join__enumValue(graph: HOBBIES)
-  ROGUELITE @join__enumValue(graph: HOBBIES)
-  SIMULATION @join__enumValue(graph: HOBBIES)
-  STRATEGY @join__enumValue(graph: HOBBIES)
-}
-
-type Gaming implements Experience
-  @join__implements(graph: HOBBIES, interface: "Experience")
-  @join__type(graph: HOBBIES)
-{
+type Gaming implements Experience & Hobby {
+  employees: [Employee!]!
   genres: [GameGenre!]!
   name: String!
   yearsOfExperience: Float!
 }
-
-enum Gender
-  @join__type(graph: FAMILY)
-{
-  FEMALE @join__enumValue(graph: FAMILY)
-  MALE @join__enumValue(graph: FAMILY)
-  UNKNOWN @join__enumValue(graph: FAMILY)
+type GBigObject {
+  aFieldOnGBigObject: String!
+  bFieldOnGBigObject: Int!
+  cFieldOnGBigObject: Boolean!
+  dFieldOnGBigObject: Float!
+  eFieldOnGBigObject: String!
+  fFieldOnGBigObject: Int!
+  gFieldOnGBigObject: Boolean!
+  hFieldOnGBigObject: Float!
+  iFieldOnGBigObject: String!
+  jFieldOnGBigObject: Int!
+  kFieldOnGBigObject: Boolean!
+  lFieldOnGBigObject: Float!
+  mFieldOnGBigObject: String!
+  nFieldOnGBigObject: Int!
+  oFieldOnGBigObject: Boolean!
+  pFieldOnGBigObject: Float!
+  qFieldOnGBigObject: String!
+  rFieldOnGBigObject: Int!
+  sFieldOnGBigObject: Boolean!
+  tFieldOnGBigObject: Float!
+  uFieldOnGBigObject: String!
+  vFieldOnGBigObject: Int!
+  wFieldOnGBigObject: Boolean!
+  xFieldOnGBigObject: Float!
+  yFieldOnGBigObject: String!
+  zFieldOnGBigObject: Int!
 }
-
-union Hobby
-  @join__type(graph: HOBBIES)
-  @join__unionMember(graph: HOBBIES, member: "Exercise")
-  @join__unionMember(graph: HOBBIES, member: "Flying")
-  @join__unionMember(graph: HOBBIES, member: "Gaming")
-  @join__unionMember(graph: HOBBIES, member: "Programming")
-  @join__unionMember(graph: HOBBIES, member: "Travelling")
-  @join__unionMember(graph: HOBBIES, member: "Other")
- = Exercise | Flying | Gaming | Programming | Travelling | Other
-
-interface Identifiable
-  @join__type(graph: EMPLOYEES)
-{
+type HBigObject {
+  aFieldOnHBigObject: String!
+  bFieldOnHBigObject: Int!
+  cFieldOnHBigObject: Boolean!
+  dFieldOnHBigObject: Float!
+  eFieldOnHBigObject: String!
+  fFieldOnHBigObject: Int!
+  gFieldOnHBigObject: Boolean!
+  hFieldOnHBigObject: Float!
+  iFieldOnHBigObject: String!
+  jFieldOnHBigObject: Int!
+  kFieldOnHBigObject: Boolean!
+  lFieldOnHBigObject: Float!
+  mFieldOnHBigObject: String!
+  nFieldOnHBigObject: Int!
+  oFieldOnHBigObject: Boolean!
+  pFieldOnHBigObject: Float!
+  qFieldOnHBigObject: String!
+  rFieldOnHBigObject: Int!
+  sFieldOnHBigObject: Boolean!
+  tFieldOnHBigObject: Float!
+  uFieldOnHBigObject: String!
+  vFieldOnHBigObject: Int!
+  wFieldOnHBigObject: Boolean!
+  xFieldOnHBigObject: Float!
+  yFieldOnHBigObject: String!
+  zFieldOnHBigObject: Int!
+}
+type IBigObject {
+  aFieldOnIBigObject: String!
+  bFieldOnIBigObject: Int!
+  cFieldOnIBigObject: Boolean!
+  dFieldOnIBigObject: Float!
+  eFieldOnIBigObject: String!
+  fFieldOnIBigObject: Int!
+  gFieldOnIBigObject: Boolean!
+  hFieldOnIBigObject: Float!
+  iFieldOnIBigObject: String!
+  jFieldOnIBigObject: Int!
+  kFieldOnIBigObject: Boolean!
+  lFieldOnIBigObject: Float!
+  mFieldOnIBigObject: String!
+  nFieldOnIBigObject: Int!
+  oFieldOnIBigObject: Boolean!
+  pFieldOnIBigObject: Float!
+  qFieldOnIBigObject: String!
+  rFieldOnIBigObject: Int!
+  sFieldOnIBigObject: Boolean!
+  tFieldOnIBigObject: Float!
+  uFieldOnIBigObject: String!
+  vFieldOnIBigObject: Int!
+  wFieldOnIBigObject: Boolean!
+  xFieldOnIBigObject: Float!
+  yFieldOnIBigObject: String!
+  zFieldOnIBigObject: Int!
+}
+type JBigObject {
+  aFieldOnJBigObject: String!
+  bFieldOnJBigObject: Int!
+  cFieldOnJBigObject: Boolean!
+  dFieldOnJBigObject: Float!
+  eFieldOnJBigObject: String!
+  fFieldOnJBigObject: Int!
+  gFieldOnJBigObject: Boolean!
+  hFieldOnJBigObject: Float!
+  iFieldOnJBigObject: String!
+  jFieldOnJBigObject: Int!
+  kFieldOnJBigObject: Boolean!
+  lFieldOnJBigObject: Float!
+  mFieldOnJBigObject: String!
+  nFieldOnJBigObject: Int!
+  oFieldOnJBigObject: Boolean!
+  pFieldOnJBigObject: Float!
+  qFieldOnJBigObject: String!
+  rFieldOnJBigObject: Int!
+  sFieldOnJBigObject: Boolean!
+  tFieldOnJBigObject: Float!
+  uFieldOnJBigObject: String!
+  vFieldOnJBigObject: Int!
+  wFieldOnJBigObject: Boolean!
+  xFieldOnJBigObject: Float!
+  yFieldOnJBigObject: String!
+  zFieldOnJBigObject: Int!
+}
+type KBigObject {
+  aFieldOnKBigObject: String!
+  bFieldOnKBigObject: Int!
+  cFieldOnKBigObject: Boolean!
+  dFieldOnKBigObject: Float!
+  eFieldOnKBigObject: String!
+  fFieldOnKBigObject: Int!
+  gFieldOnKBigObject: Boolean!
+  hFieldOnKBigObject: Float!
+  iFieldOnKBigObject: String!
+  jFieldOnKBigObject: Int!
+  kFieldOnKBigObject: Boolean!
+  lFieldOnKBigObject: Float!
+  mFieldOnKBigObject: String!
+  nFieldOnKBigObject: Int!
+  oFieldOnKBigObject: Boolean!
+  pFieldOnKBigObject: Float!
+  qFieldOnKBigObject: String!
+  rFieldOnKBigObject: Int!
+  sFieldOnKBigObject: Boolean!
+  tFieldOnKBigObject: Float!
+  uFieldOnKBigObject: String!
+  vFieldOnKBigObject: Int!
+  wFieldOnKBigObject: Boolean!
+  xFieldOnKBigObject: Float!
+  yFieldOnKBigObject: String!
+  zFieldOnKBigObject: Int!
+}
+type LBigObject {
+  aFieldOnLBigObject: String!
+  bFieldOnLBigObject: Int!
+  cFieldOnLBigObject: Boolean!
+  dFieldOnLBigObject: Float!
+  eFieldOnLBigObject: String!
+  fFieldOnLBigObject: Int!
+  gFieldOnLBigObject: Boolean!
+  hFieldOnLBigObject: Float!
+  iFieldOnLBigObject: String!
+  jFieldOnLBigObject: Int!
+  kFieldOnLBigObject: Boolean!
+  lFieldOnLBigObject: Float!
+  mFieldOnLBigObject: String!
+  nFieldOnLBigObject: Int!
+  oFieldOnLBigObject: Boolean!
+  pFieldOnLBigObject: Float!
+  qFieldOnLBigObject: String!
+  rFieldOnLBigObject: Int!
+  sFieldOnLBigObject: Boolean!
+  tFieldOnLBigObject: Float!
+  uFieldOnLBigObject: String!
+  vFieldOnLBigObject: Int!
+  wFieldOnLBigObject: Boolean!
+  xFieldOnLBigObject: Float!
+  yFieldOnLBigObject: String!
+  zFieldOnLBigObject: Int!
+}
+type Marketer implements RoleType {
+  departments: [Department!]!
+  title: [String!]!
+  employees: [Employee!]!
+}
+type MBigObject {
+  aFieldOnMBigObject: String!
+  bFieldOnMBigObject: Int!
+  cFieldOnMBigObject: Boolean!
+  dFieldOnMBigObject: Float!
+  eFieldOnMBigObject: String!
+  fFieldOnMBigObject: Int!
+  gFieldOnMBigObject: Boolean!
+  hFieldOnMBigObject: Float!
+  iFieldOnMBigObject: String!
+  jFieldOnMBigObject: Int!
+  kFieldOnMBigObject: Boolean!
+  lFieldOnMBigObject: Float!
+  mFieldOnMBigObject: String!
+  nFieldOnMBigObject: Int!
+  oFieldOnMBigObject: Boolean!
+  pFieldOnMBigObject: Float!
+  qFieldOnMBigObject: String!
+  rFieldOnMBigObject: Int!
+  sFieldOnMBigObject: Boolean!
+  tFieldOnMBigObject: Float!
+  uFieldOnMBigObject: String!
+  vFieldOnMBigObject: Int!
+  wFieldOnMBigObject: Boolean!
+  xFieldOnMBigObject: Float!
+  yFieldOnMBigObject: String!
+  zFieldOnMBigObject: Int!
+}
+type MiscellaneousFact implements TopSecretFact {
+  title: String!
+  description: FactContent!
+  factType: TopSecretFactType
+}
+type Mouse implements Pet & Animal {
+  class: Class!
+  gender: Gender!
+  name: String!
+}
+type Mutation {
+  updateAvailability(employeeID: Int!, isAvailable: Boolean!): Employee!
+  updateEmployeeTag(id: Int!, tag: String!): Employee
+  singleUpload(file: Upload!): Boolean!
+  multipleUpload(files: [Upload!]!): Boolean!
+  updateMood(employeeID: Int!, mood: Mood!): Employee!
+  addFact(fact: TopSecretFactInput!): TopSecretFact!
+}
+type NBigObject {
+  aFieldOnNBigObject: String!
+  bFieldOnNBigObject: Int!
+  cFieldOnNBigObject: Boolean!
+  dFieldOnNBigObject: Float!
+  eFieldOnNBigObject: String!
+  fFieldOnNBigObject: Int!
+  gFieldOnNBigObject: Boolean!
+  hFieldOnNBigObject: Float!
+  iFieldOnNBigObject: String!
+  jFieldOnNBigObject: Int!
+  kFieldOnNBigObject: Boolean!
+  lFieldOnNBigObject: Float!
+  mFieldOnNBigObject: String!
+  nFieldOnNBigObject: Int!
+  oFieldOnNBigObject: Boolean!
+  pFieldOnNBigObject: Float!
+  qFieldOnNBigObject: String!
+  rFieldOnNBigObject: Int!
+  sFieldOnNBigObject: Boolean!
+  tFieldOnNBigObject: Float!
+  uFieldOnNBigObject: String!
+  vFieldOnNBigObject: Int!
+  wFieldOnNBigObject: Boolean!
+  xFieldOnNBigObject: Float!
+  yFieldOnNBigObject: String!
+  zFieldOnNBigObject: Int!
+}
+type NestedObject {
+  deeplyNestedObjects: [DeeplyNestedObject!]!
+}
+type OBigObject {
+  aFieldOnOBigObject: String!
+  bFieldOnOBigObject: Int!
+  cFieldOnOBigObject: Boolean!
+  dFieldOnOBigObject: Float!
+  eFieldOnOBigObject: String!
+  fFieldOnOBigObject: Int!
+  gFieldOnOBigObject: Boolean!
+  hFieldOnOBigObject: Float!
+  iFieldOnOBigObject: String!
+  jFieldOnOBigObject: Int!
+  kFieldOnOBigObject: Boolean!
+  lFieldOnOBigObject: Float!
+  mFieldOnOBigObject: String!
+  nFieldOnOBigObject: Int!
+  oFieldOnOBigObject: Boolean!
+  pFieldOnOBigObject: Float!
+  qFieldOnOBigObject: String!
+  rFieldOnOBigObject: Int!
+  sFieldOnOBigObject: Boolean!
+  tFieldOnOBigObject: Float!
+  uFieldOnOBigObject: String!
+  vFieldOnOBigObject: Int!
+  wFieldOnOBigObject: Boolean!
+  xFieldOnOBigObject: Float!
+  yFieldOnOBigObject: String!
+  zFieldOnOBigObject: Int!
+}
+type Operator implements RoleType {
+  departments: [Department!]!
+  title: [String!]!
+  employees: [Employee!]!
+  operatorType: [OperationType!]!
+}
+type Other implements Hobby {
+  employees: [Employee!]!
+  name: String!
+}
+type PBigObject {
+  aFieldOnPBigObject: String!
+  bFieldOnPBigObject: Int!
+  cFieldOnPBigObject: Boolean!
+  dFieldOnPBigObject: Float!
+  eFieldOnPBigObject: String!
+  fFieldOnPBigObject: Int!
+  gFieldOnPBigObject: Boolean!
+  hFieldOnPBigObject: Float!
+  iFieldOnPBigObject: String!
+  jFieldOnPBigObject: Int!
+  kFieldOnPBigObject: Boolean!
+  lFieldOnPBigObject: Float!
+  mFieldOnPBigObject: String!
+  nFieldOnPBigObject: Int!
+  oFieldOnPBigObject: Boolean!
+  pFieldOnPBigObject: Float!
+  qFieldOnPBigObject: String!
+  rFieldOnPBigObject: Int!
+  sFieldOnPBigObject: Boolean!
+  tFieldOnPBigObject: Float!
+  uFieldOnPBigObject: String!
+  vFieldOnPBigObject: Int!
+  wFieldOnPBigObject: Boolean!
+  xFieldOnPBigObject: Float!
+  yFieldOnPBigObject: String!
+  zFieldOnPBigObject: Int!
+}
+type Pony implements Pet & Animal {
+  class: Class!
+  gender: Gender!
+  name: String!
+}
+type Programming implements Hobby {
+  employees: [Employee!]!
+  languages: [ProgrammingLanguage!]!
+}
+type QBigObject {
+  aFieldOnQBigObject: String!
+  bFieldOnQBigObject: Int!
+  cFieldOnQBigObject: Boolean!
+  dFieldOnQBigObject: Float!
+  eFieldOnQBigObject: String!
+  fFieldOnQBigObject: Int!
+  gFieldOnQBigObject: Boolean!
+  hFieldOnQBigObject: Float!
+  iFieldOnQBigObject: String!
+  jFieldOnQBigObject: Int!
+  kFieldOnQBigObject: Boolean!
+  lFieldOnQBigObject: Float!
+  mFieldOnQBigObject: String!
+  nFieldOnQBigObject: Int!
+  oFieldOnQBigObject: Boolean!
+  pFieldOnQBigObject: Float!
+  qFieldOnQBigObject: String!
+  rFieldOnQBigObject: Int!
+  sFieldOnQBigObject: Boolean!
+  tFieldOnQBigObject: Float!
+  uFieldOnQBigObject: String!
+  vFieldOnQBigObject: Int!
+  wFieldOnQBigObject: Boolean!
+  xFieldOnQBigObject: Float!
+  yFieldOnQBigObject: String!
+  zFieldOnQBigObject: Int!
+}
+type Query {
+  employee(id: Int!): Employee
+  employeeAsList(id: Int!): [Employee]
+  employees: [Employee]
+  products: [Products!]!
+  teammates(team: Department!): [Employee!]!
+  firstEmployee: Employee!
+  findEmployees(criteria: SearchInput): [Employee!]!
+  productTypes: [Products!]!
+  topSecretFederationFacts: [TopSecretFact!]!
+  factTypes: [TopSecretFactType!]
+  "Returns the value of the received HTTP header."
+  headerValue(name: String!): String!
+  "Returns the value of the given key in the WS initial payload."
+  initPayloadValue(key: String!): String!
+  initialPayload: Map
+  "Returns response after the given delay"
+  delay(response: String!, ms: Int!): String!
+  bigResponse(artificialDelay: Int! = 0, bigObjects: Int! = 100, nestedObjects: Int! = 100, deeplyNestedObjects: Int! = 100): [BigObject!]!
+  bigAbstractResponse: BigAbstractResponse
+}
+type RBigObject {
+  aFieldOnRBigObject: String!
+  bFieldOnRBigObject: Int!
+  cFieldOnRBigObject: Boolean!
+  dFieldOnRBigObject: Float!
+  eFieldOnRBigObject: String!
+  fFieldOnRBigObject: Int!
+  gFieldOnRBigObject: Boolean!
+  hFieldOnRBigObject: Float!
+  iFieldOnRBigObject: String!
+  jFieldOnRBigObject: Int!
+  kFieldOnRBigObject: Boolean!
+  lFieldOnRBigObject: Float!
+  mFieldOnRBigObject: String!
+  nFieldOnRBigObject: Int!
+  oFieldOnRBigObject: Boolean!
+  pFieldOnRBigObject: Float!
+  qFieldOnRBigObject: String!
+  rFieldOnRBigObject: Int!
+  sFieldOnRBigObject: Boolean!
+  tFieldOnRBigObject: Float!
+  uFieldOnRBigObject: String!
+  vFieldOnRBigObject: Int!
+  wFieldOnRBigObject: Boolean!
+  xFieldOnRBigObject: Float!
+  yFieldOnRBigObject: String!
+  zFieldOnRBigObject: Int!
+}
+type SBigObject {
+  aFieldOnSBigObject: String!
+  bFieldOnSBigObject: Int!
+  cFieldOnSBigObject: Boolean!
+  dFieldOnSBigObject: Float!
+  eFieldOnSBigObject: String!
+  fFieldOnSBigObject: Int!
+  gFieldOnSBigObject: Boolean!
+  hFieldOnSBigObject: Float!
+  iFieldOnSBigObject: String!
+  jFieldOnSBigObject: Int!
+  kFieldOnSBigObject: Boolean!
+  lFieldOnSBigObject: Float!
+  mFieldOnSBigObject: String!
+  nFieldOnSBigObject: Int!
+  oFieldOnSBigObject: Boolean!
+  pFieldOnSBigObject: Float!
+  qFieldOnSBigObject: String!
+  rFieldOnSBigObject: Int!
+  sFieldOnSBigObject: Boolean!
+  tFieldOnSBigObject: Float!
+  uFieldOnSBigObject: String!
+  vFieldOnSBigObject: Int!
+  wFieldOnSBigObject: Boolean!
+  xFieldOnSBigObject: Float!
+  yFieldOnSBigObject: String!
+  zFieldOnSBigObject: Int!
+}
+type SDK implements IProduct {
+  upc: ID!
+  engineers: [Employee!]!
+  owner: Employee!
+  clientLanguages: [ProgrammingLanguage!]!
+}
+type Subscription {
+  "`currentTime` will return a stream of `Time` objects."
+  currentTime: Time!
+  countEmp(max: Int!, intervalMilliseconds: Int!): Int!
+  countEmp2(max: Int!, intervalMilliseconds: Int!): Int!
+  countHob(max: Int!, intervalMilliseconds: Int!): Int!
+  "Returns a stream with the value of the received HTTP header."
+  headerValue(name: String!, repeat: Int): TimestampedString!
+  "Returns a stream with the value of value of the given key in the WS initial payload."
+  initPayloadValue(key: String!, repeat: Int): TimestampedString!
+  "Returns a stream with the value of the WS initial payload."
+  initialPayload(repeat: Int): Map
+  returnsError: String
+}
+type TBigObject {
+  aFieldOnTBigObject: String!
+  bFieldOnTBigObject: Int!
+  cFieldOnTBigObject: Boolean!
+  dFieldOnTBigObject: Float!
+  eFieldOnTBigObject: String!
+  fFieldOnTBigObject: Int!
+  gFieldOnTBigObject: Boolean!
+  hFieldOnTBigObject: Float!
+  iFieldOnTBigObject: String!
+  jFieldOnTBigObject: Int!
+  kFieldOnTBigObject: Boolean!
+  lFieldOnTBigObject: Float!
+  mFieldOnTBigObject: String!
+  nFieldOnTBigObject: Int!
+  oFieldOnTBigObject: Boolean!
+  pFieldOnTBigObject: Float!
+  qFieldOnTBigObject: String!
+  rFieldOnTBigObject: Int!
+  sFieldOnTBigObject: Boolean!
+  tFieldOnTBigObject: Float!
+  uFieldOnTBigObject: String!
+  vFieldOnTBigObject: Int!
+  wFieldOnTBigObject: Boolean!
+  xFieldOnTBigObject: Float!
+  yFieldOnTBigObject: String!
+  zFieldOnTBigObject: Int!
+}
+type Time {
+  unixTime: Int!
+  timeStamp: String!
+}
+type TimestampedString {
+  "The value of the string."
+  value: String!
+  "The timestamp when the response was generated."
+  unixTime: Int!
+  "Sequence number"
+  seq: Int!
+  "Total number of responses to be sent"
+  total: Int!
+  initialPayload: Map
+}
+type Travelling implements Hobby {
+  employees: [Employee!]!
+  countriesLived: [Country!]!
+}
+type UBigObject {
+  aFieldOnUBigObject: String!
+  bFieldOnUBigObject: Int!
+  cFieldOnUBigObject: Boolean!
+  dFieldOnUBigObject: Float!
+  eFieldOnUBigObject: String!
+  fFieldOnUBigObject: Int!
+  gFieldOnUBigObject: Boolean!
+  hFieldOnUBigObject: Float!
+  iFieldOnUBigObject: String!
+  jFieldOnUBigObject: Int!
+  kFieldOnUBigObject: Boolean!
+  lFieldOnUBigObject: Float!
+  mFieldOnUBigObject: String!
+  nFieldOnUBigObject: Int!
+  oFieldOnUBigObject: Boolean!
+  pFieldOnUBigObject: Float!
+  qFieldOnUBigObject: String!
+  rFieldOnUBigObject: Int!
+  sFieldOnUBigObject: Boolean!
+  tFieldOnUBigObject: Float!
+  uFieldOnUBigObject: String!
+  vFieldOnUBigObject: Int!
+  wFieldOnUBigObject: Boolean!
+  xFieldOnUBigObject: Float!
+  yFieldOnUBigObject: String!
+  zFieldOnUBigObject: Int!
+}
+type VBigObject {
+  aFieldOnVBigObject: String!
+  bFieldOnVBigObject: Int!
+  cFieldOnVBigObject: Boolean!
+  dFieldOnVBigObject: Float!
+  eFieldOnVBigObject: String!
+  fFieldOnVBigObject: Int!
+  gFieldOnVBigObject: Boolean!
+  hFieldOnVBigObject: Float!
+  iFieldOnVBigObject: String!
+  jFieldOnVBigObject: Int!
+  kFieldOnVBigObject: Boolean!
+  lFieldOnVBigObject: Float!
+  mFieldOnVBigObject: String!
+  nFieldOnVBigObject: Int!
+  oFieldOnVBigObject: Boolean!
+  pFieldOnVBigObject: Float!
+  qFieldOnVBigObject: String!
+  rFieldOnVBigObject: Int!
+  sFieldOnVBigObject: Boolean!
+  tFieldOnVBigObject: Float!
+  uFieldOnVBigObject: String!
+  vFieldOnVBigObject: Int!
+  wFieldOnVBigObject: Boolean!
+  xFieldOnVBigObject: Float!
+  yFieldOnVBigObject: String!
+  zFieldOnVBigObject: Int!
+}
+type WBigObject {
+  aFieldOnWBigObject: String!
+  bFieldOnWBigObject: Int!
+  cFieldOnWBigObject: Boolean!
+  dFieldOnWBigObject: Float!
+  eFieldOnWBigObject: String!
+  fFieldOnWBigObject: Int!
+  gFieldOnWBigObject: Boolean!
+  hFieldOnWBigObject: Float!
+  iFieldOnWBigObject: String!
+  jFieldOnWBigObject: Int!
+  kFieldOnWBigObject: Boolean!
+  lFieldOnWBigObject: Float!
+  mFieldOnWBigObject: String!
+  nFieldOnWBigObject: Int!
+  oFieldOnWBigObject: Boolean!
+  pFieldOnWBigObject: Float!
+  qFieldOnWBigObject: String!
+  rFieldOnWBigObject: Int!
+  sFieldOnWBigObject: Boolean!
+  tFieldOnWBigObject: Float!
+  uFieldOnWBigObject: String!
+  vFieldOnWBigObject: Int!
+  wFieldOnWBigObject: Boolean!
+  xFieldOnWBigObject: Float!
+  yFieldOnWBigObject: String!
+  zFieldOnWBigObject: Int!
+}
+type XBigObject {
+  aFieldOnXBigObject: String!
+  bFieldOnXBigObject: Int!
+  cFieldOnXBigObject: Boolean!
+  dFieldOnXBigObject: Float!
+  eFieldOnXBigObject: String!
+  fFieldOnXBigObject: Int!
+  gFieldOnXBigObject: Boolean!
+  hFieldOnXBigObject: Float!
+  iFieldOnXBigObject: String!
+  jFieldOnXBigObject: Int!
+  kFieldOnXBigObject: Boolean!
+  lFieldOnXBigObject: Float!
+  mFieldOnXBigObject: String!
+  nFieldOnXBigObject: Int!
+  oFieldOnXBigObject: Boolean!
+  pFieldOnXBigObject: Float!
+  qFieldOnXBigObject: String!
+  rFieldOnXBigObject: Int!
+  sFieldOnXBigObject: Boolean!
+  tFieldOnXBigObject: Float!
+  uFieldOnXBigObject: String!
+  vFieldOnXBigObject: Int!
+  wFieldOnXBigObject: Boolean!
+  xFieldOnXBigObject: Float!
+  yFieldOnXBigObject: String!
+  zFieldOnXBigObject: Int!
+}
+type YBigObject {
+  aFieldOnYBigObject: String!
+  bFieldOnYBigObject: Int!
+  cFieldOnYBigObject: Boolean!
+  dFieldOnYBigObject: Float!
+  eFieldOnYBigObject: String!
+  fFieldOnYBigObject: Int!
+  gFieldOnYBigObject: Boolean!
+  hFieldOnYBigObject: Float!
+  iFieldOnYBigObject: String!
+  jFieldOnYBigObject: Int!
+  kFieldOnYBigObject: Boolean!
+  lFieldOnYBigObject: Float!
+  mFieldOnYBigObject: String!
+  nFieldOnYBigObject: Int!
+  oFieldOnYBigObject: Boolean!
+  pFieldOnYBigObject: Float!
+  qFieldOnYBigObject: String!
+  rFieldOnYBigObject: Int!
+  sFieldOnYBigObject: Boolean!
+  tFieldOnYBigObject: Float!
+  uFieldOnYBigObject: String!
+  vFieldOnYBigObject: Int!
+  wFieldOnYBigObject: Boolean!
+  xFieldOnYBigObject: Float!
+  yFieldOnYBigObject: String!
+  zFieldOnYBigObject: Int!
+}
+type ZBigObject {
+  aFieldOnZBigObject: String!
+  bFieldOnZBigObject: Int!
+  cFieldOnZBigObject: Boolean!
+  dFieldOnZBigObject: Float!
+  eFieldOnZBigObject: String!
+  fFieldOnZBigObject: Int!
+  gFieldOnZBigObject: Boolean!
+  hFieldOnZBigObject: Float!
+  iFieldOnZBigObject: String!
+  jFieldOnZBigObject: Int!
+  kFieldOnZBigObject: Boolean!
+  lFieldOnZBigObject: Float!
+  mFieldOnZBigObject: String!
+  nFieldOnZBigObject: Int!
+  oFieldOnZBigObject: Boolean!
+  pFieldOnZBigObject: Float!
+  qFieldOnZBigObject: String!
+  rFieldOnZBigObject: Int!
+  sFieldOnZBigObject: Boolean!
+  tFieldOnZBigObject: Float!
+  uFieldOnZBigObject: String!
+  vFieldOnZBigObject: Int!
+  wFieldOnZBigObject: Boolean!
+  xFieldOnZBigObject: Float!
+  yFieldOnZBigObject: String!
+  zFieldOnZBigObject: Int!
+}
+interface Animal {
+  class: Class!
+  gender: Gender!
+}
+interface Experience {
+  yearsOfExperience: Float!
+}
+interface Hobby {
+  employees: [Employee!]!
+}
+interface Identifiable {
   id: Int!
 }
-
-interface IProduct
-  @join__type(graph: EMPLOYEES)
-{
+interface IProduct {
   upc: ID!
   engineers: [Employee!]!
 }
-
-input join__ContextArgument {
-  name: String!
-  type: String!
-  context: String!
-  selection: join__FieldValue!
-}
-
-scalar join__DirectiveArguments
-
-scalar join__FieldSet
-
-scalar join__FieldValue
-
-enum join__Graph {
-  EMPLOYEES @join__graph(name: "employees", url: "http://127.0.0.1:4001")
-  FAMILY @join__graph(name: "family", url: "http://127.0.0.1:4002")
-  HOBBIES @join__graph(name: "hobbies", url: "http://127.0.0.1:4003")
-  PRODUCTS @join__graph(name: "products", url: "http://127.0.0.1:4004")
-}
-
-scalar link__Import
-
-enum link__Purpose {
-  """
-  `SECURITY` features provide metadata necessary to securely resolve fields.
-  """
-  SECURITY
-
-  """
-  `EXECUTION` features provide metadata necessary for operation execution.
-  """
-  EXECUTION
-}
-
-enum MaritalStatus
-  @join__type(graph: FAMILY)
-{
-  ENGAGED @join__enumValue(graph: FAMILY)
-  MARRIED @join__enumValue(graph: FAMILY)
-}
-
-type Marketer implements RoleType
-  @join__implements(graph: EMPLOYEES, interface: "RoleType")
-  @join__type(graph: EMPLOYEES)
-{
-  departments: [Department!]!
-  title: [String!]!
-}
-
-type MiscellaneousFact implements TopSecretFact
-  @join__implements(graph: PRODUCTS, interface: "TopSecretFact")
-  @join__type(graph: PRODUCTS)
-{
-  title: String!
-  description: FactContent! @requiresScopes(scopes: [["read:miscellaneous"]])
-  factType: TopSecretFactType
-}
-
-type Mouse implements Pet & Animal
-  @join__implements(graph: FAMILY, interface: "Pet")
-  @join__implements(graph: FAMILY, interface: "Animal")
-  @join__type(graph: FAMILY)
-{
+interface Pet implements Animal {
   class: Class!
   gender: Gender!
   name: String!
 }
-
-type Mutation
-  @join__type(graph: EMPLOYEES)
-{
-  updateEmployeeTag(id: Int!, tag: String!): Employee
+interface RoleType {
+  departments: [Department!]!
+  title: [String!]!
+  employees: [Employee!]!
 }
-
-enum Nationality
-  @join__type(graph: FAMILY)
-{
-  AMERICAN @join__enumValue(graph: FAMILY)
-  DUTCH @join__enumValue(graph: FAMILY)
-  ENGLISH @join__enumValue(graph: FAMILY)
-  GERMAN @join__enumValue(graph: FAMILY)
-  INDIAN @join__enumValue(graph: FAMILY)
-  SPANISH @join__enumValue(graph: FAMILY)
-  UKRAINIAN @join__enumValue(graph: FAMILY)
+interface TopSecretFact {
+  description: FactContent!
+  factType: TopSecretFactType
 }
-
-input NestedSearchInput
-  @join__type(graph: FAMILY)
-{
+union BigAbstractResponse = ABigObject | BBigObject | CBigObject | DBigObject | EBigObject | FBigObject | GBigObject | HBigObject | IBigObject | JBigObject | KBigObject | LBigObject | MBigObject | NBigObject | OBigObject | PBigObject | QBigObject | RBigObject | SBigObject | TBigObject | UBigObject | VBigObject | WBigObject | XBigObject | YBigObject | ZBigObject
+union Products = Consultancy | Cosmo | SDK | Documentation
+enum CatType {
+  HOME
+  STREET
+}
+enum Class {
+  FISH
+  MAMMAL
+  REPTILE
+}
+enum Department {
+  ENGINEERING
+  MARKETING
+  OPERATIONS
+}
+enum DogBreed {
+  GOLDEN_RETRIEVER
+  POODLE
+  ROTTWEILER
+  YORKSHIRE_TERRIER
+}
+enum EngineerType {
+  BACKEND
+  FRONTEND
+  FULLSTACK
+}
+enum ExerciseType {
+  CALISTHENICS
+  HIKING
+  SPORT
+  STRENGTH_TRAINING
+}
+enum GameGenre {
+  ADVENTURE
+  BOARD
+  FPS
+  CARD
+  RPG
+  ROGUELITE
+  SIMULATION
+  STRATEGY
+}
+enum Gender {
+  FEMALE
+  MALE
+  UNKNOWN
+}
+enum MaritalStatus {
+  ENGAGED
+  MARRIED
+}
+enum Mood {
+  HAPPY
+  SAD
+}
+enum Nationality {
+  AMERICAN
+  DUTCH
+  ENGLISH
+  GERMAN
+  INDIAN
+  SPANISH
+  UKRAINIAN
+}
+enum OperationType {
+  FINANCE
+  HUMAN_RESOURCES
+}
+enum ProductName {
+  CONSULTANCY
+  COSMO
+  ENGINE
+  FINANCE
+  HUMAN_RESOURCES
+  MARKETING
+  SDK
+}
+enum ProgrammingLanguage {
+  CSHARP
+  GO
+  RUST
+  TYPESCRIPT
+}
+enum TopSecretFactType {
+  DIRECTIVE
+  ENTITY
+  MISCELLANEOUS
+}
+input NestedSearchInput {
   maritalStatus: MaritalStatus
   hasChildren: Boolean
 }
-
-enum OperationType
-  @join__type(graph: EMPLOYEES)
-{
-  FINANCE @join__enumValue(graph: EMPLOYEES)
-  HUMAN_RESOURCES @join__enumValue(graph: EMPLOYEES)
-}
-
-type Operator implements RoleType
-  @join__implements(graph: EMPLOYEES, interface: "RoleType")
-  @join__type(graph: EMPLOYEES)
-{
-  departments: [Department!]!
-  operatorType: [OperationType!]!
-  title: [String!]!
-}
-
-type Other
-  @join__type(graph: HOBBIES)
-{
-  name: String!
-}
-
-interface Pet implements Animal
-  @join__implements(graph: FAMILY, interface: "Animal")
-  @join__type(graph: FAMILY)
-{
-  class: Class!
-  gender: Gender!
-  name: String!
-}
-
-type Pony implements Pet & Animal
-  @join__implements(graph: FAMILY, interface: "Pet")
-  @join__implements(graph: FAMILY, interface: "Animal")
-  @join__type(graph: FAMILY)
-{
-  class: Class!
-  gender: Gender!
-  name: String!
-}
-
-enum ProductName
-  @join__type(graph: PRODUCTS)
-{
-  CONSULTANCY @join__enumValue(graph: PRODUCTS)
-  COSMO @join__enumValue(graph: PRODUCTS)
-  ENGINE @join__enumValue(graph: PRODUCTS)
-  FINANCE @join__enumValue(graph: PRODUCTS)
-  HUMAN_RESOURCES @join__enumValue(graph: PRODUCTS)
-  MARKETING @join__enumValue(graph: PRODUCTS)
-  SDK @join__enumValue(graph: PRODUCTS)
-}
-
-union Products
-  @join__type(graph: EMPLOYEES)
-  @join__type(graph: PRODUCTS)
-  @join__unionMember(graph: EMPLOYEES, member: "Consultancy")
-  @join__unionMember(graph: PRODUCTS, member: "Consultancy")
-  @join__unionMember(graph: EMPLOYEES, member: "Cosmo")
-  @join__unionMember(graph: PRODUCTS, member: "Cosmo")
-  @join__unionMember(graph: EMPLOYEES, member: "SDK")
-  @join__unionMember(graph: PRODUCTS, member: "Documentation")
- = Consultancy | Cosmo | SDK | Documentation
-
-type Programming
-  @join__type(graph: HOBBIES)
-{
-  languages: [ProgrammingLanguage!]!
-}
-
-enum ProgrammingLanguage
-  @join__type(graph: HOBBIES)
-{
-  CSHARP @join__enumValue(graph: HOBBIES)
-  GO @join__enumValue(graph: HOBBIES)
-  RUST @join__enumValue(graph: HOBBIES)
-  TYPESCRIPT @join__enumValue(graph: HOBBIES)
-}
-
-type Query
-  @join__type(graph: EMPLOYEES)
-  @join__type(graph: FAMILY)
-  @join__type(graph: HOBBIES)
-  @join__type(graph: PRODUCTS)
-{
-  employee(id: Int!): Employee @join__field(graph: EMPLOYEES)
-  employees: [Employee!]! @join__field(graph: EMPLOYEES)
-  products: [Products!]! @join__field(graph: EMPLOYEES)
-  teammates(team: Department!): [Employee!]! @join__field(graph: EMPLOYEES)
-  findEmployees(criteria: SearchInput): [Employee!]! @join__field(graph: FAMILY)
-  productTypes: [Products!]! @join__field(graph: PRODUCTS)
-  topSecretFederationFacts: [TopSecretFact!]! @join__field(graph: PRODUCTS) @requiresScopes(scopes: [["read:fact"], ["read:all"]])
-  factTypes: [TopSecretFactType!] @join__field(graph: PRODUCTS)
-}
-
-scalar requiresScopes__Scope
-
-interface RoleType
-  @join__type(graph: EMPLOYEES)
-{
-  departments: [Department!]!
-  title: [String!]!
-}
-
-type SDK implements IProduct
-  @join__implements(graph: EMPLOYEES, interface: "IProduct")
-  @join__type(graph: EMPLOYEES, key: "upc")
-  @join__type(graph: HOBBIES, key: "upc")
-{
-  upc: ID!
-  engineers: [Employee!]! @join__field(graph: EMPLOYEES)
-  owner: Employee! @join__field(graph: EMPLOYEES)
-  clientLanguages: [ProgrammingLanguage!]! @join__field(graph: HOBBIES)
-}
-
-input SearchInput
-  @join__type(graph: FAMILY)
-{
+input SearchInput {
   hasPets: Boolean
   nationality: Nationality
   nested: NestedSearchInput
 }
-
-type Subscription
-  @join__type(graph: EMPLOYEES)
-{
-  """`currentTime` will return a stream of `Time` objects."""
-  currentTime: Time!
-}
-
-type Time
-  @join__type(graph: EMPLOYEES)
-{
-  unixTime: Int!
-  timeStamp: String!
-}
-
-interface TopSecretFact
-  @join__type(graph: PRODUCTS)
-  @authenticated
-{
+input TopSecretFactInput {
+  title: String!
   description: FactContent!
-  factType: TopSecretFactType
+  factType: TopSecretFactType!
 }
-
-enum TopSecretFactType
-  @join__type(graph: PRODUCTS)
-  @authenticated
-{
-  DIRECTIVE @join__enumValue(graph: PRODUCTS)
-  ENTITY @join__enumValue(graph: PRODUCTS)
-  MISCELLANEOUS @join__enumValue(graph: PRODUCTS)
-}
-
-type Travelling
-  @join__type(graph: HOBBIES)
-{
-  countriesLived: [Country!]!
-}
+directive @defer(label: String, if: Boolean! = true) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+"Exposes a URL that specifies the behavior of this scalar."
+directive @specifiedBy(
+  "The URL that specifies the behavior of this scalar."
+  url: String!
+) on SCALAR
