@@ -14,9 +14,9 @@ type Query {
 }
 
 enum TopSecretFactType {
-  DIRECTIVE @alias(options: ["Directive"])
-  ENTITY @alias(options: ["Entity"])
-  MISCELLANEOUS @alias(options: ["Miscellaneous"])
+  DIRECTIVE
+  ENTITY
+  MISCELLANEOUS
 }
 
 interface TopSecretFact {
@@ -26,11 +26,11 @@ interface TopSecretFact {
 
 scalar FactContent
 
-type DirectiveFact implements TopSecretFact {
+type DIRECTIVEFact implements TopSecretFact {
   title: String!
   description: FactContent!
   factType: TopSecretFactType
-  _directiveFact: Boolean
+  _DIRECTIVEFact: Boolean
 }
 
 type EntityFact implements TopSecretFact {
@@ -48,13 +48,13 @@ type MiscellaneousFact implements TopSecretFact {
 }
 
 enum ProductName {
-  CONSULTANCY @alias(options: ["Consultancy"])
-  COSMO @alias(options: ["Cosmo"])
-  ENGINE @alias(options: ["Engine"])
-  FINANCE @alias(options: ["Finance"])
-  HUMAN_RESOURCES @alias(options: ["HumanResources"])
-  MARKETING @alias(options: ["Marketing"])
-  SDK @alias(options: ["Sdk"])
+  CONSULTANCY
+  COSMO
+  ENGINE
+  FINANCE
+  HUMAN_RESOURCES
+  MARKETING
+  SDK
 }
 
 type Employee {
@@ -62,15 +62,13 @@ type Employee {
   products: [ProductName!]!
     @http(
       baseURL: "http://localhost:8083"
-      path: "/products/employees"
-      query: [{ key: "id", value: "{{.value.id}}", batchKey: ["id"] }]
+      path: "/products/employees/{{.value.id}}"
       select: "{{.products}}"
     )
   notes: String
     @http(
       baseURL: "http://localhost:8083"
-      path: "/products/employees"
-      query: [{ key: "id", value: "{{.value.id}}", batchKey: ["id"] }]
+      path: "/products/employees/{{.value.id}}"
       select: "{{.notes}}"
     )
 }
@@ -79,28 +77,28 @@ union Products = Consultancy | Cosmo | Documentation
 
 type Consultancy {
   upc: ID!
-  name: ProductName! @http(
-    baseURL: "http://localhost:8083"
-    path: "/products?type=consultancy"
-    query: [{ key: "upc", value: "{{.value.upc}}", batchKey: ["upc"] }]
-    select: "{{.name}}"
-  )
+  name: ProductName!
+    @http(
+      baseURL: "http://localhost:8083"
+      path: "/products/{{.value.upc}}"
+      select: "{{.name}}"
+    )
 }
 
 type Cosmo {
   upc: ID!
-  name: ProductName! @http(
-    baseURL: "http://localhost:8083"
-    path: "/products?type=cosmo"
-    query: [{ key: "upc", value: "{{.value.upc}}", batchKey: ["upc"] }]
-    select: "{{.name}}"
-  )
-  repositoryURL: String!@http(
-    baseURL: "http://localhost:8083"
-    path: "/products?type=cosmo"
-    query: [{ key: "upc", value: "{{.value.upc}}", batchKey: ["upc"] }]
-    select: "{{.repositoryURL}}"
-  )
+  name: ProductName!
+    @http(
+      baseURL: "http://localhost:8083"
+      path: "/products/{{.value.upc}}"
+      select: "{{.name}}"
+    )
+  repositoryURL: String!
+    @http(
+      baseURL: "http://localhost:8083"
+      path: "/products/{{.value.upc}}"
+      select: "{{.repositoryURL}}"
+    )
 }
 
 type Documentation {

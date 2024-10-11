@@ -1,14 +1,14 @@
 use axum::{
-    extract::{Json, Query, State},
+    extract::{Json, Path, State},
     response::IntoResponse,
     routing::get,
     Router,
 };
-use hyper::Server;
+use hyper::{Server, StatusCode};
 use serde::{Deserialize, Serialize};
+use std::path::PathBuf;
 use std::sync::Arc;
 use std::{collections::BTreeSet, net::SocketAddr};
-use std::{collections::HashMap, path::PathBuf};
 use std::{env, fs};
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -42,16 +42,19 @@ enum TopSecretFact {
     DirectiveFact {
         title: String,
         description: String,
+        #[serde(rename = "factType")]
         fact_type: String,
     },
     EntityFact {
         title: String,
         description: String,
+        #[serde(rename = "factType")]
         fact_type: String,
     },
     MiscellaneousFact {
         title: String,
         description: String,
+        #[serde(rename = "factType")]
         fact_type: String,
     },
 }
@@ -76,9 +79,10 @@ async fn main() {
 
     let app = Router::new()
         .route("/products", get(get_products))
+        .route("/products/:upc", get(get_product_details))
+        .route("/products/employees/:id", get(get_employee_products))
         .route("/top_secret_facts", get(get_top_secret_facts))
         .route("/fact_types", get(get_fact_types))
-        .route("/products/employees", get(get_products_employees))
         .with_state(shared_state);
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 8083));
@@ -89,72 +93,50 @@ async fn main() {
         .unwrap();
 }
 
-async fn get_products_employees(
-    Query(params): Query<Vec<(String, String)>>,
+async fn get_employee_products(
+    Path(id): Path<u32>,
     State(state): State<Arc<AppState>>,
 ) -> impl IntoResponse {
-    // Create a map to handle multiple occurrences of the same key
-    let mut param_map: HashMap<String, Vec<String>> = HashMap::new();
-
-    // Collect all query parameters into param_map
-    for (key, value) in params {
-        param_map.entry(key).or_default().push(value);
-    }
-
-    let employees: Vec<Employee> = state
+    let employee = state
         .employees
         .iter()
-        .filter(|employee| {
-            param_map.iter().all(|(key, values)| match key.as_str() {
-                "id" => values.contains(&employee.id.to_string()),
-                _ => true,
-            })
-        })
-        .cloned()
-        .collect();
+        .find(|employee| employee.id == id)
+        .clone();
 
-    Json(employees).into_response()
+    match employee {
+        Some(employee) => Json(employee).into_response(),
+        None => StatusCode::NOT_FOUND.into_response(),
+    }
 }
 
-async fn get_products(
-    Query(params): Query<Vec<(String, String)>>,
-    State(state): State<Arc<AppState>>,
-) -> impl IntoResponse {
-    // Create a map to handle multiple occurrences of the same key
-    let mut param_map: HashMap<String, Vec<String>> = HashMap::new();
-
-    // Collect all query parameters into param_map
-    for (key, value) in params {
-        param_map.entry(key).or_default().push(value);
-    }
-
-    let products: Vec<Product> = state
-        .products
-        .iter()
-        .filter(|product| {
-            param_map.iter().all(|(key, values)| match key.as_str() {
-                "upc" => match product {
-                    Product::Cosmo { upc, .. } => values.contains(upc),
-                    Product::Consultancy { upc, .. } => values.contains(upc),
-                    Product::Documentation { .. } => true,
-                },
-                "type" => {
-                    let product_type = match product {
-                        Product::Consultancy { .. } => "consultancy",
-                        Product::Cosmo { .. } => "cosmo",
-                        Product::Documentation { .. } => "documentation",
-                    }
-                    .to_string();
-
-                    values.contains(&product_type)
-                }
-                _ => true,
-            })
-        })
-        .cloned()
-        .collect();
+async fn get_products(State(state): State<Arc<AppState>>) -> impl IntoResponse {
+    let products: Vec<Product> = state.products.iter().cloned().collect();
 
     Json(products).into_response()
+}
+
+async fn get_product_details(
+    Path(upc): Path<String>,
+    State(state): State<Arc<AppState>>,
+) -> impl IntoResponse {
+    let product = state.products.iter().find_map(|product| {
+        let product_upc = match product {
+            Product::Cosmo { upc, .. } => &upc,
+            Product::Consultancy { upc, .. } => &upc,
+            Product::Documentation { .. } => "",
+        };
+
+        if product_upc == &upc {
+            Some(product.clone())
+        } else {
+            None
+        }
+    });
+
+    match product {
+        Some(product) => Json(product).into_response(),
+        None => StatusCode::NOT_FOUND.into_response(),
+    }
 }
 
 async fn get_top_secret_facts(State(state): State<Arc<AppState>>) -> impl IntoResponse {
