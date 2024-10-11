@@ -3,7 +3,7 @@
     "type": "Cosmo",
     "upc": "cosmo",
     "name": "COSMO",
-    "repository_url": "https://github.com/wundergraph/cosmo"
+    "repositoryUrl": "https://github.com/wundergraph/cosmo"
   },
   {
     "type": "Consultancy",

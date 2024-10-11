@@ -93,11 +93,11 @@ type Cosmo {
       path: "/products/{{.value.upc}}"
       select: "{{.name}}"
     )
-  repositoryURL: String!
+  repositoryUrl: String!
     @http(
       baseURL: "http://localhost:8083"
       path: "/products/{{.value.upc}}"
-      select: "{{.repositoryURL}}"
+      select: "{{.repositoryUrl}}"
     )
 }
 

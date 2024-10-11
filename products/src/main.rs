@@ -12,6 +12,7 @@ use std::{collections::BTreeSet, net::SocketAddr};
 use std::{env, fs};
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
 struct Employee {
     id: u32,
     products: Vec<String>,
@@ -21,40 +22,37 @@ struct Employee {
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[serde(tag = "type")]
 enum Product {
+    #[serde(rename_all = "camelCase")]
     Cosmo {
         upc: String,
         name: String,
         repository_url: String,
     },
-    Consultancy {
-        upc: String,
-        name: String,
-    },
-    Documentation {
-        url: String,
-        urls: Vec<String>,
-    },
+    #[serde(rename_all = "camelCase")]
+    Consultancy { upc: String, name: String },
+    #[serde(rename_all = "camelCase")]
+    Documentation { url: String, urls: Vec<String> },
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[serde(tag = "type")]
 enum TopSecretFact {
+    #[serde(rename_all = "camelCase")]
     DirectiveFact {
         title: String,
         description: String,
-        #[serde(rename = "factType")]
         fact_type: String,
     },
+    #[serde(rename_all = "camelCase")]
     EntityFact {
         title: String,
         description: String,
-        #[serde(rename = "factType")]
         fact_type: String,
     },
+    #[serde(rename_all = "camelCase")]
     MiscellaneousFact {
         title: String,
         description: String,
-        #[serde(rename = "factType")]
         fact_type: String,
     },
 }
