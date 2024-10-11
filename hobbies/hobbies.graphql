@@ -7,8 +7,8 @@ schema
 type Query {
   hobbies_version: Int! @expr(body: 1)
   # TODO: remove test
-  test_employees: [Employee] @expr(body: [{id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}, {id: 7}, {id: 8}, {id: 10}, {id: 11}, {id: 12}])
-  test_sdk: [SDK] @expr(body: [{upc: "sdk"}])
+  # test_employees: [Employee] @expr(body: [{id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}, {id: 7}, {id: 8}, {id: 10}, {id: 11}, {id: 12}])
+  # test_sdk: [SDK] @expr(body: [{upc: "sdk"}])
 }
 
 enum ExerciseType {

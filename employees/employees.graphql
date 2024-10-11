@@ -20,7 +20,7 @@ type Query {
 
 type Mutation {
   # TODO: implement
-  updateEmployeeTag(id: Int!, tag: String!): Employee
+  updateEmployeeTag(id: Int!, tag: String!): Employee @expr(body: null)
 }
 
 type Subscription {
