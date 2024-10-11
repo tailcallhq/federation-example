@@ -1,5 +1,5 @@
 schema
-  @server(port: 8000, enableFederation: true)
+  @server(port: 8000)
   @upstream(baseURL: "http://localhost:8080", batch: { delay: 10 }) {
   query: Query
 }
@@ -85,29 +85,20 @@ enum Country {
   UKRAINE @alias(options: ["Ukraine"])
 }
 
-type Details @shareable {
+type Details {
   forename: String!
   location: Country!
   surname: String!
 }
 
-type Employee implements Identifiable
-  @key(fields: "id")
-  @http(
-    baseURL: "http://localhost:8080"
-    path: "/employees"
-    query: [{ key: "id", value: "{{.value.id}}" }]
-    batchKey: ["id"]
-  ) {
-  details: Details! @shareable
+type Employee implements Identifiable {
+  details: Details!
   id: Int!
   tag: String!
   role: RoleType!
   notes: String
   updated_at: String! @modify(name: "updatedAt")
-  start_date: String!
-    @modify(name: "startDate")
-    @requiresScopes(scopes: [["read:employee", "read:private"], ["read:all"]])
+  start_date: String! @modify(name: "startDate")
 }
 
 type Time {
@@ -122,37 +113,49 @@ interface IProduct {
   engineers: [Employee!]!
 }
 
-type Consultancy
-  @key(fields: "upc")
-  @http(
-    baseURL: "http://localhost:8080"
-    path: "/products/employees?type=consultancy"
-    query: [{ key: "upc", value: "{{.value.upc}}", batchKey: ["upc"] }]
-  ) {
+type Consultancy {
   upc: ID!
   lead: Employee!
+    @http(
+      baseURL: "http://localhost:8080"
+      path: "/products/employees?type=consultancy"
+      query: [{ key: "upc", value: "{{.value.upc}}", batchKey: ["upc"] }]
+      select: "{{.lead}}"
+    )
 }
 
-type Cosmo implements IProduct
-  @key(fields: "upc")
-  @http(
-    baseURL: "http://localhost:8080"
-    path: "/products/employees?type=cosmo"
-    query: [{ key: "upc", value: "{{.value.upc}}", batchKey: ["upc"] }]
-  ) {
+type Cosmo implements IProduct {
   upc: ID!
   engineers: [Employee!]!
+    @http(
+      baseURL: "http://localhost:8080"
+      path: "/products/employees?type=cosmo"
+      query: [{ key: "upc", value: "{{.value.upc}}", batchKey: ["upc"] }]
+      select: "{{.engineers}}"
+    )
   lead: Employee!
+    @http(
+      baseURL: "http://localhost:8080"
+      path: "/products/employees?type=cosmo"
+      query: [{ key: "upc", value: "{{.value.upc}}", batchKey: ["upc"] }]
+      select: "{{.lead}}"
+    )
 }
 
-type SDK implements IProduct
-  @key(fields: "upc")
-  @http(
-    baseURL: "http://localhost:8080"
-    path: "/products/employees?type=sdk"
-    query: [{ key: "upc", value: "{{.value.upc}}", batchKey: ["upc"] }]
-  ) {
+type SDK implements IProduct {
   upc: ID!
   engineers: [Employee!]!
+    @http(
+      baseURL: "http://localhost:8080"
+      path: "/products/employees?type=sdk"
+      query: [{ key: "upc", value: "{{.value.upc}}", batchKey: ["upc"] }]
+      select: "{{.engineers}}"
+    )
   owner: Employee!
+    @http(
+      baseURL: "http://localhost:8080"
+      path: "/products/employees?type=sdk"
+      query: [{ key: "upc", value: "{{.value.upc}}", batchKey: ["upc"] }]
+      select: "{{.owner}}"
+    )
 }

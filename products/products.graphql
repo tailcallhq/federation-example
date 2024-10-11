@@ -1,5 +1,5 @@
 schema
-  @server(port: 8003, enableFederation: true)
+  @server(port: 8003)
   @upstream(baseURL: "http://localhost:8083", batch: { delay: 10 }) {
   query: Query
 }
@@ -8,34 +8,32 @@ type Query {
   productTypes: [Products!]!
     @http(baseURL: "http://localhost:8083", path: "/products")
   topSecretFederationFacts: [TopSecretFact!]!
-    @requiresScopes(scopes: [["read:fact"], ["read:all"]])
     @http(baseURL: "http://localhost:8083", path: "/top_secret_facts")
   factTypes: [TopSecretFactType!]
     @http(baseURL: "http://localhost:8083", path: "/fact_types")
 }
 
-enum TopSecretFactType @authenticated {
+enum TopSecretFactType {
   DIRECTIVE @alias(options: ["Directive"])
   ENTITY @alias(options: ["Entity"])
   MISCELLANEOUS @alias(options: ["Miscellaneous"])
 }
 
-interface TopSecretFact @authenticated {
+interface TopSecretFact {
   description: FactContent!
   factType: TopSecretFactType
 }
 
-scalar FactContent @requiresScopes(scopes: [["read:scalar"], ["read:all"]])
+scalar FactContent
 
-type DirectiveFact implements TopSecretFact @authenticated {
+type DirectiveFact implements TopSecretFact {
   title: String!
   description: FactContent!
   factType: TopSecretFactType
   _directiveFact: Boolean
 }
 
-type EntityFact implements TopSecretFact
-  @requiresScopes(scopes: [["read:entity"]]) {
+type EntityFact implements TopSecretFact {
   title: String!
   description: FactContent!
   factType: TopSecretFactType
@@ -44,7 +42,7 @@ type EntityFact implements TopSecretFact
 
 type MiscellaneousFact implements TopSecretFact {
   title: String!
-  description: FactContent! @requiresScopes(scopes: [["read:miscellaneous"]])
+  description: FactContent!
   factType: TopSecretFactType
   _miscellaneousFact: Boolean
 }
@@ -59,41 +57,50 @@ enum ProductName {
   SDK @alias(options: ["Sdk"])
 }
 
-type Employee
-  @key(fields: "id")
-  @http(
-    baseURL: "http://localhost:8083"
-    path: "/products/employees"
-    query: [{ key: "id", value: "{{.value.id}}", batchKey: ["id"] }]
-  ) {
+type Employee {
   id: Int!
   products: [ProductName!]!
-  notes: String @override(from: "employees")
+    @http(
+      baseURL: "http://localhost:8083"
+      path: "/products/employees"
+      query: [{ key: "id", value: "{{.value.id}}", batchKey: ["id"] }]
+      select: "{{.products}}"
+    )
+  notes: String
+    @http(
+      baseURL: "http://localhost:8083"
+      path: "/products/employees"
+      query: [{ key: "id", value: "{{.value.id}}", batchKey: ["id"] }]
+      select: "{{.notes}}"
+    )
 }
 
 union Products = Consultancy | Cosmo | Documentation
 
-type Consultancy
-  @key(fields: "upc")
-  @http(
+type Consultancy {
+  upc: ID!
+  name: ProductName! @http(
     baseURL: "http://localhost:8083"
     path: "/products?type=consultancy"
     query: [{ key: "upc", value: "{{.value.upc}}", batchKey: ["upc"] }]
-  ) {
-  upc: ID!
-  name: ProductName!
+    select: "{{.name}}"
+  )
 }
 
-type Cosmo
-  @key(fields: "upc")
-  @http(
+type Cosmo {
+  upc: ID!
+  name: ProductName! @http(
     baseURL: "http://localhost:8083"
     path: "/products?type=cosmo"
     query: [{ key: "upc", value: "{{.value.upc}}", batchKey: ["upc"] }]
-  ) {
-  upc: ID!
-  name: ProductName!
-  repositoryURL: String!
+    select: "{{.name}}"
+  )
+  repositoryURL: String!@http(
+    baseURL: "http://localhost:8083"
+    path: "/products?type=cosmo"
+    query: [{ key: "upc", value: "{{.value.upc}}", batchKey: ["upc"] }]
+    select: "{{.repositoryURL}}"
+  )
 }
 
 type Documentation {
