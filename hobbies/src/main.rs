@@ -19,26 +19,42 @@ struct Employee {
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(tag = "type")] // This will add a "type" field for hobby kind (e.g., "Exercise", "Gaming")
 enum Hobby {
+    #[serde(rename_all = "camelCase")]
     Exercise { category: String },
+    #[serde(rename_all = "camelCase")]
     Gaming {
         genres: Vec<String>,
         name: String,
         years_of_experience: f64,
     },
+    #[serde(rename_all = "camelCase")]
     Flying {
         plane_models: Vec<String>,
         years_of_experience: f64,
     },
+    #[serde(rename_all = "camelCase")]
     Other { name: String },
+    #[serde(rename_all = "camelCase")]
     Programming { languages: Vec<String> },
+    #[serde(rename_all = "camelCase")]
     Travelling {
         countries_lived: Vec<Country>,
     },
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-struct Country {
-    key: CountryKey,
+enum Country {
+    America,
+    England,
+    Germany,
+    Indonesia,
+    Korea,
+    Netherlands,
+    Portugal,
+    Serbia,
+    Spain,
+    Taiwan,
+    Thailand,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -47,6 +63,7 @@ struct CountryKey {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 struct Sdk {
     upc: String,
     client_languages: Vec<String>,
@@ -59,7 +76,7 @@ struct AppState {
 async fn find_employee_by_id(Path(id): Path<u32>, State(state): State<Arc<AppState>>) -> impl IntoResponse {
     let employee = state.employees.iter().find(|e| e.id == id);
     match employee {
-        Some(emp) => Json(emp).into_response(),
+        Some(emp) => Json(&emp.hobbies).into_response(),
         None => (axum::http::StatusCode::NOT_FOUND, "Employee not found").into_response(),
     }
 }
@@ -67,11 +84,7 @@ async fn find_employee_by_id(Path(id): Path<u32>, State(state): State<Arc<AppSta
 async fn find_sdk_by_upc(Path(upc): Path<String>) -> impl IntoResponse {
     // Simulate the SDK resolver as in the Go example
     if upc == "sdk" {
-        let sdk = Sdk {
-            upc,
-            client_languages: vec!["Rust".to_string(), "Typescript".to_string()],
-        };
-        Json(sdk).into_response()
+        Json(vec!["Rust".to_string(), "Typescript".to_string()]).into_response()
     } else {
         (axum::http::StatusCode::NOT_FOUND, "SDK not found").into_response()
     }

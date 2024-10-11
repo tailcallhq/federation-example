@@ -10,7 +10,7 @@
         "type": "Gaming",
         "genres": ["Fps"],
         "name": "Counter Strike",
-        "years_of_experience": 20.0
+        "yearsOfExperience": 20.0
       },
       {
         "type": "Other",
@@ -22,9 +22,9 @@
       },
       {
         "type": "Travelling",
-        "countries_lived": [
-          {"key": {"name": "England"}},
-          {"key": {"name": "Germany"}}
+        "countriesLived": [
+          "England",
+          "Germany"
         ]
       }
     ]
@@ -40,7 +40,7 @@
         "type": "Gaming",
         "genres": ["Fps"],
         "name": "Counter Strike",
-        "years_of_experience": 0.5
+        "yearsOfExperience": 0.5
       },
       {
         "type": "Programming",
@@ -65,9 +65,9 @@
       },
       {
         "type": "Travelling",
-        "countries_lived": [
-          {"key": {"name": "America"}},
-          {"key": {"name": "Serbia"}}
+        "countriesLived": [
+          "America",
+          "Serbia"
         ]
       }
     ]
@@ -81,7 +81,7 @@
       },
       {
         "type": "Flying",
-        "plane_models": [
+        "planeModels": [
           "Aquila AT01",
           "Cessna C172",
           "Cessna C206",
@@ -94,13 +94,13 @@
           "Pitts Special",
           "Robin DR400"
         ],
-        "years_of_experience": 20.0
+        "yearsOfExperience": 20.0
       },
       {
         "type": "Travelling",
-        "countries_lived": [
-          {"key": {"name": "America"}},
-          {"key": {"name": "Germany"}}
+        "countriesLived": [
+          "America",
+          "Germany"
         ]
       }
     ]
@@ -129,7 +129,7 @@
         "type": "Gaming",
         "genres": ["Board"],
         "name": "Chess",
-        "years_of_experience": 9.5
+        "yearsOfExperience": 9.5
       },
       {
         "type": "Other",
@@ -148,7 +148,7 @@
         "type": "Gaming",
         "genres": ["Adventure", "Rpg", "Simulation", "Strategy"],
         "name": "Miscellaneous",
-        "years_of_experience": 17.0
+        "yearsOfExperience": 17.0
       },
       {
         "type": "Other",
@@ -181,13 +181,13 @@
       },
       {
         "type": "Travelling",
-        "countries_lived": [
-          {"key": {"name": "Germany"}},
-          {"key": {"name": "Indonesia"}},
-          {"key": {"name": "Netherlands"}},
-          {"key": {"name": "Portugal"}},
-          {"key": {"name": "Spain"}},
-          {"key": {"name": "Thailand"}}
+        "countriesLived": [
+          "Germany",
+          "Indonesia",
+          "Netherlands",
+          "Portugal",
+          "Spain",
+          "Thailand"
         ]
       }
     ]
@@ -206,7 +206,7 @@
     "hobbies": [
       {
         "type": "Programming",
-        "languages": ["All"]
+        "languages": ["Rust"]
       },
       {
         "type": "Exercise",
@@ -224,14 +224,14 @@
           "Strategy"
         ],
         "name": "Miscellaneous",
-        "years_of_experience": 25.5
+        "yearsOfExperience": 25.5
       },
       {
         "type": "Travelling",
-        "countries_lived": [
-          {"key": {"name": "England"}},
-          {"key": {"name": "Korea"}},
-          {"key": {"name": "Taiwan"}}
+        "countriesLived": [
+          "England",
+          "Korea",
+          "Taiwan"
         ]
       }
     ]
