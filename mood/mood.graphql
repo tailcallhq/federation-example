@@ -16,7 +16,7 @@ input MoodInput {
 }
 
 type Mutation {
-    updateMood(input: MoodInput!): Employee! @http(path: "/mood", method: POST, body: "{{.args.input}}")
+    updateMood(input: MoodInput!): Employee! @http(baseURL: "http://localhost:8071", path: "/mood", method: POST, body: "{{.args.input}}")
 }
 
 enum Mood {
