@@ -33,7 +33,7 @@ struct EmployeeDetails {
 #[derive(Serialize, Deserialize, Clone)]
 struct EmployeeRole {
     departments: Vec<String>,
-    #[serde(rename = "engineer_type")]
+    #[serde(rename = "engineerType")]
     engineer_type: Option<String>,
     #[serde(rename = "operator_type")]
     operator_type: Option<Vec<String>>,
@@ -118,170 +118,38 @@ async fn get_products(State(state): State<Arc<AppState>>) -> impl IntoResponse {
     (StatusCode::OK, Json(products)).into_response()
 }
 
-async fn get_products_lead(
+async fn get_product_info(
+    Path(upc): Path<String>,
     State(state): State<Arc<AppState>>,
-    Query(params): Query<Vec<(String, String)>>,
 ) -> impl IntoResponse {
-    // Create a map to handle multiple occurrences of the same key
-    let mut param_map: HashMap<String, Vec<String>> = HashMap::new();
-
-    // Collect all query parameters into param_map
-    for (key, value) in params {
-        param_map.entry(key).or_default().push(value);
-    }
-
-    let products: Vec<_> = state
-        .products
-        .iter()
-        .filter_map(|product| {
-            let include = param_map.iter().all(|(key, values)| match key.as_str() {
-                "type" => {
-                    let product_type = match &product {
-                        Product::Consultancy(_) => "consultancy",
-                        Product::Cosmo(_) => "cosmo",
-                        Product::SDK(_) => "sdk",
-                    }
-                    .to_string();
-                    values.contains(&product_type)
-                }
-                "upc" => {
-                    let product_upc = match &product {
-                        Product::Consultancy(c) => &c.upc,
-                        Product::Cosmo(c) => &c.upc,
-                        Product::SDK(c) => &c.upc,
-                    };
-                    values.contains(product_upc)
-                }
-                _ => true,
-            });
-            if include {
-                Some(match product {
-                    Product::Consultancy(consultancy) => {
-                        let mut hashmap: HashMap<String, serde_json::Value> = HashMap::new();
-                        hashmap.insert(
-                            "upc".to_string(),
-                            serde_json::to_value(consultancy.upc.clone()).unwrap(),
-                        );
-                        hashmap.insert(
-                            "lead".to_string(),
-                            serde_json::to_value(consultancy.lead.clone()).unwrap(),
-                        );
-                        serde_json::to_value(hashmap).unwrap()
-                    }
-                    Product::Cosmo(cosmo) => {
-                        let mut hashmap: HashMap<String, serde_json::Value> = HashMap::new();
-                        hashmap.insert(
-                            "upc".to_string(),
-                            serde_json::to_value(cosmo.upc.clone()).unwrap(),
-                        );
-                        hashmap.insert(
-                            "lead".to_string(),
-                            serde_json::to_value(cosmo.lead.clone()).unwrap(),
-                        );
-                        serde_json::to_value(hashmap).unwrap()
-                    }
-                    Product::SDK(sdk) => {
-                        let mut hashmap: HashMap<String, serde_json::Value> = HashMap::new();
-                        hashmap.insert(
-                            "upc".to_string(),
-                            serde_json::to_value(sdk.upc.clone()).unwrap(),
-                        );
-                        hashmap.insert(
-                            "lead".to_string(),
-                            serde_json::to_value(sdk.owner.clone()).unwrap(),
-                        );
-                        serde_json::to_value(hashmap).unwrap()
-                    }
-                })
-            } else {
-                None
+    let product: Option<_> = state.products.iter().find_map(|product| match product {
+        Product::Consultancy(consultancy) => {
+            if consultancy.upc != upc {
+                return None;
             }
-        })
-        .collect::<Vec<_>>();
-    (StatusCode::OK, Json(products.first().unwrap())).into_response()
-}
 
-async fn get_products_engineers(
-    State(state): State<Arc<AppState>>,
-    Query(params): Query<Vec<(String, String)>>,
-) -> impl IntoResponse {
-    // Create a map to handle multiple occurrences of the same key
-    let mut param_map: HashMap<String, Vec<String>> = HashMap::new();
-
-    // Collect all query parameters into param_map
-    for (key, value) in params {
-        param_map.entry(key).or_default().push(value);
-    }
-
-    let products: Vec<_> = state
-        .products
-        .iter()
-        .filter_map(|product| {
-            let include = param_map.iter().all(|(key, values)| match key.as_str() {
-                "type" => {
-                    let product_type = match &product {
-                        Product::Consultancy(_) => "consultancy",
-                        Product::Cosmo(_) => "cosmo",
-                        Product::SDK(_) => "sdk",
-                    }
-                    .to_string();
-                    values.contains(&product_type)
-                }
-                "upc" => {
-                    let product_upc = match &product {
-                        Product::Consultancy(c) => &c.upc,
-                        Product::Cosmo(c) => &c.upc,
-                        Product::SDK(c) => &c.upc,
-                    };
-                    values.contains(product_upc)
-                }
-                _ => true,
-            });
-            if include {
-                Some(match product {
-                    Product::Consultancy(consultancy) => {
-                        let mut hashmap: HashMap<String, serde_json::Value> = HashMap::new();
-                        hashmap.insert(
-                            "upc".to_string(),
-                            serde_json::to_value(consultancy.upc.clone()).unwrap(),
-                        );
-                        hashmap.insert(
-                            "engineers".to_string(),
-                            serde_json::to_value(Vec::<String>::new()).unwrap(),
-                        );
-                        serde_json::to_value(hashmap).unwrap()
-                    }
-                    Product::Cosmo(cosmo) => {
-                        let mut hashmap: HashMap<String, serde_json::Value> = HashMap::new();
-                        hashmap.insert(
-                            "upc".to_string(),
-                            serde_json::to_value(cosmo.upc.clone()).unwrap(),
-                        );
-                        hashmap.insert(
-                            "engineers".to_string(),
-                            serde_json::to_value(cosmo.engineers.clone()).unwrap(),
-                        );
-                        serde_json::to_value(hashmap).unwrap()
-                    }
-                    Product::SDK(sdk) => {
-                        let mut hashmap: HashMap<String, serde_json::Value> = HashMap::new();
-                        hashmap.insert(
-                            "upc".to_string(),
-                            serde_json::to_value(sdk.upc.clone()).unwrap(),
-                        );
-                        hashmap.insert(
-                            "engineers".to_string(),
-                            serde_json::to_value(sdk.engineers.clone()).unwrap(),
-                        );
-                        serde_json::to_value(hashmap).unwrap()
-                    }
-                })
-            } else {
-                None
+            Some(serde_json::to_value(consultancy).unwrap())
+        }
+        Product::Cosmo(cosmo) => {
+            if cosmo.upc != upc {
+                return None;
             }
-        })
-        .collect::<Vec<_>>();
-    (StatusCode::OK, Json(products.first().unwrap())).into_response()
+
+            Some(serde_json::to_value(cosmo).unwrap())
+        }
+        Product::SDK(sdk) => {
+            if sdk.upc != upc {
+                return None;
+            }
+
+            Some(serde_json::to_value(sdk).unwrap())
+        }
+    });
+
+    match product {
+        Some(product) => (StatusCode::OK, Json(product)).into_response(),
+        None => StatusCode::NOT_FOUND.into_response(),
+    }
 }
 
 // Define the handler to filter employees based on query parameters, including multiple IDs
@@ -382,11 +250,10 @@ async fn main() {
 
     // Build the router with the state and new routes
     let app = Router::new()
-        .route("/employees/:id", get(get_employee_by_id))
         .route("/employees", get(filter_employees))
+        .route("/employees/:id", get(get_employee_by_id))
         .route("/employees/products", get(get_products))
-        .route("/employees/products/lead", get(get_products_lead))
-        .route("/employees/products/engineers", get(get_products_engineers))
+        .route("/employees/products/:upc", get(get_product_info))
         .route(
             "/employees/department/:department",
             get(get_department_employees),

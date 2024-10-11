@@ -54,7 +54,7 @@ interface Identifiable {
 
 type Engineer implements RoleType {
   departments: [Department!]!
-  engineer_type: EngineerType @modify(name: "engineerType")
+  engineerType: EngineerType
   title: [String!]!
 }
 
@@ -92,6 +92,7 @@ type Details {
 }
 
 type Employee implements Identifiable {
+  # TODO: resolve fields using http
   details: Details!
   id: Int!
   tag: String!
@@ -118,8 +119,7 @@ type Consultancy {
   lead: Employee!
     @http(
       baseURL: "http://localhost:8080"
-      path: "/employees/products/lead?type=consultancy"
-      query: [{ key: "upc", value: "{{.value.upc}}" }]
+      path: "/employees/products/{{.value.upc}}"
       select: "{{.lead}}"
     )
 }
@@ -129,15 +129,13 @@ type Cosmo implements IProduct {
   engineers: [Employee!]!
     @http(
       baseURL: "http://localhost:8080"
-      path: "/employees/products/engineers?type=cosmo"
-      query: [{ key: "upc", value: "{{.value.upc}}" }]
+      path: "/employees/products/{{.value.upc}}"
       select: "{{.engineers}}"
     )
   lead: Employee!
     @http(
       baseURL: "http://localhost:8080"
-      path: "/employees/products/lead?type=cosmo"
-      query: [{ key: "upc", value: "{{.value.upc}}" }]
+      path: "/employees/products/{{.value.upc}}"
       select: "{{.lead}}"
     )
 }
@@ -147,15 +145,13 @@ type SDK implements IProduct {
   engineers: [Employee!]!
     @http(
       baseURL: "http://localhost:8080"
-      path: "/employees/products/engineers?type=sdk"
-      query: [{ key: "upc", value: "{{.value.upc}}" }]
+      path: "/employees/products/{{.value.upc}}"
       select: "{{.engineers}}"
     )
   owner: Employee!
     @http(
       baseURL: "http://localhost:8080"
-      path: "/employees/products/lead?type=sdk"
-      query: [{ key: "upc", value: "{{.value.upc}}" }]
+      path: "/employees/products/{{.value.upc}}"
       select: "{{.lead}}"
     )
 }
