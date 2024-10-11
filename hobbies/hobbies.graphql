@@ -80,19 +80,17 @@ type Travelling {
 
 union Hobby = Exercise | Flying | Gaming | Programming | Travelling | Other
 
-type Employee
-  @key(fields: "id")
-  @http(
-    baseURL: "http://localhost:8082"
-    path: "/employees/{{.value.id}}/hobbies"
-  ) {
+type Employee {
   id: Int!
   hobbies: [Hobby!]!
+    @http(
+      baseURL: "http://localhost:8082"
+      path: "/employees/{{.value.id}}/hobbies"
+    )
 }
 
-type SDK
-  @key(fields: "upc")
-  @http(baseURL: "http://localhost:8082", path: "/sdk/{{.value.upc}}") {
+type SDK {
   upc: ID!
-  client_languages: [ProgrammingLanguage!]! @modify(name: "clientLanguages")
+  client_languages: [ProgrammingLanguage!]!
+    @http(baseURL: "http://localhost:8082", path: "/sdk/{{.value.upc}}")
 }
