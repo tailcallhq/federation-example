@@ -1,8 +1,8 @@
 schema
-  @link(type: Config, src: "employees.graphql")
-  @link(type: Config, src: "family.graphql")
-  @link(type: Config, src: "hobbies.graphql")
-  @link(type: Config, src: "products.graphql")
+  @link(type: Config, src: "./employees/employees.graphql")
+  @link(type: Config, src: "./family/family.graphql")
+  @link(type: Config, src: "./hobbies/hobbies.graphql")
+  @link(type: Config, src: "./products/products.graphql")
   @server(port: 8030)
   @upstream {
   query: Query
