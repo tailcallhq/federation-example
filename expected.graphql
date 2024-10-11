@@ -3,125 +3,78 @@ schema {
   mutation: Mutation
   subscription: Subscription
 }
+scalar openfed__Scope
+scalar Upload
 scalar FactContent
 scalar Map
-scalar Upload
-type ABigObject {
-  aFieldOnABigObject: String!
-  bFieldOnABigObject: Int!
-  cFieldOnABigObject: Boolean!
-  dFieldOnABigObject: Float!
-  eFieldOnABigObject: String!
-  fFieldOnABigObject: Int!
-  gFieldOnABigObject: Boolean!
-  hFieldOnABigObject: Float!
-  iFieldOnABigObject: String!
-  jFieldOnABigObject: Int!
-  kFieldOnABigObject: Boolean!
-  lFieldOnABigObject: Float!
-  mFieldOnABigObject: String!
-  nFieldOnABigObject: Int!
-  oFieldOnABigObject: Boolean!
-  pFieldOnABigObject: Float!
-  qFieldOnABigObject: String!
-  rFieldOnABigObject: Int!
-  sFieldOnABigObject: Boolean!
-  tFieldOnABigObject: Float!
-  uFieldOnABigObject: String!
-  vFieldOnABigObject: Int!
-  wFieldOnABigObject: Boolean!
-  xFieldOnABigObject: Float!
-  yFieldOnABigObject: String!
-  zFieldOnABigObject: Int!
+type Query {
+  employee(id: Int!): Employee
+  employeeAsList(id: Int!): [Employee]
+  employees: [Employee]
+  products: [Products!]!
+  teammates(team: Department!): [Employee!]!
+  firstEmployee: Employee!
+  findEmployees(criteria: SearchInput): [Employee!]!
+  productTypes: [Products!]!
+  topSecretFederationFacts: [TopSecretFact!]!
+  factTypes: [TopSecretFactType!]
+  "Returns the value of the received HTTP header."
+  headerValue(name: String!): String!
+  "Returns the value of the given key in the WS initial payload."
+  initPayloadValue(key: String!): String!
+  initialPayload: Map
+  "Returns response after the given delay"
+  delay(response: String!, ms: Int!): String!
+  bigResponse(
+    artificialDelay: Int! = 0
+    bigObjects: Int! = 100
+    nestedObjects: Int! = 100
+    deeplyNestedObjects: Int! = 100
+  ): [BigObject!]!
+  bigAbstractResponse: BigAbstractResponse
+  rootFieldWithListArg(arg: [String!]!): [String!]!
+  rootFieldWithNestedListArg(arg: [[String!]!]!): [[String!]!]!
+  rootFieldWithListOfInputArg(arg: [InputType!]!): [InputResponse!]!
+  rootFieldWithListOfEnumArg(arg: [EnumType!]!): [EnumType!]!
+  rootFieldWithInput(arg: InputArg!): String!
 }
-type Alligator implements Pet & Animal {
-  class: Class!
-  dangerous: String!
-  gender: Gender!
-  name: String!
+type Mutation {
+  updateEmployeeTag(id: Int!, tag: String!): Employee
+  singleUpload(file: Upload!): Boolean!
+  multipleUpload(files: [Upload!]!): Boolean!
+  addFact(fact: TopSecretFactInput!): TopSecretFact!
+  updateAvailability(employeeID: Int!, isAvailable: Boolean!): Employee!
+  updateMood(employeeID: Int!, mood: Mood!): Employee!
 }
-type BBigObject {
-  aFieldOnBBigObject: String!
-  bFieldOnBBigObject: Int!
-  cFieldOnBBigObject: Boolean!
-  dFieldOnBBigObject: Float!
-  eFieldOnBBigObject: String!
-  fFieldOnBBigObject: Int!
-  gFieldOnBBigObject: Boolean!
-  hFieldOnBBigObject: Float!
-  iFieldOnBBigObject: String!
-  jFieldOnBBigObject: Int!
-  kFieldOnBBigObject: Boolean!
-  lFieldOnBBigObject: Float!
-  mFieldOnBBigObject: String!
-  nFieldOnBBigObject: Int!
-  oFieldOnBBigObject: Boolean!
-  pFieldOnBBigObject: Float!
-  qFieldOnBBigObject: String!
-  rFieldOnBBigObject: Int!
-  sFieldOnBBigObject: Boolean!
-  tFieldOnBBigObject: Float!
-  uFieldOnBBigObject: String!
-  vFieldOnBBigObject: Int!
-  wFieldOnBBigObject: Boolean!
-  xFieldOnBBigObject: Float!
-  yFieldOnBBigObject: String!
-  zFieldOnBBigObject: Int!
+type Subscription {
+  "`currentTime` will return a stream of `Time` objects."
+  currentTime: Time!
+  countEmp(max: Int!, intervalMilliseconds: Int!): Int!
+  countEmp2(max: Int!, intervalMilliseconds: Int!): Int!
+  countHob(max: Int!, intervalMilliseconds: Int!): Int!
+  "Returns a stream with the value of the received HTTP header."
+  headerValue(name: String!, repeat: Int): TimestampedString!
+  "Returns a stream with the value of value of the given key in the WS initial payload."
+  initPayloadValue(key: String!, repeat: Int): TimestampedString!
+  "Returns a stream with the value of the WS initial payload."
+  initialPayload(repeat: Int): Map
+  returnsError: String
 }
-type BigObject {
-  nestedObjects: [NestedObject!]!
-}
-type Cat implements Pet & Animal {
-  class: Class!
-  gender: Gender!
-  name: String!
-  type: CatType!
-}
-type CBigObject {
-  aFieldOnCBigObject: String!
-  bFieldOnCBigObject: Int!
-  cFieldOnCBigObject: Boolean!
-  dFieldOnCBigObject: Float!
-  eFieldOnCBigObject: String!
-  fFieldOnCBigObject: Int!
-  gFieldOnCBigObject: Boolean!
-  hFieldOnCBigObject: Float!
-  iFieldOnCBigObject: String!
-  jFieldOnCBigObject: Int!
-  kFieldOnCBigObject: Boolean!
-  lFieldOnCBigObject: Float!
-  mFieldOnCBigObject: String!
-  nFieldOnCBigObject: Int!
-  oFieldOnCBigObject: Boolean!
-  pFieldOnCBigObject: Float!
-  qFieldOnCBigObject: String!
-  rFieldOnCBigObject: Int!
-  sFieldOnCBigObject: Boolean!
-  tFieldOnCBigObject: Float!
-  uFieldOnCBigObject: String!
-  vFieldOnCBigObject: Int!
-  wFieldOnCBigObject: Boolean!
-  xFieldOnCBigObject: Float!
-  yFieldOnCBigObject: String!
-  zFieldOnCBigObject: Int!
+type Details {
+  forename: String!
+  location: Country!
+  surname: String!
+  pastLocations: [City!]!
+  middlename: String @deprecated(reason: "No longer supported")
+  hasChildren: Boolean!
+  maritalStatus: MaritalStatus
+  nationality: Nationality!
+  pets: [Pet]
 }
 type City {
   type: String!
   name: String!
   country: Country
-}
-type Consultancy {
-  upc: ID!
-  lead: Employee!
-  isLeadAvailable: Boolean
-  name: ProductName!
-}
-type Cosmo implements IProduct {
-  upc: ID!
-  engineers: [Employee!]!
-  lead: Employee!
-  name: ProductName!
-  repositoryURL: String!
 }
 type Country {
   key: CountryKey!
@@ -129,33 +82,43 @@ type Country {
 type CountryKey {
   name: String!
 }
-type DBigObject {
-  aFieldOnDBigObject: String!
-  bFieldOnDBigObject: Int!
-  cFieldOnDBigObject: Boolean!
-  dFieldOnDBigObject: Float!
-  eFieldOnDBigObject: String!
-  fFieldOnDBigObject: Int!
-  gFieldOnDBigObject: Boolean!
-  hFieldOnDBigObject: Float!
-  iFieldOnDBigObject: String!
-  jFieldOnDBigObject: Int!
-  kFieldOnDBigObject: Boolean!
-  lFieldOnDBigObject: Float!
-  mFieldOnDBigObject: String!
-  nFieldOnDBigObject: Int!
-  oFieldOnDBigObject: Boolean!
-  pFieldOnDBigObject: Float!
-  qFieldOnDBigObject: String!
-  rFieldOnDBigObject: Int!
-  sFieldOnDBigObject: Boolean!
-  tFieldOnDBigObject: Float!
-  uFieldOnDBigObject: String!
-  vFieldOnDBigObject: Int!
-  wFieldOnDBigObject: Boolean!
-  xFieldOnDBigObject: Float!
-  yFieldOnDBigObject: String!
-  zFieldOnDBigObject: Int!
+type ErrorWrapper {
+  okField: String
+  errorField: String
+}
+type Time {
+  unixTime: Int!
+  timeStamp: String!
+}
+type Consultancy {
+  upc: ID!
+  lead: Employee!
+  isLeadAvailable: Boolean
+  name: ProductName!
+}
+type Documentation {
+  url(product: ProductName!): String!
+  urls(products: [ProductName!]!): [String!]!
+}
+type InputResponse {
+  arg: String!
+}
+type TimestampedString {
+  "The value of the string."
+  value: String!
+  "The timestamp when the response was generated."
+  unixTime: Int!
+  "Sequence number"
+  seq: Int!
+  "Total number of responses to be sent"
+  total: Int!
+  initialPayload: Map
+}
+type BigObject {
+  nestedObjects: [NestedObject!]!
+}
+type NestedObject {
+  deeplyNestedObjects: [DeeplyNestedObject!]!
 }
 type DeeplyNestedObject {
   aFieldOnDeeplyNestedObject: String!
@@ -185,31 +148,117 @@ type DeeplyNestedObject {
   yFieldOnDeeplyNestedObject: String!
   zFieldOnDeeplyNestedObject: Int!
 }
-type Details {
-  forename: String!
-  location: Country!
-  surname: String!
-  pastLocations: [City!]!
-  middlename: String @deprecated(reason: "No longer supported")
-  hasChildren: Boolean!
-  maritalStatus: MaritalStatus
-  nationality: Nationality!
-  pets: [Pet]
+type ABigObject {
+  aFieldOnABigObject: String!
+  bFieldOnABigObject: Int!
+  cFieldOnABigObject: Boolean!
+  dFieldOnABigObject: Float!
+  eFieldOnABigObject: String!
+  fFieldOnABigObject: Int!
+  gFieldOnABigObject: Boolean!
+  hFieldOnABigObject: Float!
+  iFieldOnABigObject: String!
+  jFieldOnABigObject: Int!
+  kFieldOnABigObject: Boolean!
+  lFieldOnABigObject: Float!
+  mFieldOnABigObject: String!
+  nFieldOnABigObject: Int!
+  oFieldOnABigObject: Boolean!
+  pFieldOnABigObject: Float!
+  qFieldOnABigObject: String!
+  rFieldOnABigObject: Int!
+  sFieldOnABigObject: Boolean!
+  tFieldOnABigObject: Float!
+  uFieldOnABigObject: String!
+  vFieldOnABigObject: Int!
+  wFieldOnABigObject: Boolean!
+  xFieldOnABigObject: Float!
+  yFieldOnABigObject: String!
+  zFieldOnABigObject: Int!
 }
-type DirectiveFact implements TopSecretFact {
-  title: String!
-  description: FactContent!
-  factType: TopSecretFactType
+type BBigObject {
+  aFieldOnBBigObject: String!
+  bFieldOnBBigObject: Int!
+  cFieldOnBBigObject: Boolean!
+  dFieldOnBBigObject: Float!
+  eFieldOnBBigObject: String!
+  fFieldOnBBigObject: Int!
+  gFieldOnBBigObject: Boolean!
+  hFieldOnBBigObject: Float!
+  iFieldOnBBigObject: String!
+  jFieldOnBBigObject: Int!
+  kFieldOnBBigObject: Boolean!
+  lFieldOnBBigObject: Float!
+  mFieldOnBBigObject: String!
+  nFieldOnBBigObject: Int!
+  oFieldOnBBigObject: Boolean!
+  pFieldOnBBigObject: Float!
+  qFieldOnBBigObject: String!
+  rFieldOnBBigObject: Int!
+  sFieldOnBBigObject: Boolean!
+  tFieldOnBBigObject: Float!
+  uFieldOnBBigObject: String!
+  vFieldOnBBigObject: Int!
+  wFieldOnBBigObject: Boolean!
+  xFieldOnBBigObject: Float!
+  yFieldOnBBigObject: String!
+  zFieldOnBBigObject: Int!
 }
-type Documentation {
-  url(product: ProductName!): String!
-  urls(products: [ProductName!]!): [String!]!
+type CBigObject {
+  aFieldOnCBigObject: String!
+  bFieldOnCBigObject: Int!
+  cFieldOnCBigObject: Boolean!
+  dFieldOnCBigObject: Float!
+  eFieldOnCBigObject: String!
+  fFieldOnCBigObject: Int!
+  gFieldOnCBigObject: Boolean!
+  hFieldOnCBigObject: Float!
+  iFieldOnCBigObject: String!
+  jFieldOnCBigObject: Int!
+  kFieldOnCBigObject: Boolean!
+  lFieldOnCBigObject: Float!
+  mFieldOnCBigObject: String!
+  nFieldOnCBigObject: Int!
+  oFieldOnCBigObject: Boolean!
+  pFieldOnCBigObject: Float!
+  qFieldOnCBigObject: String!
+  rFieldOnCBigObject: Int!
+  sFieldOnCBigObject: Boolean!
+  tFieldOnCBigObject: Float!
+  uFieldOnCBigObject: String!
+  vFieldOnCBigObject: Int!
+  wFieldOnCBigObject: Boolean!
+  xFieldOnCBigObject: Float!
+  yFieldOnCBigObject: String!
+  zFieldOnCBigObject: Int!
 }
-type Dog implements Pet & Animal {
-  breed: DogBreed!
-  class: Class!
-  gender: Gender!
-  name: String!
+type DBigObject {
+  aFieldOnDBigObject: String!
+  bFieldOnDBigObject: Int!
+  cFieldOnDBigObject: Boolean!
+  dFieldOnDBigObject: Float!
+  eFieldOnDBigObject: String!
+  fFieldOnDBigObject: Int!
+  gFieldOnDBigObject: Boolean!
+  hFieldOnDBigObject: Float!
+  iFieldOnDBigObject: String!
+  jFieldOnDBigObject: Int!
+  kFieldOnDBigObject: Boolean!
+  lFieldOnDBigObject: Float!
+  mFieldOnDBigObject: String!
+  nFieldOnDBigObject: Int!
+  oFieldOnDBigObject: Boolean!
+  pFieldOnDBigObject: Float!
+  qFieldOnDBigObject: String!
+  rFieldOnDBigObject: Int!
+  sFieldOnDBigObject: Boolean!
+  tFieldOnDBigObject: Float!
+  uFieldOnDBigObject: String!
+  vFieldOnDBigObject: Int!
+  wFieldOnDBigObject: Boolean!
+  xFieldOnDBigObject: Float!
+  yFieldOnDBigObject: String!
+  zFieldOnDBigObject: Int!
 }
 type EBigObject {
   aFieldOnEBigObject: String!
@@ -239,42 +288,6 @@ type EBigObject {
   yFieldOnEBigObject: String!
   zFieldOnEBigObject: Int!
 }
-type Employee implements Identifiable {
-  id: Int!
-  isAvailable: Boolean!
-  details: Details
-  tag: String!
-  role: RoleType!
-  notes: String
-  updatedAt: String!
-  startDate: String!
-  currentMood: Mood!
-  derivedMood: Mood!
-  rootFieldThrowsError: String
-  rootFieldErrorWrapper: ErrorWrapper
-  hobbies: [Hobby!]
-  products: [ProductName!]!
-  fieldThrowsError: String
-}
-type Engineer implements RoleType {
-  departments: [Department!]!
-  title: [String!]!
-  employees: [Employee!]!
-  engineerType: EngineerType!
-}
-type EntityFact implements TopSecretFact {
-  title: String!
-  description: FactContent!
-  factType: TopSecretFactType
-}
-type ErrorWrapper {
-  okField: String
-  errorField: String
-}
-type Exercise implements Hobby {
-  employees: [Employee!]!
-  category: ExerciseType!
-}
 type FBigObject {
   aFieldOnFBigObject: String!
   bFieldOnFBigObject: Int!
@@ -302,17 +315,6 @@ type FBigObject {
   xFieldOnFBigObject: Float!
   yFieldOnFBigObject: String!
   zFieldOnFBigObject: Int!
-}
-type Flying implements Experience & Hobby {
-  employees: [Employee!]!
-  planeModels: [String!]!
-  yearsOfExperience: Float!
-}
-type Gaming implements Experience & Hobby {
-  employees: [Employee!]!
-  genres: [GameGenre!]!
-  name: String!
-  yearsOfExperience: Float!
 }
 type GBigObject {
   aFieldOnGBigObject: String!
@@ -482,11 +484,6 @@ type LBigObject {
   yFieldOnLBigObject: String!
   zFieldOnLBigObject: Int!
 }
-type Marketer implements RoleType {
-  departments: [Department!]!
-  title: [String!]!
-  employees: [Employee!]!
-}
 type MBigObject {
   aFieldOnMBigObject: String!
   bFieldOnMBigObject: Int!
@@ -514,24 +511,6 @@ type MBigObject {
   xFieldOnMBigObject: Float!
   yFieldOnMBigObject: String!
   zFieldOnMBigObject: Int!
-}
-type MiscellaneousFact implements TopSecretFact {
-  title: String!
-  description: FactContent!
-  factType: TopSecretFactType
-}
-type Mouse implements Pet & Animal {
-  class: Class!
-  gender: Gender!
-  name: String!
-}
-type Mutation {
-  updateAvailability(employeeID: Int!, isAvailable: Boolean!): Employee!
-  updateEmployeeTag(id: Int!, tag: String!): Employee
-  singleUpload(file: Upload!): Boolean!
-  multipleUpload(files: [Upload!]!): Boolean!
-  updateMood(employeeID: Int!, mood: Mood!): Employee!
-  addFact(fact: TopSecretFactInput!): TopSecretFact!
 }
 type NBigObject {
   aFieldOnNBigObject: String!
@@ -561,9 +540,6 @@ type NBigObject {
   yFieldOnNBigObject: String!
   zFieldOnNBigObject: Int!
 }
-type NestedObject {
-  deeplyNestedObjects: [DeeplyNestedObject!]!
-}
 type OBigObject {
   aFieldOnOBigObject: String!
   bFieldOnOBigObject: Int!
@@ -591,16 +567,6 @@ type OBigObject {
   xFieldOnOBigObject: Float!
   yFieldOnOBigObject: String!
   zFieldOnOBigObject: Int!
-}
-type Operator implements RoleType {
-  departments: [Department!]!
-  title: [String!]!
-  employees: [Employee!]!
-  operatorType: [OperationType!]!
-}
-type Other implements Hobby {
-  employees: [Employee!]!
-  name: String!
 }
 type PBigObject {
   aFieldOnPBigObject: String!
@@ -630,15 +596,6 @@ type PBigObject {
   yFieldOnPBigObject: String!
   zFieldOnPBigObject: Int!
 }
-type Pony implements Pet & Animal {
-  class: Class!
-  gender: Gender!
-  name: String!
-}
-type Programming implements Hobby {
-  employees: [Employee!]!
-  languages: [ProgrammingLanguage!]!
-}
 type QBigObject {
   aFieldOnQBigObject: String!
   bFieldOnQBigObject: Int!
@@ -666,27 +623,6 @@ type QBigObject {
   xFieldOnQBigObject: Float!
   yFieldOnQBigObject: String!
   zFieldOnQBigObject: Int!
-}
-type Query {
-  employee(id: Int!): Employee
-  employeeAsList(id: Int!): [Employee]
-  employees: [Employee]
-  products: [Products!]!
-  teammates(team: Department!): [Employee!]!
-  firstEmployee: Employee!
-  findEmployees(criteria: SearchInput): [Employee!]!
-  productTypes: [Products!]!
-  topSecretFederationFacts: [TopSecretFact!]!
-  factTypes: [TopSecretFactType!]
-  "Returns the value of the received HTTP header."
-  headerValue(name: String!): String!
-  "Returns the value of the given key in the WS initial payload."
-  initPayloadValue(key: String!): String!
-  initialPayload: Map
-  "Returns response after the given delay"
-  delay(response: String!, ms: Int!): String!
-  bigResponse(artificialDelay: Int! = 0, bigObjects: Int! = 100, nestedObjects: Int! = 100, deeplyNestedObjects: Int! = 100): [BigObject!]!
-  bigAbstractResponse: BigAbstractResponse
 }
 type RBigObject {
   aFieldOnRBigObject: String!
@@ -744,26 +680,6 @@ type SBigObject {
   yFieldOnSBigObject: String!
   zFieldOnSBigObject: Int!
 }
-type SDK implements IProduct {
-  upc: ID!
-  engineers: [Employee!]!
-  owner: Employee!
-  clientLanguages: [ProgrammingLanguage!]!
-}
-type Subscription {
-  "`currentTime` will return a stream of `Time` objects."
-  currentTime: Time!
-  countEmp(max: Int!, intervalMilliseconds: Int!): Int!
-  countEmp2(max: Int!, intervalMilliseconds: Int!): Int!
-  countHob(max: Int!, intervalMilliseconds: Int!): Int!
-  "Returns a stream with the value of the received HTTP header."
-  headerValue(name: String!, repeat: Int): TimestampedString!
-  "Returns a stream with the value of value of the given key in the WS initial payload."
-  initPayloadValue(key: String!, repeat: Int): TimestampedString!
-  "Returns a stream with the value of the WS initial payload."
-  initialPayload(repeat: Int): Map
-  returnsError: String
-}
 type TBigObject {
   aFieldOnTBigObject: String!
   bFieldOnTBigObject: Int!
@@ -791,25 +707,6 @@ type TBigObject {
   xFieldOnTBigObject: Float!
   yFieldOnTBigObject: String!
   zFieldOnTBigObject: Int!
-}
-type Time {
-  unixTime: Int!
-  timeStamp: String!
-}
-type TimestampedString {
-  "The value of the string."
-  value: String!
-  "The timestamp when the response was generated."
-  unixTime: Int!
-  "Sequence number"
-  seq: Int!
-  "Total number of responses to be sent"
-  total: Int!
-  initialPayload: Map
-}
-type Travelling implements Hobby {
-  employees: [Employee!]!
-  countriesLived: [Country!]!
 }
 type UBigObject {
   aFieldOnUBigObject: String!
@@ -979,6 +876,136 @@ type ZBigObject {
   yFieldOnZBigObject: String!
   zFieldOnZBigObject: Int!
 }
+type Engineer implements RoleType {
+  departments: [Department!]!
+  title: [String!]!
+  employees: [Employee!]!
+  engineerType: EngineerType!
+}
+type Marketer implements RoleType {
+  departments: [Department!]!
+  title: [String!]!
+  employees: [Employee!]!
+}
+type Operator implements RoleType {
+  departments: [Department!]!
+  title: [String!]!
+  employees: [Employee!]!
+  operatorType: [OperationType!]!
+}
+type Employee implements Identifiable {
+  details: Details
+  id: Int!
+  tag: String!
+  role: RoleType!
+  notes: String
+  updatedAt: String!
+  startDate: String!
+  currentMood: Mood!
+  derivedMood: Mood!
+  isAvailable: Boolean!
+  rootFieldThrowsError: String
+  rootFieldErrorWrapper: ErrorWrapper
+  hobbies: [Hobby!]
+  products: [ProductName!]!
+  fieldThrowsError: String
+}
+type Cosmo implements IProduct {
+  upc: ID!
+  engineers: [Employee!]!
+  lead: Employee!
+  name: ProductName!
+  repositoryURL: String!
+}
+type SDK implements IProduct {
+  upc: ID!
+  engineers: [Employee!]!
+  owner: Employee!
+  unicode: String!
+  clientLanguages: [ProgrammingLanguage!]!
+}
+type Alligator implements Pet & Animal {
+  class: Class!
+  dangerous: String!
+  gender: Gender!
+  name: String!
+}
+type Cat implements Pet & Animal {
+  class: Class!
+  gender: Gender!
+  name: String!
+  type: CatType!
+}
+type Dog implements Pet & Animal {
+  breed: DogBreed!
+  class: Class!
+  gender: Gender!
+  name: String!
+}
+type Mouse implements Pet & Animal {
+  class: Class!
+  gender: Gender!
+  name: String!
+}
+type Pony implements Pet & Animal {
+  class: Class!
+  gender: Gender!
+  name: String!
+}
+type Exercise implements Hobby {
+  employees: [Employee!]!
+  category: ExerciseType!
+}
+type Flying implements Experience & Hobby {
+  employees: [Employee!]!
+  planeModels: [String!]!
+  yearsOfExperience: Float!
+}
+type Gaming implements Experience & Hobby {
+  employees: [Employee!]!
+  genres: [GameGenre!]!
+  name: String!
+  yearsOfExperience: Float!
+}
+type Other implements Hobby {
+  employees: [Employee!]!
+  name: String!
+}
+type Programming implements Hobby {
+  employees: [Employee!]!
+  languages: [ProgrammingLanguage!]!
+}
+type Travelling implements Hobby {
+  employees: [Employee!]!
+  countriesLived: [Country!]!
+}
+type DirectiveFact implements TopSecretFact {
+  title: String!
+  description: FactContent!
+  factType: TopSecretFactType
+}
+type EntityFact implements TopSecretFact {
+  title: String!
+  description: FactContent!
+  factType: TopSecretFactType
+}
+type MiscellaneousFact implements TopSecretFact {
+  title: String!
+  description: FactContent!
+  factType: TopSecretFactType
+}
+interface RoleType {
+  departments: [Department!]!
+  title: [String!]!
+  employees: [Employee!]!
+}
+interface Identifiable {
+  id: Int!
+}
+interface IProduct {
+  upc: ID!
+  engineers: [Employee!]!
+}
 interface Animal {
   class: Class!
   gender: Gender!
@@ -989,42 +1016,74 @@ interface Experience {
 interface Hobby {
   employees: [Employee!]!
 }
-interface Identifiable {
-  id: Int!
-}
-interface IProduct {
-  upc: ID!
-  engineers: [Employee!]!
+interface TopSecretFact {
+  description: FactContent!
+  factType: TopSecretFactType
 }
 interface Pet implements Animal {
   class: Class!
   gender: Gender!
   name: String!
 }
-interface RoleType {
-  departments: [Department!]!
-  title: [String!]!
-  employees: [Employee!]!
-}
-interface TopSecretFact {
-  description: FactContent!
-  factType: TopSecretFactType
-}
-union BigAbstractResponse = ABigObject | BBigObject | CBigObject | DBigObject | EBigObject | FBigObject | GBigObject | HBigObject | IBigObject | JBigObject | KBigObject | LBigObject | MBigObject | NBigObject | OBigObject | PBigObject | QBigObject | RBigObject | SBigObject | TBigObject | UBigObject | VBigObject | WBigObject | XBigObject | YBigObject | ZBigObject
 union Products = Consultancy | Cosmo | SDK | Documentation
-enum CatType {
-  HOME
-  STREET
+union BigAbstractResponse =
+  | ABigObject
+  | BBigObject
+  | CBigObject
+  | DBigObject
+  | EBigObject
+  | FBigObject
+  | GBigObject
+  | HBigObject
+  | IBigObject
+  | JBigObject
+  | KBigObject
+  | LBigObject
+  | MBigObject
+  | NBigObject
+  | OBigObject
+  | PBigObject
+  | QBigObject
+  | RBigObject
+  | SBigObject
+  | TBigObject
+  | UBigObject
+  | VBigObject
+  | WBigObject
+  | XBigObject
+  | YBigObject
+  | ZBigObject
+enum Department {
+  ENGINEERING
+  MARKETING
+  OPERATIONS
+}
+enum EngineerType {
+  BACKEND
+  FRONTEND
+  FULLSTACK
+}
+enum OperationType {
+  FINANCE
+  HUMAN_RESOURCES
+}
+enum Mood {
+  HAPPY
+  SAD
 }
 enum Class {
   FISH
   MAMMAL
   REPTILE
 }
-enum Department {
-  ENGINEERING
-  MARKETING
-  OPERATIONS
+enum Gender {
+  FEMALE
+  MALE
+  UNKNOWN
+}
+enum CatType {
+  HOME
+  STREET
 }
 enum DogBreed {
   GOLDEN_RETRIEVER
@@ -1032,10 +1091,18 @@ enum DogBreed {
   ROTTWEILER
   YORKSHIRE_TERRIER
 }
-enum EngineerType {
-  BACKEND
-  FRONTEND
-  FULLSTACK
+enum MaritalStatus {
+  ENGAGED
+  MARRIED
+}
+enum Nationality {
+  AMERICAN
+  DUTCH
+  ENGLISH
+  GERMAN
+  INDIAN
+  SPANISH
+  UKRAINIAN
 }
 enum ExerciseType {
   CALISTHENICS
@@ -1053,41 +1120,6 @@ enum GameGenre {
   SIMULATION
   STRATEGY
 }
-enum Gender {
-  FEMALE
-  MALE
-  UNKNOWN
-}
-enum MaritalStatus {
-  ENGAGED
-  MARRIED
-}
-enum Mood {
-  HAPPY
-  SAD
-}
-enum Nationality {
-  AMERICAN
-  DUTCH
-  ENGLISH
-  GERMAN
-  INDIAN
-  SPANISH
-  UKRAINIAN
-}
-enum OperationType {
-  FINANCE
-  HUMAN_RESOURCES
-}
-enum ProductName {
-  CONSULTANCY
-  COSMO
-  ENGINE
-  FINANCE
-  HUMAN_RESOURCES
-  MARKETING
-  SDK
-}
 enum ProgrammingLanguage {
   CSHARP
   GO
@@ -1099,23 +1131,44 @@ enum TopSecretFactType {
   ENTITY
   MISCELLANEOUS
 }
-input NestedSearchInput {
-  maritalStatus: MaritalStatus
-  hasChildren: Boolean
+enum ProductName {
+  CONSULTANCY
+  COSMO
+  ENGINE
+  FINANCE
+  HUMAN_RESOURCES
+  MARKETING
+  SDK
+}
+enum EnumType {
+  A
+  B
+  C
 }
 input SearchInput {
   hasPets: Boolean
   nationality: Nationality
   nested: NestedSearchInput
 }
+input NestedSearchInput {
+  maritalStatus: MaritalStatus
+  hasChildren: Boolean
+}
 input TopSecretFactInput {
   title: String!
   description: FactContent!
   factType: TopSecretFactType!
 }
-directive @defer(label: String, if: Boolean! = true) on FRAGMENT_SPREAD | INLINE_FRAGMENT
-"Exposes a URL that specifies the behavior of this scalar."
-directive @specifiedBy(
-  "The URL that specifies the behavior of this scalar."
-  url: String!
-) on SCALAR
+input InputArg {
+  enums: [EnumType!]
+  enum: EnumType
+  string: String
+  strings: [String!]
+}
+input InputType {
+  arg: String!
+}
+directive @authenticated on SCALAR | OBJECT | FIELD_DEFINITION | INTERFACE | ENUM
+directive @requiresScopes(
+  scopes: [[openfed__Scope!]!]!
+) on SCALAR | OBJECT | FIELD_DEFINITION | INTERFACE | ENUM
