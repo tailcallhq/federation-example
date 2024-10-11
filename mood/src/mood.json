@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "currentMood": "HAPPY"
+  },
+  {
+    "id": 2,
+    "currentMood": "SAD"
+  },
+  {
+    "id": 3,
+    "currentMood": "HAPPY"
+  },
+  {
+    "id": 4,
+    "currentMood": "HAPPY"
+  },
+  {
+    "id": 5,
+    "currentMood": "SAD"
+  },
+  {
+    "id": 7,
+    "currentMood": "SAD"
+  },
+  {
+    "id": 8,
+    "currentMood": "SAD"
+  },
+  {
+    "id": 10,
+    "currentMood": "HAPPY"
+  },
+  {
+    "id": 11,
+    "currentMood": "HAPPY"
+  },
+  {
+    "id": 12,
+    "currentMood": "HAPPY"
+  }
+]

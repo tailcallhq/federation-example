@@ -1,0 +1,30 @@
+schema
+  @server(port: 8004)
+  @upstream(baseURL: "http://localhost:8071", batch: { delay: 10 }) {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  # tailcall expect query to be there.
+  me: String @expr(body: "me")
+}
+
+input MoodInput {
+  employeeID: Int!
+  mood: Mood!
+}
+
+type Mutation {
+    updateMood(input: MoodInput!): Employee! @http(path: "/mood", method: POST, body: "{{.args.input}}")
+}
+
+enum Mood {
+    HAPPY
+    SAD
+}
+
+type Employee {
+  id: Int!
+  currentMood: Mood!
+}
