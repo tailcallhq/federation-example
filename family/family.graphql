@@ -111,9 +111,9 @@ enum Nationality {
 }
 
 type Details {
-  forename: String! 
+  forename: String!
   middlename: String
-  surname: String! 
+  surname: String!
   has_children: Boolean! @modify(name: "hasChildren")
   marital_status: MaritalStatus @modify(name: "maritalStatus")
   nationality: Nationality!
@@ -121,7 +121,7 @@ type Details {
 }
 
 type Employee {
-  details: Details 
+  details: Details @http(baseURL: "http://localhost:8081", path: "/family/employee-details", query: [{key: "id", value: "{{.value.id}}"}], batchKey: ["id"], select: "{{.details}}")
   id: Int!
 }
 

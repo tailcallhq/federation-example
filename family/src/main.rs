@@ -99,14 +99,13 @@ async fn get_employee_details_by_id(
     State(state): State<Arc<AppState>>,
 ) -> impl IntoResponse {
     let employees = state.employees.clone();
-    let filtered_employees: Vec<Details> = employees
+    let employees_with_details: Vec<Employee> = employees
         .iter()
         .filter(|e| ids.iter().any(|(key, id)| key == "id" && e.id == *id))
         .cloned()
-        .map(|employee| employee.details)
         .collect();
-    
-    Json(filtered_employees)
+
+    Json(employees_with_details)
 }
 
 // Define the shared application state
