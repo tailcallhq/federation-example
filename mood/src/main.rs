@@ -1,10 +1,13 @@
+use axum::extract::Query;
 use axum::http::StatusCode;
+use axum::routing::get;
 use axum::{extract::State, response::IntoResponse, routing::post, Json, Router};
 use hyper::Server;
 use serde::{Deserialize, Serialize};
+use std::collections::HashSet;
 use std::env;
 use std::path::PathBuf;
-use std::sync::Mutex;
+use std::sync::RwLock;
 use std::{fs, net::SocketAddr, sync::Arc};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -27,11 +30,29 @@ struct Input {
     mood: Mood,
 }
 
+async fn get_mood_by_id(
+    State(state): State<Arc<AppState>>,
+    Query(ids): Query<Vec<(String, u32)>>,
+) -> impl IntoResponse {
+    let db = state.mood_db.read().unwrap();
+    let employee_ids = ids
+        .iter()
+        .filter(|(k, _)| k == "id")
+        .map(|(_, id)| id)
+        .collect::<HashSet<_>>();
+    Json(
+        db.iter()
+            .filter(|employee| employee_ids.contains(&&employee.id))
+            .cloned()
+            .collect::<Vec<_>>(),
+    )
+}
+
 async fn update_mood(
     State(state): State<Arc<AppState>>,
     Json(input): Json<Input>,
 ) -> impl IntoResponse {
-    let mut db = state.mood_db.lock().unwrap();
+    let mut db = state.mood_db.write().unwrap();
 
     match db
         .iter_mut()
@@ -49,7 +70,7 @@ async fn update_mood(
 }
 
 struct AppState {
-    mood_db: Mutex<Vec<Employee>>,
+    mood_db: RwLock<Vec<Employee>>
 }
 
 #[tokio::main]
@@ -72,12 +93,13 @@ async fn main() {
 
     // Create shared application state
     let shared_state = Arc::new(AppState {
-        mood_db: Mutex::new(employees_mood),
+        mood_db: RwLock::new(employees_mood),
     });
 
     // Build the router with the state and new routes
     let app = Router::new()
         .route("/mood", post(update_mood))
+        .route("/mood", get(get_mood_by_id))
         .with_state(shared_state);
 
     // Define the address to serve the application
