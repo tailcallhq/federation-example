@@ -1,14 +1,14 @@
 use axum::{
-    extract::{Json, State},
+    extract::{Json, Query, State},
     response::IntoResponse,
     routing::get,
     Router,
 };
 use hyper::Server;
 use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
 use std::sync::Arc;
 use std::{collections::BTreeSet, net::SocketAddr};
+use std::{collections::HashMap, path::PathBuf};
 use std::{env, fs};
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -89,23 +89,72 @@ async fn main() {
         .unwrap();
 }
 
-async fn get_products_employees(State(state): State<Arc<AppState>>) -> impl IntoResponse {
-    Json(state.employees.clone()).into_response()
+async fn get_products_employees(
+    Query(params): Query<Vec<(String, String)>>,
+    State(state): State<Arc<AppState>>,
+) -> impl IntoResponse {
+    // Create a map to handle multiple occurrences of the same key
+    let mut param_map: HashMap<String, Vec<String>> = HashMap::new();
+
+    // Collect all query parameters into param_map
+    for (key, value) in params {
+        param_map.entry(key).or_default().push(value);
+    }
+
+    let employees: Vec<Employee> = state
+        .employees
+        .iter()
+        .filter(|employee| {
+            param_map.iter().all(|(key, values)| match key.as_str() {
+                "id" => values.contains(&employee.id.to_string()),
+                _ => true,
+            })
+        })
+        .cloned()
+        .collect();
+
+    Json(employees).into_response()
 }
 
-// async fn find_employee_by_id(
-//     Path(id): Path<u32>,
-//     State(state): State<Arc<AppState>>,
-// ) -> impl IntoResponse {
-//     let employee = state.employees.iter().find(|e| e.id == id);
-//     match employee {
-//         Some(emp) => Json(emp.clone()).into_response(),
-//         None => (axum::http::StatusCode::NOT_FOUND, "Employee not found").into_response(),
-//     }
-// }
+async fn get_products(
+    Query(params): Query<Vec<(String, String)>>,
+    State(state): State<Arc<AppState>>,
+) -> impl IntoResponse {
+    // Create a map to handle multiple occurrences of the same key
+    let mut param_map: HashMap<String, Vec<String>> = HashMap::new();
 
-async fn get_products(State(state): State<Arc<AppState>>) -> impl IntoResponse {
-    Json(state.products.clone()).into_response()
+    // Collect all query parameters into param_map
+    for (key, value) in params {
+        param_map.entry(key).or_default().push(value);
+    }
+
+    let products: Vec<Product> = state
+        .products
+        .iter()
+        .filter(|product| {
+            param_map.iter().all(|(key, values)| match key.as_str() {
+                "upc" => match product {
+                    Product::Cosmo { upc, .. } => values.contains(upc),
+                    Product::Consultancy { upc, .. } => values.contains(upc),
+                    Product::Documentation { .. } => true,
+                },
+                "type" => {
+                    let product_type = match product {
+                        Product::Consultancy { .. } => "consultancy",
+                        Product::Cosmo { .. } => "cosmo",
+                        Product::Documentation { .. } => "documentation",
+                    }
+                    .to_string();
+
+                    values.contains(&product_type)
+                }
+                _ => true,
+            })
+        })
+        .cloned()
+        .collect();
+
+    Json(products).into_response()
 }
 
 async fn get_top_secret_facts(State(state): State<Arc<AppState>>) -> impl IntoResponse {

@@ -1,7 +1,13 @@
-schema @server @upstream {
+schema
+  @link(type: Config, src: "employees.graphql")
+  @link(type: Config, src: "family.graphql")
+  @link(type: Config, src: "hobbies.graphql")
+  @link(type: Config, src: "products.graphql")
+  @server(port: 8030)
+  @upstream {
   query: Query
 }
 
 type Query {
-  greet: String! @expr(body: "Hello, World!")
+  main_version: Int! @expr(body: 1)
 }

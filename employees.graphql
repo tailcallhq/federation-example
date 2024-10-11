@@ -1,32 +1,20 @@
-schema @server(port: 8000) @upstream(baseURL: "http://localhost:8080") {
+schema
+  @server(port: 8000, enableFederation: true)
+  @upstream(baseURL: "http://localhost:8080", batch: { delay: 10 }) {
   query: Query
 }
 
 type Query {
-  employee(id: Int!): Employee @http(path: "/employees/{{.args.id}}")
-  employees: [Employee!]! @http(path: "/employees")
-  products: [Products!]! @http(path: "/products/employees")
+  employee(id: Int!): Employee
+    @http(baseURL: "http://localhost:8080", path: "/employees/{{.args.id}}")
+  employees: [Employee!]!
+    @http(baseURL: "http://localhost:8080", path: "/employees")
+  products: [Products!]!
+    @http(baseURL: "http://localhost:8080", path: "/products/employees")
   teammates(team: Department!): [Employee!]!
-    @http(path: "/department/{{.args.team}}/employees")
-  _employee_resolver(ids: [Int!]!): [Employee!]!
     @http(
-      path: "/employees"
-      query: [{ key: "id", value: "{{.args.ids}}", skipEmpty: true }]
-    )
-  _consultancy_resolver(upcs: [ID!]!): [Consultancy!]!
-    @http(
-      path: "/products/employees?type=consultancy"
-      query: [{ key: "upc", value: "{{.args.upcs}}", skipEmpty: true }]
-    )
-  _cosmo_resolver(upcs: [ID!]!): [Cosmo!]!
-    @http(
-      path: "/products/employees?type=cosmo"
-      query: [{ key: "upc", value: "{{.args.upcs}}", skipEmpty: true }]
-    )
-  _sdk_resolver(upcs: [ID!]!): [SDK!]!
-    @http(
-      path: "/products/employees?type=sdk"
-      query: [{ key: "upc", value: "{{.args.upcs}}", skipEmpty: true }]
+      baseURL: "http://localhost:8080"
+      path: "/department/{{.args.team}}/employees"
     )
 }
 
@@ -82,7 +70,7 @@ enum OperationType {
 
 type Operator implements RoleType {
   departments: [Department!]!
-  operator_type: [OperationType] @modify(name: "operatorType")
+  operatorType: [OperationType!]!
   title: [String!]!
 }
 
@@ -103,7 +91,14 @@ type Details @shareable {
   surname: String!
 }
 
-type Employee implements Identifiable @key(fields: "id") {
+type Employee implements Identifiable
+  @key(fields: "id")
+  @http(
+    baseURL: "http://localhost:8080"
+    path: "/employees"
+    query: [{ key: "id", value: "{{.value.id}}" }]
+    batchKey: ["id"]
+  ) {
   details: Details! @shareable
   id: Int!
   tag: String!
@@ -127,18 +122,36 @@ interface IProduct {
   engineers: [Employee!]!
 }
 
-type Consultancy @key(fields: "upc") {
+type Consultancy
+  @key(fields: "upc")
+  @http(
+    baseURL: "http://localhost:8080"
+    path: "/products/employees?type=consultancy"
+    query: [{ key: "upc", value: "{{.value.upc}}", batchKey: ["upc"] }]
+  ) {
   upc: ID!
   lead: Employee!
 }
 
-type Cosmo implements IProduct @key(fields: "upc") {
+type Cosmo implements IProduct
+  @key(fields: "upc")
+  @http(
+    baseURL: "http://localhost:8080"
+    path: "/products/employees?type=cosmo"
+    query: [{ key: "upc", value: "{{.value.upc}}", batchKey: ["upc"] }]
+  ) {
   upc: ID!
   engineers: [Employee!]!
   lead: Employee!
 }
 
-type SDK implements IProduct @key(fields: "upc") {
+type SDK implements IProduct
+  @key(fields: "upc")
+  @http(
+    baseURL: "http://localhost:8080"
+    path: "/products/employees?type=sdk"
+    query: [{ key: "upc", value: "{{.value.upc}}", batchKey: ["upc"] }]
+  ) {
   upc: ID!
   engineers: [Employee!]!
   owner: Employee!

@@ -1,11 +1,14 @@
-schema @server(port: 8001) @upstream(baseURL: "http://localhost:8081") {
+schema
+  @server(port: 8001, enableFederation: true)
+  @upstream(baseURL: "http://localhost:8081", batch: { delay: 10 }) {
   query: Query
 }
 
 type Query {
   findEmployees(criteria: SearchInput): [Employee!]!
     @http(
-      path: "/employees/family"
+      baseURL: "http://localhost:8081"
+      path: "/family/employees"
       query: [
         {
           key: "has_pets"
@@ -19,12 +22,6 @@ type Query {
         }
         { key: "nested", value: "{{.args.criteria.nested}}", skipEmpty: true }
       ]
-    )
-  _employee_resolver(ids: [Int!]!): [Employee!]!
-    @http(
-      path: "/employees/family"
-
-      query: [{ key: "id", value: "{{.args.ids}}", skipEmpty: true }]
     )
 }
 
@@ -123,7 +120,13 @@ type Details {
   pets: [Pet]
 }
 
-type Employee @key(fields: "id") {
+type Employee
+  @key(fields: "id")
+  @http(
+    baseURL: "http://localhost:8081"
+    path: "/family/employees"
+    query: [{ key: "id", value: "{{.value.id}}", batchKey: ["id"] }]
+  ) {
   details: Details @shareable
   id: Int!
 }

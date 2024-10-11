@@ -1,10 +1,11 @@
-schema @server(port: 8002) @upstream(baseURL: "http://localhost:8082") {
+schema
+  @server(port: 8002, enableFederation: true)
+  @upstream(baseURL: "http://localhost:8082", batch: { delay: 10 }) {
   query: Query
 }
 
 type Query {
-  _employeeHobbies(id: Int!): Employee @http(path: "/employees/{{.args.id}}/hobbies")
-  _sdk(upc: String!): SDK @http(path: "/sdk/{{.args.upc}}")
+  hobbies_version: Int! @expr(body: 1)
 }
 
 enum ExerciseType {
@@ -79,12 +80,19 @@ type Travelling {
 
 union Hobby = Exercise | Flying | Gaming | Programming | Travelling | Other
 
-type Employee @key(fields: "id") {
+type Employee
+  @key(fields: "id")
+  @http(
+    baseURL: "http://localhost:8082"
+    path: "/employees/{{.value.id}}/hobbies"
+  ) {
   id: Int!
   hobbies: [Hobby!]!
 }
 
-type SDK @key(fields: "upc") {
+type SDK
+  @key(fields: "upc")
+  @http(baseURL: "http://localhost:8082", path: "/sdk/{{.value.upc}}") {
   upc: ID!
   client_languages: [ProgrammingLanguage!]! @modify(name: "clientLanguages")
 }

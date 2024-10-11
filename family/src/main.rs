@@ -124,7 +124,7 @@ async fn main() {
 
     // Build the router with the state and new routes
     let app = Router::new()
-        .route("/employees/family", get(filter_employees))
+        .route("/family/employees", get(filter_employees))
         .with_state(shared_state);
 
     // Define the address to serve the application
