@@ -1,0 +1,558 @@
+
+schema
+  @link(url: "https://specs.apollo.dev/link/v1.0")
+  @link(url: "https://specs.apollo.dev/join/v0.5", for: EXECUTION)
+  @link(url: "https://specs.apollo.dev/requiresScopes/v0.1", import: ["@requiresScopes"], for: SECURITY)
+  @link(url: "https://specs.apollo.dev/authenticated/v0.1", import: ["@authenticated"], for: SECURITY)
+{
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+directive @authenticated on FIELD_DEFINITION | OBJECT | INTERFACE | SCALAR | ENUM
+
+directive @join__directive(graphs: [join__Graph!], name: String!, args: join__DirectiveArguments) repeatable on SCHEMA | OBJECT | INTERFACE | FIELD_DEFINITION
+
+directive @join__enumValue(graph: join__Graph!) repeatable on ENUM_VALUE
+
+directive @join__field(graph: join__Graph, requires: join__FieldSet, provides: join__FieldSet, type: String, external: Boolean, override: String, usedOverridden: Boolean, overrideLabel: String, contextArguments: [join__ContextArgument!]) repeatable on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
+
+directive @join__graph(name: String!, url: String!) on ENUM_VALUE
+
+directive @join__implements(graph: join__Graph!, interface: String!) repeatable on OBJECT | INTERFACE
+
+directive @join__type(graph: join__Graph!, key: join__FieldSet, extension: Boolean! = false, resolvable: Boolean! = true, isInterfaceObject: Boolean! = false) repeatable on OBJECT | INTERFACE | UNION | ENUM | INPUT_OBJECT | SCALAR
+
+directive @join__unionMember(graph: join__Graph!, member: String!) repeatable on UNION
+
+directive @link(url: String, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
+
+directive @requiresScopes(scopes: [[requiresScopes__Scope!]!]!) on FIELD_DEFINITION | OBJECT | INTERFACE | SCALAR | ENUM
+
+type Alligator implements Pet & Animal
+  @join__implements(graph: FAMILY, interface: "Pet")
+  @join__implements(graph: FAMILY, interface: "Animal")
+  @join__type(graph: FAMILY)
+{
+  class: Class!
+  dangerous: String!
+  gender: Gender!
+  name: String!
+}
+
+interface Animal
+  @join__type(graph: FAMILY)
+{
+  class: Class!
+  gender: Gender!
+}
+
+type Cat implements Pet & Animal
+  @join__implements(graph: FAMILY, interface: "Pet")
+  @join__implements(graph: FAMILY, interface: "Animal")
+  @join__type(graph: FAMILY)
+{
+  class: Class!
+  gender: Gender!
+  name: String!
+  type: CatType!
+}
+
+enum CatType
+  @join__type(graph: FAMILY)
+{
+  HOME @join__enumValue(graph: FAMILY)
+  STREET @join__enumValue(graph: FAMILY)
+}
+
+enum Class
+  @join__type(graph: FAMILY)
+{
+  FISH @join__enumValue(graph: FAMILY)
+  MAMMAL @join__enumValue(graph: FAMILY)
+  REPTILE @join__enumValue(graph: FAMILY)
+}
+
+type Consultancy
+  @join__type(graph: EMPLOYEES, key: "upc")
+  @join__type(graph: PRODUCTS, key: "upc")
+{
+  upc: ID!
+  lead: Employee! @join__field(graph: EMPLOYEES)
+  name: ProductName! @join__field(graph: PRODUCTS)
+}
+
+type Cosmo implements IProduct
+  @join__implements(graph: EMPLOYEES, interface: "IProduct")
+  @join__type(graph: EMPLOYEES, key: "upc")
+  @join__type(graph: PRODUCTS, key: "upc")
+{
+  upc: ID!
+  engineers: [Employee!]! @join__field(graph: EMPLOYEES)
+  lead: Employee! @join__field(graph: EMPLOYEES)
+  name: ProductName! @join__field(graph: PRODUCTS)
+  repositoryURL: String! @join__field(graph: PRODUCTS)
+}
+
+enum Country
+  @join__type(graph: EMPLOYEES)
+  @join__type(graph: HOBBIES)
+{
+  AMERICA @join__enumValue(graph: EMPLOYEES) @join__enumValue(graph: HOBBIES)
+  ENGLAND @join__enumValue(graph: EMPLOYEES) @join__enumValue(graph: HOBBIES)
+  GERMANY @join__enumValue(graph: EMPLOYEES) @join__enumValue(graph: HOBBIES)
+  INDIA @join__enumValue(graph: EMPLOYEES)
+  NETHERLANDS @join__enumValue(graph: EMPLOYEES) @join__enumValue(graph: HOBBIES)
+  PORTUGAL @join__enumValue(graph: EMPLOYEES) @join__enumValue(graph: HOBBIES)
+  SPAIN @join__enumValue(graph: EMPLOYEES) @join__enumValue(graph: HOBBIES)
+  UKRAINE @join__enumValue(graph: EMPLOYEES)
+  INDONESIA @join__enumValue(graph: HOBBIES)
+  KOREA @join__enumValue(graph: HOBBIES)
+  SERBIA @join__enumValue(graph: HOBBIES)
+  TAIWAN @join__enumValue(graph: HOBBIES)
+  THAILAND @join__enumValue(graph: HOBBIES)
+}
+
+enum Department
+  @join__type(graph: EMPLOYEES)
+{
+  ENGINEERING @join__enumValue(graph: EMPLOYEES)
+  MARKETING @join__enumValue(graph: EMPLOYEES)
+  OPERATIONS @join__enumValue(graph: EMPLOYEES)
+}
+
+type Details
+  @join__type(graph: EMPLOYEES)
+  @join__type(graph: FAMILY)
+{
+  forename: String!
+  location: Country! @join__field(graph: EMPLOYEES)
+  surname: String!
+  middlename: String @join__field(graph: FAMILY) @deprecated
+  hasChildren: Boolean! @join__field(graph: FAMILY)
+  maritalStatus: MaritalStatus @join__field(graph: FAMILY)
+  nationality: Nationality! @join__field(graph: FAMILY)
+  pets: [Pet] @join__field(graph: FAMILY)
+}
+
+type DirectiveFact implements TopSecretFact
+  @join__implements(graph: PRODUCTS, interface: "TopSecretFact")
+  @join__type(graph: PRODUCTS)
+  @authenticated
+{
+  title: String!
+  description: FactContent!
+  factType: TopSecretFactType
+}
+
+type Documentation
+  @join__type(graph: PRODUCTS)
+{
+  url(product: ProductName!): String!
+  urls(products: [ProductName!]!): [String!]!
+}
+
+type Dog implements Pet & Animal
+  @join__implements(graph: FAMILY, interface: "Pet")
+  @join__implements(graph: FAMILY, interface: "Animal")
+  @join__type(graph: FAMILY)
+{
+  breed: DogBreed!
+  class: Class!
+  gender: Gender!
+  name: String!
+}
+
+enum DogBreed
+  @join__type(graph: FAMILY)
+{
+  GOLDEN_RETRIEVER @join__enumValue(graph: FAMILY)
+  POODLE @join__enumValue(graph: FAMILY)
+  ROTTWEILER @join__enumValue(graph: FAMILY)
+  YORKSHIRE_TERRIER @join__enumValue(graph: FAMILY)
+}
+
+type Employee implements Identifiable
+  @join__implements(graph: EMPLOYEES, interface: "Identifiable")
+  @join__type(graph: EMPLOYEES, key: "id")
+  @join__type(graph: FAMILY, key: "id")
+  @join__type(graph: HOBBIES, key: "id")
+  @join__type(graph: PRODUCTS, key: "id")
+{
+  details: Details @join__field(graph: EMPLOYEES, type: "Details!") @join__field(graph: FAMILY, type: "Details")
+  id: Int!
+  tag: String! @join__field(graph: EMPLOYEES)
+  role: RoleType! @join__field(graph: EMPLOYEES)
+  notes: String @join__field(graph: PRODUCTS, override: "employees")
+  updatedAt: String! @join__field(graph: EMPLOYEES)
+  startDate: String! @join__field(graph: EMPLOYEES) @requiresScopes(scopes: [["read:employee", "read:private"], ["read:all"]])
+  hobbies: [Hobby!]! @join__field(graph: HOBBIES)
+  products: [ProductName!]! @join__field(graph: PRODUCTS)
+}
+
+type Engineer implements RoleType
+  @join__implements(graph: EMPLOYEES, interface: "RoleType")
+  @join__type(graph: EMPLOYEES)
+{
+  departments: [Department!]!
+  engineerType: EngineerType!
+  title: [String!]!
+}
+
+enum EngineerType
+  @join__type(graph: EMPLOYEES)
+{
+  BACKEND @join__enumValue(graph: EMPLOYEES)
+  FRONTEND @join__enumValue(graph: EMPLOYEES)
+  FULLSTACK @join__enumValue(graph: EMPLOYEES)
+}
+
+type EntityFact implements TopSecretFact
+  @join__implements(graph: PRODUCTS, interface: "TopSecretFact")
+  @join__type(graph: PRODUCTS)
+  @requiresScopes(scopes: [["read:entity"]])
+{
+  title: String!
+  description: FactContent!
+  factType: TopSecretFactType
+}
+
+type Exercise
+  @join__type(graph: HOBBIES)
+{
+  category: ExerciseType!
+}
+
+enum ExerciseType
+  @join__type(graph: HOBBIES)
+{
+  CALISTHENICS @join__enumValue(graph: HOBBIES)
+  HIKING @join__enumValue(graph: HOBBIES)
+  SPORT @join__enumValue(graph: HOBBIES)
+  STRENGTH_TRAINING @join__enumValue(graph: HOBBIES)
+}
+
+interface Experience
+  @join__type(graph: HOBBIES)
+{
+  yearsOfExperience: Float!
+}
+
+scalar FactContent
+  @join__type(graph: PRODUCTS)
+  @requiresScopes(scopes: [["read:scalar"], ["read:all"]])
+
+type Flying implements Experience
+  @join__implements(graph: HOBBIES, interface: "Experience")
+  @join__type(graph: HOBBIES)
+{
+  planeModels: [String!]!
+  yearsOfExperience: Float!
+}
+
+enum GameGenre
+  @join__type(graph: HOBBIES)
+{
+  ADVENTURE @join__enumValue(graph: HOBBIES)
+  BOARD @join__enumValue(graph: HOBBIES)
+  FPS @join__enumValue(graph: HOBBIES)
+  CARD @join__enumValue(graph: HOBBIES)
+  RPG @join__enumValue(graph: HOBBIES)
+  ROGUELITE @join__enumValue(graph: HOBBIES)
+  SIMULATION @join__enumValue(graph: HOBBIES)
+  STRATEGY @join__enumValue(graph: HOBBIES)
+}
+
+type Gaming implements Experience
+  @join__implements(graph: HOBBIES, interface: "Experience")
+  @join__type(graph: HOBBIES)
+{
+  genres: [GameGenre!]!
+  name: String!
+  yearsOfExperience: Float!
+}
+
+enum Gender
+  @join__type(graph: FAMILY)
+{
+  FEMALE @join__enumValue(graph: FAMILY)
+  MALE @join__enumValue(graph: FAMILY)
+  UNKNOWN @join__enumValue(graph: FAMILY)
+}
+
+union Hobby
+  @join__type(graph: HOBBIES)
+  @join__unionMember(graph: HOBBIES, member: "Exercise")
+  @join__unionMember(graph: HOBBIES, member: "Flying")
+  @join__unionMember(graph: HOBBIES, member: "Gaming")
+  @join__unionMember(graph: HOBBIES, member: "Programming")
+  @join__unionMember(graph: HOBBIES, member: "Travelling")
+  @join__unionMember(graph: HOBBIES, member: "Other")
+ = Exercise | Flying | Gaming | Programming | Travelling | Other
+
+interface Identifiable
+  @join__type(graph: EMPLOYEES)
+{
+  id: Int!
+}
+
+interface IProduct
+  @join__type(graph: EMPLOYEES)
+{
+  upc: ID!
+  engineers: [Employee!]!
+}
+
+input join__ContextArgument {
+  name: String!
+  type: String!
+  context: String!
+  selection: join__FieldValue!
+}
+
+scalar join__DirectiveArguments
+
+scalar join__FieldSet
+
+scalar join__FieldValue
+
+enum join__Graph {
+  EMPLOYEES @join__graph(name: "employees", url: "http://127.0.0.1:4001")
+  FAMILY @join__graph(name: "family", url: "http://127.0.0.1:4002")
+  HOBBIES @join__graph(name: "hobbies", url: "http://127.0.0.1:4003")
+  PRODUCTS @join__graph(name: "products", url: "http://127.0.0.1:4004")
+}
+
+scalar link__Import
+
+enum link__Purpose {
+  """
+  `SECURITY` features provide metadata necessary to securely resolve fields.
+  """
+  SECURITY
+
+  """
+  `EXECUTION` features provide metadata necessary for operation execution.
+  """
+  EXECUTION
+}
+
+enum MaritalStatus
+  @join__type(graph: FAMILY)
+{
+  ENGAGED @join__enumValue(graph: FAMILY)
+  MARRIED @join__enumValue(graph: FAMILY)
+}
+
+type Marketer implements RoleType
+  @join__implements(graph: EMPLOYEES, interface: "RoleType")
+  @join__type(graph: EMPLOYEES)
+{
+  departments: [Department!]!
+  title: [String!]!
+}
+
+type MiscellaneousFact implements TopSecretFact
+  @join__implements(graph: PRODUCTS, interface: "TopSecretFact")
+  @join__type(graph: PRODUCTS)
+{
+  title: String!
+  description: FactContent! @requiresScopes(scopes: [["read:miscellaneous"]])
+  factType: TopSecretFactType
+}
+
+type Mouse implements Pet & Animal
+  @join__implements(graph: FAMILY, interface: "Pet")
+  @join__implements(graph: FAMILY, interface: "Animal")
+  @join__type(graph: FAMILY)
+{
+  class: Class!
+  gender: Gender!
+  name: String!
+}
+
+type Mutation
+  @join__type(graph: EMPLOYEES)
+{
+  updateEmployeeTag(id: Int!, tag: String!): Employee
+}
+
+enum Nationality
+  @join__type(graph: FAMILY)
+{
+  AMERICAN @join__enumValue(graph: FAMILY)
+  DUTCH @join__enumValue(graph: FAMILY)
+  ENGLISH @join__enumValue(graph: FAMILY)
+  GERMAN @join__enumValue(graph: FAMILY)
+  INDIAN @join__enumValue(graph: FAMILY)
+  SPANISH @join__enumValue(graph: FAMILY)
+  UKRAINIAN @join__enumValue(graph: FAMILY)
+}
+
+input NestedSearchInput
+  @join__type(graph: FAMILY)
+{
+  maritalStatus: MaritalStatus
+  hasChildren: Boolean
+}
+
+enum OperationType
+  @join__type(graph: EMPLOYEES)
+{
+  FINANCE @join__enumValue(graph: EMPLOYEES)
+  HUMAN_RESOURCES @join__enumValue(graph: EMPLOYEES)
+}
+
+type Operator implements RoleType
+  @join__implements(graph: EMPLOYEES, interface: "RoleType")
+  @join__type(graph: EMPLOYEES)
+{
+  departments: [Department!]!
+  operatorType: [OperationType!]!
+  title: [String!]!
+}
+
+type Other
+  @join__type(graph: HOBBIES)
+{
+  name: String!
+}
+
+interface Pet implements Animal
+  @join__implements(graph: FAMILY, interface: "Animal")
+  @join__type(graph: FAMILY)
+{
+  class: Class!
+  gender: Gender!
+  name: String!
+}
+
+type Pony implements Pet & Animal
+  @join__implements(graph: FAMILY, interface: "Pet")
+  @join__implements(graph: FAMILY, interface: "Animal")
+  @join__type(graph: FAMILY)
+{
+  class: Class!
+  gender: Gender!
+  name: String!
+}
+
+enum ProductName
+  @join__type(graph: PRODUCTS)
+{
+  CONSULTANCY @join__enumValue(graph: PRODUCTS)
+  COSMO @join__enumValue(graph: PRODUCTS)
+  ENGINE @join__enumValue(graph: PRODUCTS)
+  FINANCE @join__enumValue(graph: PRODUCTS)
+  HUMAN_RESOURCES @join__enumValue(graph: PRODUCTS)
+  MARKETING @join__enumValue(graph: PRODUCTS)
+  SDK @join__enumValue(graph: PRODUCTS)
+}
+
+union Products
+  @join__type(graph: EMPLOYEES)
+  @join__type(graph: PRODUCTS)
+  @join__unionMember(graph: EMPLOYEES, member: "Consultancy")
+  @join__unionMember(graph: PRODUCTS, member: "Consultancy")
+  @join__unionMember(graph: EMPLOYEES, member: "Cosmo")
+  @join__unionMember(graph: PRODUCTS, member: "Cosmo")
+  @join__unionMember(graph: EMPLOYEES, member: "SDK")
+  @join__unionMember(graph: PRODUCTS, member: "Documentation")
+ = Consultancy | Cosmo | SDK | Documentation
+
+type Programming
+  @join__type(graph: HOBBIES)
+{
+  languages: [ProgrammingLanguage!]!
+}
+
+enum ProgrammingLanguage
+  @join__type(graph: HOBBIES)
+{
+  CSHARP @join__enumValue(graph: HOBBIES)
+  GO @join__enumValue(graph: HOBBIES)
+  RUST @join__enumValue(graph: HOBBIES)
+  TYPESCRIPT @join__enumValue(graph: HOBBIES)
+}
+
+type Query
+  @join__type(graph: EMPLOYEES)
+  @join__type(graph: FAMILY)
+  @join__type(graph: HOBBIES)
+  @join__type(graph: PRODUCTS)
+{
+  employee(id: Int!): Employee @join__field(graph: EMPLOYEES)
+  employees: [Employee!]! @join__field(graph: EMPLOYEES)
+  products: [Products!]! @join__field(graph: EMPLOYEES)
+  teammates(team: Department!): [Employee!]! @join__field(graph: EMPLOYEES)
+  findEmployees(criteria: SearchInput): [Employee!]! @join__field(graph: FAMILY)
+  productTypes: [Products!]! @join__field(graph: PRODUCTS)
+  topSecretFederationFacts: [TopSecretFact!]! @join__field(graph: PRODUCTS) @requiresScopes(scopes: [["read:fact"], ["read:all"]])
+  factTypes: [TopSecretFactType!] @join__field(graph: PRODUCTS)
+}
+
+scalar requiresScopes__Scope
+
+interface RoleType
+  @join__type(graph: EMPLOYEES)
+{
+  departments: [Department!]!
+  title: [String!]!
+}
+
+type SDK implements IProduct
+  @join__implements(graph: EMPLOYEES, interface: "IProduct")
+  @join__type(graph: EMPLOYEES, key: "upc")
+  @join__type(graph: HOBBIES, key: "upc")
+{
+  upc: ID!
+  engineers: [Employee!]! @join__field(graph: EMPLOYEES)
+  owner: Employee! @join__field(graph: EMPLOYEES)
+  clientLanguages: [ProgrammingLanguage!]! @join__field(graph: HOBBIES)
+}
+
+input SearchInput
+  @join__type(graph: FAMILY)
+{
+  hasPets: Boolean
+  nationality: Nationality
+  nested: NestedSearchInput
+}
+
+type Subscription
+  @join__type(graph: EMPLOYEES)
+{
+  """`currentTime` will return a stream of `Time` objects."""
+  currentTime: Time!
+}
+
+type Time
+  @join__type(graph: EMPLOYEES)
+{
+  unixTime: Int!
+  timeStamp: String!
+}
+
+interface TopSecretFact
+  @join__type(graph: PRODUCTS)
+  @authenticated
+{
+  description: FactContent!
+  factType: TopSecretFactType
+}
+
+enum TopSecretFactType
+  @join__type(graph: PRODUCTS)
+  @authenticated
+{
+  DIRECTIVE @join__enumValue(graph: PRODUCTS)
+  ENTITY @join__enumValue(graph: PRODUCTS)
+  MISCELLANEOUS @join__enumValue(graph: PRODUCTS)
+}
+
+type Travelling
+  @join__type(graph: HOBBIES)
+{
+  countriesLived: [Country!]!
+}
