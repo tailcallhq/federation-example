@@ -19,32 +19,29 @@ enum TopSecretFactType {
   MISCELLANEOUS
 }
 
-interface TopSecretFact {
+interface TopSecretFact @discriminate(field: "type") {
   description: FactContent!
   factType: TopSecretFactType
 }
 
 scalar FactContent
 
-type DIRECTIVEFact implements TopSecretFact {
+type DirectiveFact implements TopSecretFact {
   title: String!
   description: FactContent!
   factType: TopSecretFactType
-  _DIRECTIVEFact: Boolean
 }
 
 type EntityFact implements TopSecretFact {
   title: String!
   description: FactContent!
   factType: TopSecretFactType
-  _entityFact: Boolean
 }
 
 type MiscellaneousFact implements TopSecretFact {
   title: String!
   description: FactContent!
   factType: TopSecretFactType
-  _miscellaneousFact: Boolean
 }
 
 enum ProductName {
@@ -73,7 +70,10 @@ type Employee {
     )
 }
 
-union Products = Consultancy | Cosmo | Documentation
+union Products @discriminate(field: "type") =
+    Consultancy
+  | Cosmo
+  | Documentation
 
 type Consultancy {
   upc: ID!

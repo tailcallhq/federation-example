@@ -106,7 +106,7 @@ type Time {
   timeStamp: String!
 }
 
-union Products = Consultancy | Cosmo | SDK
+union Products @discriminate(field: "type") = Consultancy | Cosmo | SDK
 
 interface IProduct {
   upc: ID!

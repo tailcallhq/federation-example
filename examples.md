@@ -1,102 +1,165 @@
 ```gql
-{
-  employees {
-    id
-    details {
-      forename
-      surname
-      location
+query Employees {
+    employees {
+        currentMood
+        id
+        notes
+        products
+        startDate
+        tag
+        updatedAt
+        details {
+            forename
+            hasChildren
+            maritalStatus
+            middlename
+            nationality
+            surname
+            pets {
+                class
+                gender
+                name
+                ... on Alligator {
+                    class
+                    gender
+                    name
+                    dangerous
+                }
+                ... on Cat {
+                    class
+                    gender
+                    name
+                    type
+                }
+                ... on Dog {
+                    breed
+                    class
+                    gender
+                    name
+                }
+                ... on Mouse {
+                    class
+                    gender
+                    name
+                }
+                ... on Pony {
+                    class
+                    gender
+                    name
+                }
+            }
+        }
+        role {
+            departments
+            title
+            ... on Engineer {
+                departments
+                engineerType
+                title
+            }
+            ... on Marketer {
+                departments
+                title
+            }
+            ... on Operator {
+                departments
+                operatorType
+                title
+            }
+        }
     }
-    role {
-      title
-      departments
-      ... on Engineer {
-        engineerType
-      }
-      ... on Operator {
-        operatorType
-      }
+    factTypes
+    productTypes {
+        ... on Consultancy {
+            name
+            upc
+            lead {
+                id
+                startDate
+                tag
+                updatedAt
+            }
+        }
+        ... on Cosmo {
+            name
+            repositoryUrl
+            upc
+        }
+        ... on Documentation {
+            url(product: "Test")
+            urls(products: "Test")
+        }
+        ... on SDK {
+            upc
+            owner {
+                id
+                startDate
+                tag
+                updatedAt
+            }
+            engineers {
+                id
+                updatedAt
+            }
+        }
     }
-    startDate
-    notes
-    tag
-    updatedAt
-    __typename
-  }
+    products {
+        ... on Consultancy {
+            name
+            upc
+        }
+        ... on Cosmo {
+            name
+            repositoryUrl
+            upc
+        }
+        ... on SDK {
+            upc
+        }
+    }
+    teammates(team: "Engineering") {
+        id
+        notes
+        products
+        startDate
+        tag
+        updatedAt
+        details {
+            forename
+            hasChildren
+            maritalStatus
+            middlename
+            nationality
+            surname
+            pets {
+                class
+                gender
+                name
+            }
+        }
+    }
+    topSecretFederationFacts {
+        description
+        factType
+        ... on DIRECTIVEFact {
+            _DIRECTIVEFact
+            description
+            factType
+            title
+        }
+        ... on EntityFact {
+            _entityFact
+            description
+            factType
+            title
+        }
+        ... on MiscellaneousFact {
+            _miscellaneousFact
+            description
+            factType
+            title
+        }
+    }
 }
-```
 
-```gql
-{
-  products {
-    __typename
-    ... on Cosmo {
-      upc
-      lead {
-        id
-      }
-      engineers {
-        id
-      }
-    }
-    ... on Consultancy {
-      upc
-      lead {
-        id
-      }
-    }
-    ... on SDK {
-      upc
-      owner {
-        id
-      }
-      engineers {
-        id
-      }
-    }
-  }
-}
-```
-
-```gql
-{
-  teammates(team:ENGINEERING) {
-    id
-  }
-}
-```
-
-```gql
-{
-  findEmployees {
-    id
-    details {
-      forename
-      surname
-      middlename
-      hasChildren
-      maritalStatus
-      nationality
-      pets {
-        name
-        gender
-        class
-      }
-    }
-  }
-}
-```
-
-```gql
-{
-  _consultancy_resolver(upcs: ["consultancy"]) {
-    upc
-  }
-  _cosmo_resolver(upcs: ["cosmo"]) {
-    upc
-  }
-  _sdk_resolver(upcs: ["sdk"]) {
-    upc
-  }
-}
 ```

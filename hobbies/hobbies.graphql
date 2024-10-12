@@ -81,7 +81,13 @@ type Travelling {
   countriesLived: [Country!]!
 }
 
-union Hobby = Exercise | Flying | Gaming | Programming | Travelling | Other
+union Hobby @discriminate(field: "type") =
+    Exercise
+  | Flying
+  | Gaming
+  | Programming
+  | Travelling
+  | Other
 
 type Employee {
   id: Int!

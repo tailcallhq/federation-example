@@ -1,7 +1,7 @@
 schema
   @link(type: Config, src: "./employees/employees.graphql")
   @link(type: Config, src: "./family/family.graphql")
-  @link(type: Config, src: "./hobbies/hobbies.graphql")
+  # @link(type: Config, src: "./hobbies/hobbies.graphql")
   @link(type: Config, src: "./mood/mood.graphql")
   @link(type: Config, src: "./products/products.graphql")
   # @link(type: Config, src: "./test1.graphql")

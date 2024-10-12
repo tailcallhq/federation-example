@@ -42,7 +42,7 @@ interface Animal {
   gender: Gender!
 }
 
-interface Pet implements Animal {
+interface Pet implements Animal @discriminate(field: "union_type") {
   class: Class!
   gender: Gender!
   name: String!
@@ -85,14 +85,12 @@ type Mouse implements Pet & Animal {
   class: Class!
   gender: Gender!
   name: String!
-  _mouse: String
 }
 
 type Pony implements Pet & Animal {
   class: Class!
   gender: Gender!
   name: String!
-  _pony: String
 }
 
 enum MaritalStatus {
@@ -121,7 +119,14 @@ type Details {
 }
 
 type Employee {
-  details: Details @http(baseURL: "http://localhost:8081", path: "/family/employee-details", query: [{key: "id", value: "{{.value.id}}"}], batchKey: ["id"], select: "{{.details}}")
+  details: Details
+    @http(
+      baseURL: "http://localhost:8081"
+      path: "/family/employee-details"
+      query: [{ key: "id", value: "{{.value.id}}" }]
+      batchKey: ["id"]
+      select: "{{.details}}"
+    )
   id: Int!
 }
 

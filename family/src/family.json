@@ -38,7 +38,8 @@
           "gender": "Unknown",
           "name": "Snappy",
           "type": null,
-          "dangerous": "yes"
+          "dangerous": "yes",
+          "union_type": "Alligator"
         }
       ]
     }
@@ -58,13 +59,15 @@
           "gender": "Female",
           "name": "Abby",
           "breed": "Golden Retriever",
-          "type": null
+          "type": null,
+          "union_type": "Dog"
         },
         {
           "class": "Mammal",
           "gender": "Male",
           "name": "Survivor",
-          "type": null
+          "type": null,
+          "union_type": "Mouse"
         }
       ]
     }
@@ -83,61 +86,71 @@
           "class": "Mammal",
           "gender": "Female",
           "name": "Blotch",
-          "type": "Street"
+          "type": "Street",
+          "union_type": "Cat"
         },
         {
           "class": "Mammal",
           "gender": "Male",
           "name": "Grayone",
-          "type": "Street"
+          "type": "Street",
+          "union_type": "Cat"
         },
         {
           "class": "Mammal",
           "gender": "Male",
           "name": "Rusty",
-          "type": "Street"
+          "type": "Street",
+          "union_type": "Cat"
         },
         {
           "class": "Mammal",
           "gender": "Female",
           "name": "Manya",
-          "type": "Home"
+          "type": "Home",
+          "union_type": "Cat"
         },
         {
           "class": "Mammal",
           "gender": "Male",
           "name": "Peach",
-          "type": "Street"
+          "type": "Street",
+          "union_type": "Cat"
         },
         {
           "class": "Mammal",
           "gender": "Male",
           "name": "Panda",
-          "type": "Home"
+          "type": "Home",
+          "union_type": "Cat"
         },
         {
           "class": "Mammal",
           "gender": "Female",
           "name": "Mommy",
-          "type": "Street"
+          "type": "Street",
+          "union_type": "Cat"
         },
         {
           "class": "Mammal",
           "gender": "Female",
           "name": "Terry",
-          "type": "Home"
+          "type": "Home",
+          "union_type": "Cat"
         },
         {
           "class": "Mammal",
           "gender": "Female",
           "name": "Tilda",
-          "type": "Home"
+          "type": "Home",
+          "union_type": "Cat"
         },
         {
           "class": "Mammal",
           "gender": "Male",
           "name": "Vasya",
-          "type": "Home"
+          "type": "Home",
+          "union_type": "Cat"
         }
       ]
     }
@@ -180,7 +193,8 @@
           "class": "Mammal",
           "gender": "Unknown",
           "name": "Vanson",
-          "type": null
+          "type": null,
+          "union_type": "Pony"
         }
       ]
     }
@@ -211,7 +225,8 @@
           "class": "Mammal",
           "gender": "Female",
           "name": "Pepper",
-          "type": "Home"
+          "type": "Home",
+          "union_type": "Cat"
         }
       ]
     }

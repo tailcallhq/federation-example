@@ -45,8 +45,11 @@ struct Pet {
     class: String,
     gender: String,
     name: String,
+    dangerous: Option<String>,
+    breed: Option<String>,
     #[serde(rename = "type")]
     pet_type: Option<String>,
+    union_type: String,
 }
 
 async fn filter_employees(
@@ -100,13 +103,21 @@ async fn filter_employees(
 }
 
 async fn get_employee_details_by_id(
-    Query(ids): Query<Vec<(String, u32)>>,
+    Query(ids): Query<Vec<(String, Option<u32>)>>,
     State(state): State<Arc<AppState>>,
 ) -> impl IntoResponse {
     let employees = state.employees.clone();
     let employees_with_details: Vec<Employee> = employees
         .iter()
-        .filter(|e| ids.iter().any(|(key, id)| key == "id" && e.id == *id))
+        .filter(|e| {
+            ids.iter().any(|(key, id)| {
+                if key == "id" {
+                    id.map(|id| id == e.id).unwrap_or(false)
+                } else {
+                    false
+                }
+            })
+        })
         .cloned()
         .collect();
 

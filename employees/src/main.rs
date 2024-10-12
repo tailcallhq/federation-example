@@ -78,6 +78,7 @@ struct OperatorRole {
 }
 
 #[derive(Serialize, Deserialize, Clone)]
+#[serde(tag = "type")]
 enum Product {
     Consultancy(Consultancy),
     Cosmo(Cosmo),
