@@ -19,7 +19,9 @@ struct Employee {
     role: EmployeeRole,
     notes: String,
     tag: String,
+    #[serde(rename = "startDate")]
     start_date: String,
+    #[serde(rename = "updatedAt")]
     updated_at: String,
 }
 

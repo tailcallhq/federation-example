@@ -13,8 +13,8 @@
       "title": ["Founder", "CEO"]
     },
     "notes": "Jens notes resolved by employees",
-    "start_date": "January 2020",
-    "updated_at": "2021-09-01T00:00:00Z"
+    "startDate": "January 2020",
+    "updatedAt": "2021-09-01T00:00:00Z"
   },
   {
     "id": 2,
@@ -30,8 +30,8 @@
       "title": ["Co-founder", "Tech Lead"]
     },
     "notes": "Dustin notes resolved by employees",
-    "start_date": "July 2022",
-    "updated_at": "2021-09-01T00:00:00Z"
+    "startDate": "July 2022",
+    "updatedAt": "2021-09-01T00:00:00Z"
   },
   {
     "id": 3,
@@ -46,8 +46,8 @@
       "title": ["Co-founder", "Head of Growth"]
     },
     "notes": "Stefan notes resolved by employees",
-    "start_date": "June 2021",
-    "updated_at": "2021-09-01T00:00:00Z"
+    "startDate": "June 2021",
+    "updatedAt": "2021-09-01T00:00:00Z"
   },
   {
     "id": 4,
@@ -63,8 +63,8 @@
       "title": ["Co-founder", "COO"]
     },
     "notes": "Björn notes resolved by employees",
-    "start_date": "July 2022",
-    "updated_at": "2021-09-01T00:00:00Z"
+    "startDate": "July 2022",
+    "updatedAt": "2021-09-01T00:00:00Z"
   },
   {
     "id": 5,
@@ -80,8 +80,8 @@
       "title": ["Senior GO Engineer"]
     },
     "notes": "Serigy notes resolved by employees",
-    "start_date": "July 2022",
-    "updated_at": "2021-09-01T00:00:00Z"
+    "startDate": "July 2022",
+    "updatedAt": "2021-09-01T00:00:00Z"
   },
   {
     "id": 7,
@@ -97,8 +97,8 @@
       "title": ["Software Engineer"]
     },
     "notes": "Suvij notes resolved by employees",
-    "start_date": "September 2022",
-    "updated_at": "2021-09-01T00:00:00Z"
+    "startDate": "September 2022",
+    "updatedAt": "2021-09-01T00:00:00Z"
   },
   {
     "id": 8,
@@ -114,8 +114,8 @@
       "title": ["Software Engineer"]
     },
     "notes": "Nithin notes resolved by employees",
-    "start_date": "September 2022",
-    "updated_at": "2021-09-01T00:00:00Z"
+    "startDate": "September 2022",
+    "updatedAt": "2021-09-01T00:00:00Z"
   },
   {
     "id": 10,
@@ -131,8 +131,8 @@
       "title": ["Senior Frontend Engineer"]
     },
     "notes": "Eelco notes resolved by employees",
-    "start_date": "November 2022",
-    "updated_at": "2021-09-01T00:00:00Z"
+    "startDate": "November 2022",
+    "updatedAt": "2021-09-01T00:00:00Z"
   },
   {
     "id": 11,
@@ -148,8 +148,8 @@
       "title": ["Accounting & Finance"]
     },
     "notes": "Alexandra notes resolved by employees",
-    "start_date": "November 2022",
-    "updated_at": "2021-09-01T00:00:00Z"
+    "startDate": "November 2022",
+    "updatedAt": "2021-09-01T00:00:00Z"
   },
   {
     "id": 12,
@@ -165,7 +165,7 @@
       "title": ["HR Manager"]
     },
     "notes": "Nicole notes resolved by employees",
-    "start_date": "November 2022",
-    "updated_at": "2021-09-01T00:00:00Z"
+    "startDate": "November 2022",
+    "updatedAt": "2021-09-01T00:00:00Z"
   }
 ]
