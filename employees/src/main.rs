@@ -1,6 +1,6 @@
 use axum::http::StatusCode;
 use axum::{
-    extract::{Path, Query, State},
+    extract::{Path, State},
     response::IntoResponse,
     routing::get,
     Json, Router,
@@ -9,14 +9,14 @@ use hyper::Server;
 use serde::{Deserialize, Serialize};
 use std::env;
 use std::path::PathBuf;
-use std::{collections::HashMap, fs, net::SocketAddr, sync::Arc};
+use std::{fs, net::SocketAddr, sync::Arc};
 
 // Define your structs
 #[derive(Serialize, Deserialize, Clone)]
 struct Employee {
     id: u32,
     details: EmployeeDetails,
-    role: EmployeeRole,
+    role: RoleType,
     notes: String,
     tag: String,
     #[serde(rename = "startDate")]
@@ -33,13 +33,48 @@ struct EmployeeDetails {
 }
 
 #[derive(Serialize, Deserialize, Clone)]
-struct EmployeeRole {
+enum RoleType {
+    Engineer(EngineerRole),
+    Marketer(MarketerRole),
+    Operator(OperatorRole),
+}
+
+impl RoleType {
+    fn departments_contains(&self, department_name: &String) -> bool {
+        match self {
+            RoleType::Engineer(engineer_role) => {
+                engineer_role.departments.contains(department_name)
+            }
+            RoleType::Marketer(marketer_role) => {
+                marketer_role.departments.contains(department_name)
+            }
+            RoleType::Operator(operator_role) => {
+                operator_role.departments.contains(department_name)
+            }
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Clone)]
+struct EngineerRole {
     departments: Vec<String>,
     #[serde(rename = "engineerType")]
     engineer_type: Option<String>,
-    #[serde(rename = "operator_type")]
-    operator_type: Option<Vec<String>>,
     title: Vec<String>,
+}
+
+#[derive(Serialize, Deserialize, Clone)]
+struct MarketerRole {
+    departments: Vec<String>,
+    title: Vec<String>,
+}
+
+#[derive(Serialize, Deserialize, Clone)]
+struct OperatorRole {
+    departments: Vec<String>,
+    title: Vec<String>,
+    #[serde(rename = "operatorType")]
+    operator_type: Option<Vec<String>>,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -99,7 +134,7 @@ async fn get_department_employees(
     let employees = &state.employees;
     let employees = employees
         .iter()
-        .filter(|employee| employee.role.departments.contains(&department))
+        .filter(|employee| employee.role.departments_contains(&department))
         .cloned()
         .collect::<Vec<_>>();
     (StatusCode::OK, Json(employees)).into_response()
@@ -108,15 +143,7 @@ async fn get_department_employees(
 async fn get_products(State(state): State<Arc<AppState>>) -> impl IntoResponse {
     // Create a map to handle multiple occurrences of the same key
 
-    let products: Vec<_> = state
-        .products
-        .iter()
-        .map(|product| match product {
-            Product::Consultancy(consultancy) => serde_json::to_value(consultancy.clone()).unwrap(),
-            Product::Cosmo(cosmo) => serde_json::to_value(cosmo.clone()).unwrap(),
-            Product::SDK(sdk) => serde_json::to_value(sdk.clone()).unwrap(),
-        })
-        .collect::<Vec<_>>();
+    let products: Vec<_> = state.products.clone();
     (StatusCode::OK, Json(products)).into_response()
 }
 
@@ -154,66 +181,8 @@ async fn get_product_info(
     }
 }
 
-// Define the handler to filter employees based on query parameters, including multiple IDs
-async fn filter_employees(
-    Query(params): Query<Vec<(String, String)>>,
-    State(state): State<Arc<AppState>>,
-) -> impl IntoResponse {
-    let employees = &state.employees;
-
-    // Create a map to handle multiple occurrences of the same key
-    let mut param_map: HashMap<String, Vec<String>> = HashMap::new();
-
-    // Collect all query parameters into param_map
-    for (key, value) in params {
-        param_map.entry(key).or_default().push(value);
-    }
-
-    // Filter employees based on the provided query parameters
-    let filtered_employees: Vec<Employee> = employees
-        .iter()
-        .filter(|employee| {
-            param_map.iter().all(|(key, values)| match key.as_str() {
-                "id" => values.contains(&employee.id.to_string()),
-                "forename" => values
-                    .iter()
-                    .any(|v| v.to_lowercase() == employee.details.forename.to_lowercase()),
-                "surname" => values
-                    .iter()
-                    .any(|v| v.to_lowercase() == employee.details.surname.to_lowercase()),
-                "department" => values.iter().any(|v| {
-                    employee
-                        .role
-                        .departments
-                        .iter()
-                        .any(|d| d.to_lowercase() == v.to_lowercase())
-                }),
-                "engineer_type" => values.iter().any(|v| {
-                    employee
-                        .role
-                        .engineer_type
-                        .as_deref()
-                        .map_or(false, |e| e.to_lowercase() == v.to_lowercase())
-                }),
-                "operator_type" => employee.role.operator_type.as_ref().map_or(false, |types| {
-                    values
-                        .iter()
-                        .any(|v| types.iter().any(|t| t.to_lowercase() == v.to_lowercase()))
-                }),
-                "title" => values.iter().any(|v| {
-                    employee
-                        .role
-                        .title
-                        .iter()
-                        .any(|t| t.to_lowercase() == v.to_lowercase())
-                }),
-                _ => true,
-            })
-        })
-        .cloned()
-        .collect();
-
-    (StatusCode::OK, Json(filtered_employees))
+async fn filter_employees(State(state): State<Arc<AppState>>) -> impl IntoResponse {
+    (StatusCode::OK, Json(state.employees.clone()))
 }
 
 #[tokio::main]
