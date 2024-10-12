@@ -81,13 +81,8 @@ async fn find_employee_by_id(Path(id): Path<u32>, State(state): State<Arc<AppSta
     }
 }
 
-async fn find_sdk_by_upc(Path(upc): Path<String>) -> impl IntoResponse {
-    // Simulate the SDK resolver as in the Go example
-    if upc == "sdk" {
-        Json(vec!["Rust".to_string(), "Typescript".to_string()]).into_response()
-    } else {
-        (axum::http::StatusCode::NOT_FOUND, "SDK not found").into_response()
-    }
+async fn find_sdk_by_upc(Path(_upc): Path<String>) -> impl IntoResponse {
+    Json(vec!["Rust".to_string(), "Typescript".to_string()]).into_response()
 }
 
 #[tokio::main]
