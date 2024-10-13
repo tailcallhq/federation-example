@@ -126,6 +126,7 @@ type Employee {
       query: [{ key: "id", value: "{{.value.id}}" }]
       batchKey: ["id"]
       select: "{{.details}}"
+      dedupe: true
     )
   id: Int!
 }
