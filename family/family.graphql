@@ -20,7 +20,8 @@ type Query {
           value: "{{.args.criteria.nationality}}"
           skipEmpty: true
         }
-        { key: "nested", value: "{{.args.criteria.nested}}", skipEmpty: true }
+        { key: "marital_status", value: "{{.args.criteria.nested.maritalStatus}}", skipEmpty: true }
+        { key: "has_children", value: "{{.args.criteria.nested.hasChildren}}", skipEmpty: true }
       ]
     )
 }

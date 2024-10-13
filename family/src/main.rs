@@ -14,11 +14,6 @@ use std::{fs, net::SocketAddr, sync::Arc};
 struct SearchInput {
     has_pets: Option<bool>,
     nationality: Option<String>,
-    nested: Option<NestedSearchInput>,
-}
-
-#[derive(Debug, Deserialize)]
-struct NestedSearchInput {
     marital_status: Option<String>,
     has_children: Option<bool>,
 }
@@ -72,17 +67,15 @@ async fn filter_employees(
         employees.retain(|e| e.details.nationality.eq_ignore_ascii_case(nationality));
     }
 
-    if let Some(ref nested) = params.nested {
-        if let Some(has_children) = nested.has_children {
-            employees.retain(|e| e.details.has_children == Some(has_children));
-        }
+    if let Some(has_children) = params.has_children {
+        employees.retain(|e| e.details.has_children == Some(has_children));
+    }
 
-        if let Some(ref marital_status) = nested.marital_status {
-            employees.retain(|e| match &e.details.marital_status {
-                Some(ms) => ms.eq_ignore_ascii_case(marital_status),
-                None => false,
-            });
-        }
+    if let Some(ref marital_status) = params.marital_status {
+        employees.retain(|e| match &e.details.marital_status {
+            Some(ms) => ms.eq_ignore_ascii_case(marital_status),
+            None => false,
+        });
     }
 
     let ids = query
