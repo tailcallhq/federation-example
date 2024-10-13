@@ -26,5 +26,5 @@ enum Mood {
 
 type Employee {
   id: Int!
-  currentMood: Mood! @http(baseURL: "http://localhost:8071", path: "/mood", query: [{key: "id", value: "{{.value.id}}"}], batchKey: ["id"], select: "{{.currentMood}}")
+  currentMood: Mood! @http(baseURL: "http://localhost:8071", path: "/mood", query: [{key: "id", value: "{{.value.id}}"}], select: "{{.currentMood}}")
 }
