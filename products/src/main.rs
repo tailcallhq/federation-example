@@ -103,7 +103,7 @@ async fn get_employee_products(
 
     match employee {
         Some(employee) => Json(employee).into_response(),
-        None => StatusCode::NOT_FOUND.into_response(),
+        None => (StatusCode::OK, Json(serde_json::Value::Null)).into_response(),
     }
 }
 
@@ -133,7 +133,7 @@ async fn get_product_details(
 
     match product {
         Some(product) => Json(product).into_response(),
-        None => StatusCode::NOT_FOUND.into_response(),
+        None => (StatusCode::OK, Json(serde_json::Value::Null)).into_response(),
     }
 }
 
