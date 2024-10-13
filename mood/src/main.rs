@@ -62,15 +62,12 @@ async fn update_mood(
             employee.current_mood = input.mood;
             Json(employee).into_response()
         }
-        None => {
-            let error_response = Json(format!("Employee with id {} not found", input.employee_id));
-            (StatusCode::NOT_FOUND, error_response).into_response()
-        }
+        None => (StatusCode::OK, Json(serde_json::Value::Null)).into_response(),
     }
 }
 
 struct AppState {
-    mood_db: RwLock<Vec<Employee>>
+    mood_db: RwLock<Vec<Employee>>,
 }
 
 #[tokio::main]

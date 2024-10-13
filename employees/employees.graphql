@@ -1,6 +1,6 @@
 schema
   @server(port: 8000)
-  @upstream(baseURL: "http://localhost:8080", poolMaxIdlePerHost: 200, tcpKeepAlive: 60) {
+  @upstream(baseURL: "http://localhost:8080") {
   query: Query
 }
 
@@ -8,7 +8,7 @@ type Query {
   employee(id: Int!): Employee
     @http(baseURL: "http://localhost:8080", path: "/employees/{{.args.id}}")
   employees: [Employee!]!
-    @http(baseURL: "http://localhost:8080", path: "/employees")
+    @http(baseURL: "http://localhost:8080", path: "/employees", dedupe: false)
   products: [Products!]!
     @http(baseURL: "http://localhost:8080", path: "/employees/products")
   teammates(team: Department!): [Employee!]!

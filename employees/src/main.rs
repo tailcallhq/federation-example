@@ -120,11 +120,7 @@ async fn get_employee_by_id(
     if let Some(employee) = employees.iter().find(|e| e.id == id) {
         (StatusCode::OK, Json(employee.clone())).into_response()
     } else {
-        (
-            StatusCode::NOT_FOUND,
-            Json("Employee not found".to_string()),
-        )
-            .into_response()
+        (StatusCode::OK, Json(serde_json::Value::Null)).into_response()
     }
 }
 

@@ -37,9 +37,7 @@ enum Hobby {
     #[serde(rename_all = "camelCase")]
     Programming { languages: Vec<String> },
     #[serde(rename_all = "camelCase")]
-    Travelling {
-        countries_lived: Vec<Country>,
-    },
+    Travelling { countries_lived: Vec<Country> },
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -73,11 +71,14 @@ struct AppState {
     employees: Arc<Vec<Employee>>,
 }
 
-async fn find_employee_by_id(Path(id): Path<u32>, State(state): State<Arc<AppState>>) -> impl IntoResponse {
+async fn find_employee_by_id(
+    Path(id): Path<u32>,
+    State(state): State<Arc<AppState>>,
+) -> impl IntoResponse {
     let employee = state.employees.iter().find(|e| e.id == id);
     match employee {
         Some(emp) => Json(&emp.hobbies).into_response(),
-        None => (axum::http::StatusCode::NOT_FOUND, "Employee not found").into_response(),
+        None => Json(serde_json::Value::Null).into_response(),
     }
 }
 
