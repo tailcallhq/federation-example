@@ -1,6 +1,6 @@
 schema
   @server(port: 8005)
-  @upstream(baseURL: "http://localhost:8088", batch: { delay: 10 }) {
+  @upstream(baseURL: "http://localhost:8088") {
   query: Query
 }
 
