@@ -28,7 +28,7 @@ export default function () {
     'GraphQL-Client-Version': '0.0.1',
   };
 
-  let res = http.post('http://localhost:8003/graphql', JSON.stringify({ query: query, operationName: 'Bench' }), {
+  let res = http.post('http://localhost:8030/graphql', JSON.stringify({ query: query, operationName: 'Bench' }), {
     headers: headers,
   });
   check(res, {

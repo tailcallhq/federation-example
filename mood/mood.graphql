@@ -1,6 +1,6 @@
 schema
   @server(port: 8004)
-  @upstream(baseURL: "http://localhost:8071", batch: { delay: 10 }) {
+  @upstream(baseURL: "http://localhost:8071") {
   query: Query
   mutation: Mutation
 }
