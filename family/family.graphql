@@ -42,7 +42,7 @@ interface Animal {
   gender: Gender!
 }
 
-interface Pet implements Animal @discriminate(field: "union_type") {
+interface Pet implements Animal {
   class: Class!
   gender: Gender!
   name: String!
@@ -115,7 +115,7 @@ type Details {
   has_children: Boolean! @modify(name: "hasChildren")
   marital_status: MaritalStatus @modify(name: "maritalStatus")
   nationality: Nationality!
-  pets: [Pet]
+  pets: [Pet] @discriminate(field: "union_type")
 }
 
 type Employee {

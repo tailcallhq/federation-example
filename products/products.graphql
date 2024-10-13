@@ -6,9 +6,11 @@ schema
 
 type Query {
   productTypes: [Products!]!
+    @discriminate(field: "type")
     @http(baseURL: "http://localhost:8083", path: "/products")
   topSecretFederationFacts: [TopSecretFact!]!
     @http(baseURL: "http://localhost:8083", path: "/top_secret_facts")
+    @discriminate(field: "type")
   factTypes: [TopSecretFactType!]
     @http(baseURL: "http://localhost:8083", path: "/fact_types")
 }
@@ -19,7 +21,7 @@ enum TopSecretFactType {
   MISCELLANEOUS
 }
 
-interface TopSecretFact @discriminate(field: "type") {
+interface TopSecretFact {
   description: FactContent!
   factType: TopSecretFactType
 }
@@ -70,10 +72,7 @@ type Employee {
     )
 }
 
-union Products @discriminate(field: "type") =
-    Consultancy
-  | Cosmo
-  | Documentation
+union Products = Consultancy | Cosmo | Documentation
 
 type Consultancy {
   upc: ID!

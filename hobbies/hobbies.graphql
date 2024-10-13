@@ -1,6 +1,4 @@
-schema
-  @server(port: 8002)
-  @upstream(baseURL: "http://localhost:8082") {
+schema @server(port: 8002) @upstream(baseURL: "http://localhost:8082") {
   query: Query
 }
 
@@ -81,13 +79,7 @@ type Travelling {
   countriesLived: [Country!]!
 }
 
-union Hobby @discriminate(field: "type") =
-    Exercise
-  | Flying
-  | Gaming
-  | Programming
-  | Travelling
-  | Other
+union Hobby = Exercise | Flying | Gaming | Programming | Travelling | Other
 
 type Employee {
   id: Int!
@@ -96,6 +88,7 @@ type Employee {
       baseURL: "http://localhost:8082"
       path: "/employees/{{.value.id}}/hobbies"
     )
+    @discriminate(field: "type")
 }
 
 type SDK {

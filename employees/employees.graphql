@@ -1,6 +1,4 @@
-schema
-  @server(port: 8000)
-  @upstream(baseURL: "http://localhost:8080") {
+schema @server(port: 8000) @upstream(baseURL: "http://localhost:8080") {
   query: Query
 }
 
@@ -11,6 +9,7 @@ type Query {
     @http(baseURL: "http://localhost:8080", path: "/employees", dedupe: false)
   products: [Products!]!
     @http(baseURL: "http://localhost:8080", path: "/employees/products")
+    @discriminate(field: "type")
   teammates(team: Department!): [Employee!]!
     @http(
       baseURL: "http://localhost:8080"
@@ -106,7 +105,7 @@ type Time {
   timeStamp: String!
 }
 
-union Products @discriminate(field: "type") = Consultancy | Cosmo | SDK
+union Products = Consultancy | Cosmo | SDK
 
 interface IProduct {
   upc: ID!
