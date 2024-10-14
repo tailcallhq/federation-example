@@ -1,4 +1,5 @@
 use axum::http::StatusCode;
+use axum::routing::post;
 use axum::{
     extract::{Path, State},
     response::IntoResponse,
@@ -9,6 +10,7 @@ use hyper::Server;
 use serde::{Deserialize, Serialize};
 use std::env;
 use std::path::PathBuf;
+use std::sync::RwLock;
 use std::{fs, net::SocketAddr, sync::Arc};
 
 // Define your structs
@@ -107,7 +109,7 @@ struct SDK {
 
 // Define the shared application state
 struct AppState {
-    employees: Vec<Employee>,
+    employees: RwLock<Vec<Employee>>,
     products: Vec<Product>,
 }
 
@@ -116,7 +118,7 @@ async fn get_employee_by_id(
     Path(id): Path<u32>,
     State(state): State<Arc<AppState>>,
 ) -> impl IntoResponse {
-    let employees = &state.employees;
+    let employees = state.employees.read().unwrap();
     if let Some(employee) = employees.iter().find(|e| e.id == id) {
         (StatusCode::OK, Json(employee.clone())).into_response()
     } else {
@@ -128,7 +130,7 @@ async fn get_department_employees(
     Path(department): Path<String>,
     State(state): State<Arc<AppState>>,
 ) -> impl IntoResponse {
-    let employees = &state.employees;
+    let employees = state.employees.read().unwrap();
     let employees = employees
         .iter()
         .filter(|employee| employee.role.departments_contains(&department))
@@ -178,8 +180,27 @@ async fn get_product_info(
     }
 }
 
+// Updated handler to use POST
+async fn update_employee_tag(
+    Path(id): Path<u32>,
+    State(state): State<Arc<AppState>>,
+    Json(payload): Json<serde_json::Value>,
+) -> impl IntoResponse {
+    let mut employees = state.employees.write().unwrap();
+    if let Some(employee) = employees.iter_mut().find(|e| e.id == id) {
+        if let Some(new_tag) = payload.get("tag").and_then(|v| v.as_str()) {
+            employee.tag = new_tag.to_string();
+            return Json(employee).into_response()
+        } else {
+            return StatusCode::BAD_REQUEST.into_response();
+        }
+    } else {
+        return StatusCode::NOT_FOUND.into_response();
+    }
+}
+
 async fn filter_employees(State(state): State<Arc<AppState>>) -> impl IntoResponse {
-    (StatusCode::OK, Json(state.employees.clone()))
+    (StatusCode::OK, Json(state.employees.read().unwrap().clone()))
 }
 
 #[tokio::main]
@@ -212,7 +233,7 @@ async fn main() {
 
     // Create shared application state
     let shared_state = Arc::new(AppState {
-        employees: employees,
+        employees: RwLock::new(employees),
         products: products,
     });
 
@@ -220,6 +241,7 @@ async fn main() {
     let app = Router::new()
         .route("/employees", get(filter_employees))
         .route("/employees/:id", get(get_employee_by_id))
+        .route("/employees/:id/tag", post(update_employee_tag))
         .route("/employees/products", get(get_products))
         .route("/employees/products/:upc", get(get_product_info))
         .route(

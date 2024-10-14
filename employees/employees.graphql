@@ -17,9 +17,12 @@ type Query {
     )
 }
 
+type TagInput {
+  tag: String!
+}
+
 type Mutation {
-  # TODO: implement
-  updateEmployeeTag(id: Int!, tag: String!): Employee @expr(body: null)
+  updateEmployeeTag(id: Int!, tag: TagInput!): Employee @http(baseURL: "http://localhost:8080", path: "/employees/{{.args.id}}/tag", method: POST, body: "{{.args.tag}}")
 }
 
 type Subscription {
