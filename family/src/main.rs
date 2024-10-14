@@ -87,7 +87,7 @@ async fn filter_employees(
         employees.retain(|e| ids.contains(&e.id.to_string()));
     }
 
-    Json(employees)
+    Json(employees.into_iter().map(|employee| employee.id).collect::<Vec<_>>())
 }
 
 async fn get_employee_details_by_id(

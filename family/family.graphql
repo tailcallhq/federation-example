@@ -120,7 +120,14 @@ type Details {
 }
 
 type Employee {
-  details: Details
+  details: Details @http(
+      baseURL: "http://localhost:8081"
+      path: "/family/employee-details"
+      query: [{ key: "id", value: "{{.value.id}}" }]
+      batchKey: ["id"]
+      select: "{{.details}}"
+      dedupe: true
+    )
   id: Int!
 }
 
