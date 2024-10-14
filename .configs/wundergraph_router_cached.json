@@ -1,0 +1,33 @@
+{
+    "version": "1",
+    "execution_config": {
+        "file": {
+            "path": "./config.json"
+        }
+    },
+    "engine": {
+        "enable_persisted_operations_cache": true,
+        "enable_normalization_cache": true,
+        "enable_validation_cache": true,
+        "operation_hash_cache_size": 10000,
+        "execution_plan_cache_size": 10000,
+        "normalization_cache_size": 10000,
+        "validation_cache_size": 10000
+    },
+    "cache_control_policy": {
+        "enabled": true,
+        "value": "max-age=180, public"
+    },
+    "persisted_operations": {
+        "cache": {
+            "size": "100MB"
+        }
+    },
+    "telemetry": {
+        "metrics": {
+            "prometheus": {
+                "enabled": true
+            }
+        }
+    }
+}
