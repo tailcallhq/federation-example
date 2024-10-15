@@ -1,4 +1,6 @@
-use axum::http::StatusCode;
+use axum::http::{HeaderValue, StatusCode};
+use axum::middleware::Next;
+use axum::response::Response;
 use axum::routing::post;
 use axum::{
     extract::{Path, State},
@@ -6,7 +8,7 @@ use axum::{
     routing::get,
     Json, Router,
 };
-use hyper::Server;
+use hyper::{Request, Server};
 use serde::{Deserialize, Serialize};
 use std::env;
 use std::path::PathBuf;
@@ -190,7 +192,7 @@ async fn update_employee_tag(
     if let Some(employee) = employees.iter_mut().find(|e| e.id == id) {
         if let Some(new_tag) = payload.get("tag").and_then(|v| v.as_str()) {
             employee.tag = new_tag.to_string();
-            return Json(employee).into_response()
+            return Json(employee).into_response();
         } else {
             return StatusCode::BAD_REQUEST.into_response();
         }
@@ -200,7 +202,10 @@ async fn update_employee_tag(
 }
 
 async fn filter_employees(State(state): State<Arc<AppState>>) -> impl IntoResponse {
-    (StatusCode::OK, Json(state.employees.read().unwrap().clone()))
+    (
+        StatusCode::OK,
+        Json(state.employees.read().unwrap().clone()),
+    )
 }
 
 #[tokio::main]
@@ -248,6 +253,7 @@ async fn main() {
             "/employees/department/:department",
             get(get_department_employees),
         )
+        .layer(axum::middleware::from_fn(http_cache_middleware))
         .with_state(shared_state);
 
     // Define the address to serve the application
@@ -277,4 +283,15 @@ fn load_file<T: for<'a> Deserialize<'a>>(file_path: &str) -> Vec<T> {
     let data = fs::read_to_string(&path).expect("Unable to read file");
 
     serde_json::from_str(&data).expect("JSON was not well-formatted")
+}
+
+async fn http_cache_middleware<T>(request: Request<T>, next: Next<T>) -> Response {
+    let mut response = next.run(request).await;
+
+    response.headers_mut().insert(
+        "Cache-control",
+        HeaderValue::from_str("max-age=180, public").unwrap(),
+    );
+
+    response
 }
