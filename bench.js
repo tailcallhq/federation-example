@@ -10,7 +10,7 @@ export const options = {
 };
 
 
-// oha http://localhost:3002/graphql -n 100 -z 10s -H 'content-type: application/json' -d '{"query":"  query Bench {\n    employees {\n      details {\n        forename\n      }\n    }\n}","operationName":"Bench"}'
+// oha http://127.0.0.1:3002/graphql -n 100 -z 10s -H 'content-type: application/json' -d '{"query":"  query Bench {\n    employees {\n      details {\n        forename\n      }\n    }\n}","operationName":"Bench"}'
 
 export default function () {
   let query = `
@@ -28,7 +28,7 @@ export default function () {
     'GraphQL-Client-Version': '0.0.1',
   };
 
-  let res = http.post('http://localhost:8030/graphql', JSON.stringify({ query: query, operationName: 'Bench' }), {
+  let res = http.post('http://127.0.0.1:8030/graphql', JSON.stringify({ query: query, operationName: 'Bench' }), {
     headers: headers,
   });
   check(res, {

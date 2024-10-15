@@ -10,8 +10,7 @@ export const options = {
 };
 
 export default function () {
-
-  let res = http.post('http://localhost:8080/employees');
+  let res = http.get('http://127.0.0.1:8080/employees');
   check(res, {
     'is status 200': (r) => r.status === 200,
   });

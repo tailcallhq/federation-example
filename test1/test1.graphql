@@ -1,32 +1,32 @@
 schema
   @server(port: 8005)
-  @upstream(baseURL: "http://localhost:8088") {
+  @upstream(baseURL: "http://127.0.0.1:8088") {
   query: Query
 }
 
 type Query {
   # "Returns the value of the received HTTP header."
-  headerValue(name: String!): String! @http(baseURL: "http://localhost:8088", path: "/header-value" ,query: [{key: "name", value: "{{.args.name}}"}])
+  headerValue(name: String!): String! @http(baseURL: "http://127.0.0.1:8088", path: "/header-value" ,query: [{key: "name", value: "{{.args.name}}"}])
   # "Returns the value of the given key in the WS initial payload."
   # initPayloadValue(key: String!): String!     # WS we don't support.
   # initialPayload: Map                         # not sure how to write this.
   # "Returns response after the given delay"
-  delay(response: String!, ms: Int!): String! @http(baseURL: "http://localhost:8088", path: "/delay", query: [{key: "ms", value: "{{.args.ms}}", skipEmpty: true}, {key: "response", value: "{{.args.response}}", skipEmpty: true}])
+  delay(response: String!, ms: Int!): String! @http(baseURL: "http://127.0.0.1:8088", path: "/delay", query: [{key: "ms", value: "{{.args.ms}}", skipEmpty: true}, {key: "response", value: "{{.args.response}}", skipEmpty: true}])
 
   bigResponse(
     artificialDelay: Int! = 0
     bigObjects: Int! = 100
     nestedObjects: Int! = 100
     deeplyNestedObjects: Int! = 100
-  ): [BigObject!]!  @http(baseURL: "http://localhost:8088", path: "/big-response", query: [{key: "artificialDelay", value: "{{.args.artificialDelay}}", skipEmpty: true}, {key: "bigObjects", value: "{{.args.bigObjects}}", skipEmpty: true}, {key: "nestedObjects", value: "{{.args.nestedObjects}}", skipEmpty: true}, {key: "deeplyNestedObjects", value: "{{.args.deeplyNestedObjects}}", skipEmpty: true}])
+  ): [BigObject!]!  @http(baseURL: "http://127.0.0.1:8088", path: "/big-response", query: [{key: "artificialDelay", value: "{{.args.artificialDelay}}", skipEmpty: true}, {key: "bigObjects", value: "{{.args.bigObjects}}", skipEmpty: true}, {key: "nestedObjects", value: "{{.args.nestedObjects}}", skipEmpty: true}, {key: "deeplyNestedObjects", value: "{{.args.deeplyNestedObjects}}", skipEmpty: true}])
 
-  bigAbstractResponse: BigAbstractResponse @http(baseURL: "http://localhost:8088", path: "/big-abstract-response")
+  bigAbstractResponse: BigAbstractResponse @http(baseURL: "http://127.0.0.1:8088", path: "/big-abstract-response")
 
   rootFieldWithListArg(arg: [String!]!): [String!]! @expr(body: "{{.args.arg}}")
   rootFieldWithNestedListArg(arg: [[String!]!]!): [[String!]!]! @expr(body: "{{.args.arg}}")
   rootFieldWithListOfInputArg(arg: [InputType!]!): [InputResponse!]! @expr(body: "{{.args.arg}}")
   rootFieldWithListOfEnumArg(arg: [EnumType!]!): [EnumType!]!  @expr(body: "{{.args.arg}}")
-  rootFieldWithInput(arg: InputArg!): String! @http(baseURL: "http://localhost:8088", path:"/root-field-with-input", query: [{key: "enum", value: "{{.args.arg.enum}}", skipEmpty: true},{key: "enums[]", value: "{{.args.arg.enums}}", skipEmpty: true},{key: "string", value: "{{.args.arg.string}}", skipEmpty: true},{key: "strings[]", value: "{{.args.arg.strings}}", skipEmpty: true}])
+  rootFieldWithInput(arg: InputArg!): String! @http(baseURL: "http://127.0.0.1:8088", path:"/root-field-with-input", query: [{key: "enum", value: "{{.args.arg.enum}}", skipEmpty: true},{key: "enums[]", value: "{{.args.arg.enums}}", skipEmpty: true},{key: "string", value: "{{.args.arg.string}}", skipEmpty: true},{key: "strings[]", value: "{{.args.arg.strings}}", skipEmpty: true}])
 }
 
 input InputArg {

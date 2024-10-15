@@ -1,18 +1,18 @@
 schema
   @server(port: 8003)
-  @upstream(baseURL: "http://localhost:8083") {
+  @upstream(baseURL: "http://127.0.0.1:8083") {
   query: Query
 }
 
 type Query {
   productTypes: [Products!]!
     @discriminate(field: "type")
-    @http(baseURL: "http://localhost:8083", path: "/products")
+    @http(baseURL: "http://127.0.0.1:8083", path: "/products")
   topSecretFederationFacts: [TopSecretFact!]!
-    @http(baseURL: "http://localhost:8083", path: "/top_secret_facts")
+    @http(baseURL: "http://127.0.0.1:8083", path: "/top_secret_facts")
     @discriminate(field: "type")
   factTypes: [TopSecretFactType!]
-    @http(baseURL: "http://localhost:8083", path: "/fact_types")
+    @http(baseURL: "http://127.0.0.1:8083", path: "/fact_types")
 }
 
 enum TopSecretFactType {
@@ -60,13 +60,13 @@ type Employee {
   id: Int!
   products: [ProductName!]!
     @http(
-      baseURL: "http://localhost:8083"
+      baseURL: "http://127.0.0.1:8083"
       path: "/products/employees/{{.value.id}}"
       select: "{{.products}}"
     )
   notes: String
     @http(
-      baseURL: "http://localhost:8083"
+      baseURL: "http://127.0.0.1:8083"
       path: "/products/employees/{{.value.id}}"
       select: "{{.notes}}"
     )
@@ -78,7 +78,7 @@ type Consultancy {
   upc: ID!
   name: ProductName!
     @http(
-      baseURL: "http://localhost:8083"
+      baseURL: "http://127.0.0.1:8083"
       path: "/products/{{.value.upc}}"
       select: "{{.name}}"
     )
@@ -88,13 +88,13 @@ type Cosmo {
   upc: ID!
   name: ProductName!
     @http(
-      baseURL: "http://localhost:8083"
+      baseURL: "http://127.0.0.1:8083"
       path: "/products/{{.value.upc}}"
       select: "{{.name}}"
     )
   repositoryUrl: String!
     @http(
-      baseURL: "http://localhost:8083"
+      baseURL: "http://127.0.0.1:8083"
       path: "/products/{{.value.upc}}"
       select: "{{.repositoryUrl}}"
     )

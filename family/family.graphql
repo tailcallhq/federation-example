@@ -1,13 +1,13 @@
 schema
   @server(port: 8001)
-  @upstream(baseURL: "http://localhost:8081") {
+  @upstream(baseURL: "http://127.0.0.1:8081") {
   query: Query
 }
 
 type Query {
   findEmployees(criteria: SearchInput): [Employee!]!
     @http(
-      baseURL: "http://localhost:8081"
+      baseURL: "http://127.0.0.1:8081"
       path: "/family/employees"
       query: [
         {
@@ -121,7 +121,7 @@ type Details {
 
 type Employee {
   details: Details @http(
-      baseURL: "http://localhost:8081"
+      baseURL: "http://127.0.0.1:8081"
       path: "/family/employee-details"
       query: [{ key: "id", value: "{{.value.id}}" }]
       batchKey: ["id"]
