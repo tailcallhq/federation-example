@@ -1,0 +1,11 @@
+schema
+  @link(type: Config, src: "./employees/employees.graphql")
+  @link(type: Config, src: "./bench_upstream.graphql")
+  @server(port: 8030)
+  @upstream {
+  query: Query
+}
+
+type Query {
+  main_version: Int! @expr(body: 1)
+}

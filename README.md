@@ -6,8 +6,13 @@
 
 ## Setup
 
+### Demo
 - Run `./run.sh` to start the services.
 - Run `TC_LOG_LEVEL=error tailcall start main.graphql`
+
+### Benchmark
+- Run `./run.sh` to start the services.
+- Run `TC_LOG_LEVEL=error tailcall start bench.graphql`
 
 Before benchmarking we have to ensure that all services and tailcall are running. To test each service we can just inspect the terminal where the `./run.sh` command was executed. For tailcall we check if the terminal has any error, and if not we can also check by visiting the tailcall [playground](https://tailcall.run/playground/?u=http://127.0.0.1:8030/graphql&utm_source=tailcall-debug&utm_medium=server).
 
