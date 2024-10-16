@@ -58,7 +58,6 @@ async fn handle_big_abstract_response() -> impl IntoResponse {
 }
 
 async fn root_field_with_input(Qs2(params): Qs2<RootQuery>) -> impl IntoResponse {
-    // TODO: impl this.
     Json(params).into_response()
 }
 

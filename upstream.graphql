@@ -1,6 +1,11 @@
 schema
   @server(port: 8030)
-  @upstream(poolMaxIdlePerHost: 200, tcpKeepAlive: 60, httpCache: 40) {
+  @upstream(
+    poolMaxIdlePerHost: 200
+    tcpKeepAlive: 60
+    httpCache: 40
+    batch: { delay: 1 }
+  ) {
   query: Query
 }
 

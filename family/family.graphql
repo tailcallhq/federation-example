@@ -1,6 +1,4 @@
-schema
-  @server(port: 8001)
-  @upstream(baseURL: "http://127.0.0.1:8081") {
+schema @server(port: 8001) @upstream(baseURL: "http://127.0.0.1:8081") {
   query: Query
 }
 
@@ -20,8 +18,16 @@ type Query {
           value: "{{.args.criteria.nationality}}"
           skipEmpty: true
         }
-        { key: "marital_status", value: "{{.args.criteria.nested.maritalStatus}}", skipEmpty: true }
-        { key: "has_children", value: "{{.args.criteria.nested.hasChildren}}", skipEmpty: true }
+        {
+          key: "marital_status"
+          value: "{{.args.criteria.nested.maritalStatus}}"
+          skipEmpty: true
+        }
+        {
+          key: "has_children"
+          value: "{{.args.criteria.nested.hasChildren}}"
+          skipEmpty: true
+        }
       ]
     )
 }
@@ -120,7 +126,8 @@ type Details {
 }
 
 type Employee {
-  details: Details @http(
+  details: Details
+    @http(
       baseURL: "http://127.0.0.1:8081"
       path: "/family/employee-details"
       query: [{ key: "id", value: "{{.value.id}}" }]

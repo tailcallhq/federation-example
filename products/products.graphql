@@ -1,6 +1,4 @@
-schema
-  @server(port: 8003)
-  @upstream(baseURL: "http://127.0.0.1:8083") {
+schema @server(port: 8003) @upstream(baseURL: "http://127.0.0.1:8083") {
   query: Query
 }
 

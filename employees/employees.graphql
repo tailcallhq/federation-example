@@ -7,6 +7,7 @@ type Query {
     @http(baseURL: "http://127.0.0.1:8080", path: "/employees/{{.args.id}}")
   employees: [Employee!]!
     @http(baseURL: "http://127.0.0.1:8080", path: "/employees", dedupe: true)
+    @cache(maxAge: 40)
   products: [Products!]!
     @http(baseURL: "http://127.0.0.1:8080", path: "/employees/products")
     @discriminate(field: "type")
@@ -22,14 +23,19 @@ type TagInput {
 }
 
 type Mutation {
-  updateEmployeeTag(id: Int!, tag: TagInput!): Employee @http(baseURL: "http://127.0.0.1:8080", path: "/employees/{{.args.id}}/tag", method: POST, body: "{{.args.tag}}")
+  updateEmployeeTag(id: Int!, tag: TagInput!): Employee
+    @http(
+      baseURL: "http://127.0.0.1:8080"
+      path: "/employees/{{.args.id}}/tag"
+      method: POST
+      body: "{{.args.tag}}"
+    )
 }
 
 type Subscription {
   """
   `currentTime` will return a stream of `Time` objects.
   """
-  # TODO: implement
   currentTime: Time!
 }
 
@@ -80,11 +86,14 @@ enum Country {
   AMERICA @alias(options: ["America"])
   ENGLAND @alias(options: ["England"])
   GERMANY @alias(options: ["Germany"])
-  INDIA @alias(options: ["India"])
+  INDONESIA @alias(options: ["Indonesia"])
+  KOREA @alias(options: ["Korea"])
   NETHERLANDS @alias(options: ["Netherlands"])
   PORTUGAL @alias(options: ["Portugal"])
+  SERBIA @alias(options: ["Serbia"])
   SPAIN @alias(options: ["Spain"])
-  UKRAINE @alias(options: ["Ukraine"])
+  TAIWAN @alias(options: ["Taiwan"])
+  THAILAND @alias(options: ["Thailand"])
 }
 
 type Details {
@@ -93,7 +102,6 @@ type Details {
 }
 
 type Employee implements Identifiable {
-  # TODO: resolve fields using http
   details: Details!
   id: Int!
   tag: String!

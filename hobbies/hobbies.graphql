@@ -4,9 +4,6 @@ schema @server(port: 8002) @upstream(baseURL: "http://127.0.0.1:8082") {
 
 type Query {
   hobbies_version: Int! @expr(body: 1)
-  # TODO: remove test
-  # test_employees: [Employee] @expr(body: [{id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}, {id: 7}, {id: 8}, {id: 10}, {id: 11}, {id: 12}])
-  # test_sdk: [SDK] @expr(body: [{upc: "sdk"}])
 }
 
 enum ExerciseType {
@@ -59,20 +56,6 @@ enum ProgrammingLanguage {
 
 type Programming {
   languages: [ProgrammingLanguage!]!
-}
-
-enum Country {
-  AMERICA @alias(options: ["America"])
-  ENGLAND @alias(options: ["England"])
-  GERMANY @alias(options: ["Germany"])
-  INDONESIA @alias(options: ["Indonesia"])
-  KOREA @alias(options: ["Korea"])
-  NETHERLANDS @alias(options: ["Netherlands"])
-  PORTUGAL @alias(options: ["Portugal"])
-  SERBIA @alias(options: ["Serbia"])
-  SPAIN @alias(options: ["Spain"])
-  TAIWAN @alias(options: ["Taiwan"])
-  THAILAND @alias(options: ["Thailand"])
 }
 
 type Travelling {
