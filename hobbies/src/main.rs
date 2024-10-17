@@ -113,7 +113,7 @@ async fn main() {
         .with_state(shared_state);
 
     // Define the address to serve the application
-    let addr = SocketAddr::from(([127, 0, 0, 1], 8082));
+    let addr = SocketAddr::from(([0, 0, 0, 0], 8082));
     println!("Listening on http://{}", addr);
 
     // Run the server using axum's Server

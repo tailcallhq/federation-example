@@ -135,7 +135,7 @@ async fn main() {
         .route("/big-response", get(big_response_handler));
 
     // Define the address to serve the application
-    let addr = SocketAddr::from(([127, 0, 0, 1], 8088));
+    let addr = SocketAddr::from(([0, 0, 0, 0], 8088));
     println!("Listening on http://{}", addr);
 
     // Run the server using axum's Server

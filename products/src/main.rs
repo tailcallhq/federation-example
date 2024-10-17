@@ -83,7 +83,7 @@ async fn main() {
         .route("/fact_types", get(get_fact_types))
         .with_state(shared_state);
 
-    let addr = SocketAddr::from(([127, 0, 0, 1], 8083));
+    let addr = SocketAddr::from(([0, 0, 0, 0], 8083));
     println!("Listening on {}", addr);
     Server::bind(&addr)
         .serve(app.into_make_service())
