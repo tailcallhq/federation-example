@@ -7,10 +7,12 @@
 ## Setup
 
 ### Demo
+
 - Run `./run.sh` to start the services.
 - Run `TC_LOG_LEVEL=error tailcall start main.graphql`
 
 ### Benchmark
+
 - Run `./run.sh` to start the services.
 - Run `TC_LOG_LEVEL=error tailcall start bench.graphql`
 
@@ -43,3 +45,9 @@ On the next step we can benchmark the Tailcall Platform by running:
 ```
 k6 run bench.js
 ```
+
+## Configurations
+
+In the folder `./configuration` we include the minimal versions of the
+benchmarking configurations. We used those configurations to calculate
+the performance of Tailcall in different scenarios.
