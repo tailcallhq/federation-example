@@ -161,6 +161,6 @@ type SDK implements IProduct {
     @http(
       baseURL: "http://127.0.0.1:8080"
       path: "/employees/products/{{.value.upc}}"
-      select: "{{.lead}}"
+      select: "{{.owner}}"
     )
 }
