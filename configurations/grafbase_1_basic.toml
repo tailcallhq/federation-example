@@ -1,0 +1,6 @@
+[graph]
+path = "/graphql"
+introspection = true
+
+[network]
+listen_address = "127.0.0.1:5000"

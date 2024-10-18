@@ -1,0 +1,14 @@
+[graph]
+path = "/graphql"
+introspection = true
+
+[network]
+listen_address = "127.0.0.1:5000"
+
+[gateway.batching]
+enabled = true
+limit = 5
+
+[entity_caching]
+enabled = true
+ttl = "60s"
