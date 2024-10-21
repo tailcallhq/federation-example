@@ -3,4 +3,4 @@ path = "/graphql"
 introspection = true
 
 [network]
-listen_address = "127.0.0.1:5000"
+listen_address = "127.0.0.1:4000"

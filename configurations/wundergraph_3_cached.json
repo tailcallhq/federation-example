@@ -5,28 +5,6 @@
             "path": "./config.json"
         }
     },
-    "engine": {
-        "enable_single_flight": true,
-        "enable_request_tracing": false,
-        "enable_persisted_operations_cache": true,
-        "enable_normalization_cache": true,
-        "enable_validation_cache": true,
-        "operation_hash_cache_size": 10000,
-        "execution_plan_cache_size": 10000,
-        "normalization_cache_size": 10000,
-        "validation_cache_size": 10000,
-        "max_concurrent_resolvers": 200
-    },
-    "traffic_shaping": {
-        "all": {
-            "keep_alive_idle_timeout": "60s",
-            "keep_alive_probe_interval": "60s"
-        }
-    },
-
-    "log_level": "panic",
-    "json_log": false,
-    "query_plans_enabled": false,
     "cache_control_policy": {
         "enabled": true,
         "value": "max-age=180, public"
@@ -36,9 +14,41 @@
             "size": "100MB"
         }
     },
+    "engine": {
+        "enable_single_flight": true,
+        "enable_persisted_operations_cache": true,
+        "enable_normalization_cache": true,
+        "enable_validation_cache": true,
+        "operation_hash_cache_size": 10000,
+        "execution_plan_cache_size": 10000,
+        "normalization_cache_size": 10000,
+        "validation_cache_size": 10000,
+        "minify_subgraph_operations": true,
+        "enable_request_tracing": false,
+        "max_concurrent_resolvers": 200
+    },
+    "traffic_shaping": {
+        "all": {
+            "keep_alive_idle_timeout": "60s",
+            "keep_alive_probe_interval": "60s"
+        }
+    },
+    "router_registration": false,
+    "log_level": "error",
+    "json_log": false,
+    "query_plans_enabled": false,
+    "graphql_metrics": {
+        "enabled": false
+    },
     "telemetry": {
+        "tracing": {
+            "enabled": false
+        },
         "metrics": {
             "prometheus": {
+                "enabled": false
+            },
+            "otlp": {
                 "enabled": false
             }
         }
