@@ -32,7 +32,7 @@ type Query {
   ): [BigObject!]!
     @http(
       baseURL: "http://127.0.0.1:8088"
-      path: "/big-response"
+      path: "/big-json"
       query: [
         {
           key: "artificialDelay"

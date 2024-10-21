@@ -132,7 +132,7 @@ async fn main() {
         .route("/root-field-with-input", get(root_field_with_input))
         .route("/delay", get(handle_delay))
         .route("/big-abstract-response", get(handle_big_abstract_response))
-        .route("/big-response", get(big_response_handler));
+        .route("/big-json", get(big_response_handler));
 
     // Define the address to serve the application
     let addr = SocketAddr::from(([0, 0, 0, 0], 8088));
