@@ -31,8 +31,9 @@ type Query {
     deeplyNestedObjects: Int! = 100
   ): [BigObject!]!
     @http(
-      baseURL: "http://127.0.0.1:8088"
+      baseURL: "http://127.0.0.1:4006"
       path: "/big-json"
+      dedupe: true
       query: [
         {
           key: "artificialDelay"
