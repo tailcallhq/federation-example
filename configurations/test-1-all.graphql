@@ -29,7 +29,8 @@ type Query {
     deeplyNestedObjects: Int! = 100
   ): [BigObject!]!
     @http(
-      url: "http://127.0.0.1:8088/big-json"
+      url: "http://127.0.0.1:4006/big-json"
+      dedupe: true
       query: [
         {
           key: "artificialDelay"
@@ -49,6 +50,7 @@ type Query {
         }
       ]
     )
+    @cache(maxAge: 40)
 
   bigAbstractResponse: BigAbstractResponse
     @http(url: "http://127.0.0.1:8088/big-abstract-response")

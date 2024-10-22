@@ -4,9 +4,13 @@ schema
   @link(type: Config, src: "../hobbies/hobbies.graphql")
   @link(type: Config, src: "../mood/mood.graphql")
   @link(type: Config, src: "../products/products.graphql")
-  @link(type: Config, src: "./test1-basic.graphql")
+  @link(type: Config, src: "./test1-all.graphql")
   @server(port: 8030)
-  @upstream {
+  @upstream(
+    poolMaxIdlePerHost: 200
+    tcpKeepAlive: 60
+    httpCache: 40
+  ) {
   query: Query
 }
 
