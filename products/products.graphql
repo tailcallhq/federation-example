@@ -1,16 +1,15 @@
-schema @server(port: 8003) @upstream(baseURL: "http://127.0.0.1:8083") {
+schema {
   query: Query
 }
 
 type Query {
   productTypes: [Products!]!
     @discriminate(field: "type")
-    @http(baseURL: "http://127.0.0.1:8083", path: "/products")
+    @http(url: "http://127.0.0.1:8083/products")
   topSecretFederationFacts: [TopSecretFact!]!
-    @http(baseURL: "http://127.0.0.1:8083", path: "/top_secret_facts")
+    @http(url: "http://127.0.0.1:8083/top_secret_facts")
     @discriminate(field: "type")
-  factTypes: [TopSecretFactType!]
-    @http(baseURL: "http://127.0.0.1:8083", path: "/fact_types")
+  factTypes: [TopSecretFactType!] @http(url: "http://127.0.0.1:8083/fact_types")
 }
 
 enum TopSecretFactType {
@@ -57,17 +56,9 @@ enum ProductName {
 type Employee {
   id: Int!
   products: [ProductName!]!
-    @http(
-      baseURL: "http://127.0.0.1:8083"
-      path: "/products/employees/{{.value.id}}"
-      select: "{{.products}}"
-    )
+    @http(url: "http://127.0.0.1:8083/products/employees/{{.value.id}}", select: "{{.products}}")
   notes: String
-    @http(
-      baseURL: "http://127.0.0.1:8083"
-      path: "/products/employees/{{.value.id}}"
-      select: "{{.notes}}"
-    )
+    @http(url: "http://127.0.0.1:8083/products/employees/{{.value.id}}", select: "{{.notes}}")
 }
 
 union Products = Consultancy | Cosmo | Documentation
@@ -75,27 +66,15 @@ union Products = Consultancy | Cosmo | Documentation
 type Consultancy {
   upc: ID!
   name: ProductName!
-    @http(
-      baseURL: "http://127.0.0.1:8083"
-      path: "/products/{{.value.upc}}"
-      select: "{{.name}}"
-    )
+    @http(url: "http://127.0.0.1:8083/products/{{.value.upc}}", select: "{{.name}}")
 }
 
 type Cosmo {
   upc: ID!
   name: ProductName!
-    @http(
-      baseURL: "http://127.0.0.1:8083"
-      path: "/products/{{.value.upc}}"
-      select: "{{.name}}"
-    )
+    @http(url: "http://127.0.0.1:8083/products/{{.value.upc}}", select: "{{.name}}")
   repositoryUrl: String!
-    @http(
-      baseURL: "http://127.0.0.1:8083"
-      path: "/products/{{.value.upc}}"
-      select: "{{.repositoryUrl}}"
-    )
+    @http(url: "http://127.0.0.1:8083/products/{{.value.upc}}", select: "{{.repositoryUrl}}")
 }
 
 type Documentation {

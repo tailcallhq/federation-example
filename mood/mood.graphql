@@ -1,4 +1,4 @@
-schema @server(port: 8004) @upstream(baseURL: "http://127.0.0.1:8071") {
+schema {
   query: Query
   mutation: Mutation
 }
@@ -16,8 +16,7 @@ input MoodInput {
 type Mutation {
   updateMood(input: MoodInput!): Employee!
     @http(
-      baseURL: "http://127.0.0.1:8071"
-      path: "/mood"
+      url: "http://127.0.0.1:8071/mood"
       method: POST
       body: "{{.args.input}}"
     )
@@ -32,8 +31,7 @@ type Employee {
   id: Int!
   currentMood: Mood!
     @http(
-      baseURL: "http://127.0.0.1:8071"
-      path: "/mood"
+      url: "http://127.0.0.1:8071/mood"
       query: [{ key: "id", value: "{{.value.id}}" }]
       batchKey: ["id"]
       select: "{{.currentMood}}"

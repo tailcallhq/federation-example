@@ -1,4 +1,4 @@
-schema @server(port: 8005) @upstream(baseURL: "http://127.0.0.1:8088") {
+schema @server(port: 8005) @upstream {
   query: Query
 }
 
@@ -6,8 +6,7 @@ type Query {
   # "Returns the value of the received HTTP header."
   headerValue(name: String!): String!
     @http(
-      baseURL: "http://127.0.0.1:8088"
-      path: "/header-value"
+      url: "http://127.0.0.1:8088/header-value"
       query: [{ key: "name", value: "{{.args.name}}" }]
     )
   # "Returns the value of the given key in the WS initial payload."
@@ -16,8 +15,7 @@ type Query {
   # "Returns response after the given delay"
   delay(response: String!, ms: Int!): String!
     @http(
-      baseURL: "http://127.0.0.1:8088"
-      path: "/delay"
+      url: "http://127.0.0.1:8088/delay"
       query: [
         { key: "ms", value: "{{.args.ms}}", skipEmpty: true }
         { key: "response", value: "{{.args.response}}", skipEmpty: true }
@@ -31,8 +29,7 @@ type Query {
     deeplyNestedObjects: Int! = 100
   ): [BigObject!]!
     @http(
-      baseURL: "http://127.0.0.1:4006"
-      path: "/big-json"
+      url: "http://127.0.0.1:8088/big-json"
       dedupe: true
       query: [
         {
@@ -55,7 +52,7 @@ type Query {
     )
 
   bigAbstractResponse: BigAbstractResponse
-    @http(baseURL: "http://127.0.0.1:8088", path: "/big-abstract-response")
+    @http(url: "http://127.0.0.1:8088/big-abstract-response")
 
   rootFieldWithListArg(arg: [String!]!): [String!]! @expr(body: "{{.args.arg}}")
   rootFieldWithNestedListArg(arg: [[String!]!]!): [[String!]!]!
@@ -66,8 +63,7 @@ type Query {
     @expr(body: "{{.args.arg}}")
   rootFieldWithInput(arg: InputArg!): String!
     @http(
-      baseURL: "http://127.0.0.1:8088"
-      path: "/root-field-with-input"
+      url: "http://127.0.0.1:8088/root-field-with-input"
       query: [
         { key: "enum", value: "{{.args.arg.enum}}", skipEmpty: true }
         { key: "enums[]", value: "{{.args.arg.enums}}", skipEmpty: true }

@@ -1,4 +1,4 @@
-schema @server(port: 8002) @upstream(baseURL: "http://127.0.0.1:8082") {
+schema {
   query: Query
 }
 
@@ -67,15 +67,12 @@ union Hobby = Exercise | Flying | Gaming | Programming | Travelling | Other
 type Employee {
   id: Int!
   hobbies: [Hobby!]!
-    @http(
-      baseURL: "http://127.0.0.1:8082"
-      path: "/employees/{{.value.id}}/hobbies"
-    )
+    @http(url: "http://127.0.0.1:8082/employees/{{.value.id}}/hobbies")
     @discriminate(field: "type")
 }
 
 type SDK {
   upc: ID!
   clientLanguages: [ProgrammingLanguage!]!
-    @http(baseURL: "http://127.0.0.1:8082", path: "/sdk/{{.value.upc}}")
+    @http(url: "http://127.0.0.1:8082/sdk/{{.value.upc}}")
 }

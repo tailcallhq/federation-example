@@ -1,21 +1,18 @@
-schema @server(port: 8000) @upstream(baseURL: "http://127.0.0.1:8080") {
+schema {
   query: Query
 }
 
 type Query {
   employee(id: Int!): Employee
-    @http(baseURL: "http://127.0.0.1:8080", path: "/employees/{{.args.id}}")
+    @http(url: "http://127.0.0.1:8080/employees/{{.args.id}}")
   employees: [Employee!]!
-    @http(baseURL: "http://127.0.0.1:8080", path: "/employees", dedupe: true)
+    @http(url: "http://127.0.0.1:8080/employees", dedupe: true)
     @cache(maxAge: 40)
   products: [Products!]!
-    @http(baseURL: "http://127.0.0.1:8080", path: "/employees/products")
+    @http(url: "http://127.0.0.1:8080/employees/products")
     @discriminate(field: "type")
   teammates(team: Department!): [Employee!]!
-    @http(
-      baseURL: "http://127.0.0.1:8080"
-      path: "/employees/department/{{.args.team}}"
-    )
+    @http(url: "http://127.0.0.1:8080/employees/department/{{.args.team}}")
 }
 
 type TagInput {
@@ -25,8 +22,7 @@ type TagInput {
 type Mutation {
   updateEmployeeTag(id: Int!, tag: TagInput!): Employee
     @http(
-      baseURL: "http://127.0.0.1:8080"
-      path: "/employees/{{.args.id}}/tag"
+      url: "http://127.0.0.1:8080/employees/{{.args.id}}/tag"
       method: POST
       body: "{{.args.tag}}"
     )
@@ -127,8 +123,7 @@ type Consultancy {
   upc: ID!
   lead: Employee!
     @http(
-      baseURL: "http://127.0.0.1:8080"
-      path: "/employees/products/{{.value.upc}}"
+      url: "http://127.0.0.1:8080/employees/products/{{.value.upc}}"
       select: "{{.lead}}"
     )
 }
@@ -137,14 +132,12 @@ type Cosmo implements IProduct {
   upc: ID!
   engineers: [Employee!]!
     @http(
-      baseURL: "http://127.0.0.1:8080"
-      path: "/employees/products/{{.value.upc}}"
+      url: "http://127.0.0.1:8080/employees/products/{{.value.upc}}"
       select: "{{.engineers}}"
     )
   lead: Employee!
     @http(
-      baseURL: "http://127.0.0.1:8080"
-      path: "/employees/products/{{.value.upc}}"
+      url: "http://127.0.0.1:8080/employees/products/{{.value.upc}}"
       select: "{{.lead}}"
     )
 }
@@ -153,14 +146,12 @@ type SDK implements IProduct {
   upc: ID!
   engineers: [Employee!]!
     @http(
-      baseURL: "http://127.0.0.1:8080"
-      path: "/employees/products/{{.value.upc}}"
+      url: "http://127.0.0.1:8080/employees/products/{{.value.upc}}"
       select: "{{.engineers}}"
     )
   owner: Employee!
     @http(
-      baseURL: "http://127.0.0.1:8080"
-      path: "/employees/products/{{.value.upc}}"
+      url: "http://127.0.0.1:8080/employees/products/{{.value.upc}}"
       select: "{{.owner}}"
     )
 }
