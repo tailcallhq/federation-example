@@ -99,7 +99,7 @@ hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: applic
 
 **Medium**
 
-**Before conducting this test replace `big` with `medium` in Dockerfile and rebuild.**
+**Before conducting this test replace `big` with `medium` in `nginx.conf` and rebuild.**
 
 We can benchmark the baseline using the following command:
 
