@@ -54,7 +54,7 @@ advised to use them during production setups.
 
 #### Steps:
 
-- Run `cd nginx && docker build -t tc-benchmark . && docker run -d -p 4006:4006 -p 8090:8090 --name tc-benchmark tc-benchmark`
+- Run `cd nginx && docker build -t tc-benchmark . && docker run -d -p 4006:4006 -p 8090:8090 -p 4001:4001 -p 8091:8091  --name tc-benchmark tc-benchmark`
 
   To run the static upstream server. This server provides data to tailcall.
 
@@ -83,6 +83,8 @@ query BigQuery($delay: Int!, $bigObjects: Int!, $deeplyNestedObjects: Int!, $nes
 
 ## HEY Benchmarking
 
+**Big JSON**
+
 We can benchmark the baseline using the following command:
 
 ```
@@ -93,6 +95,20 @@ On the next step we can benchmark the Tailcall Platform by running:
 
 ```
 hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D bench-hey.json http://127.0.0.1:8030/graphql
+```
+
+**Employees**
+
+We can benchmark the baseline using the following command:
+
+```
+hey -n 200 -z 10s -m GET -H 'Accept: application/json' -H 'Content-Type: application/json' http://127.0.0.1:8091/employees
+```
+
+On the next step we can benchmark the Tailcall Platform by running:
+
+```
+hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D bench-hey-alt.json http://127.0.0.1:8030/graphql
 ```
 
 ## WRK Benchmarking

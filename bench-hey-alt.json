@@ -1,0 +1,5 @@
+{
+  "operationName": "Bench",
+  "variables": {},
+  "query": "query Bench { employees { details { forename } } }"
+}
