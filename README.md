@@ -83,7 +83,7 @@ query BigQuery($delay: Int!, $bigObjects: Int!, $deeplyNestedObjects: Int!, $nes
 
 ## HEY Benchmarking
 
-**Big JSON**
+**Big**
 
 We can benchmark the baseline using the following command:
 
@@ -94,10 +94,26 @@ hey -n 200 -z 10s -m GET -H 'Accept: application/json' -H 'Content-Type: applica
 On the next step we can benchmark the Tailcall Platform by running:
 
 ```
-hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D bench-hey.json http://127.0.0.1:8030/graphql
+hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D bench-hey-big.json http://127.0.0.1:8030/graphql
 ```
 
-**Employees**
+**Medium**
+
+**Before conducting this test replace `big` with `medium` in Dockerfile and rebuild.**
+
+We can benchmark the baseline using the following command:
+
+```
+hey -n 200 -z 10s -m GET -H 'Accept: application/json' -H 'Content-Type: application/json' http://127.0.0.1:8090/medium-json
+```
+
+On the next step we can benchmark the Tailcall Platform by running:
+
+```
+hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D bench-hey-medium.json http://127.0.0.1:8030/graphql
+```
+
+**Small**
 
 We can benchmark the baseline using the following command:
 
@@ -108,7 +124,7 @@ hey -n 200 -z 10s -m GET -H 'Accept: application/json' -H 'Content-Type: applica
 On the next step we can benchmark the Tailcall Platform by running:
 
 ```
-hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D bench-hey-alt.json http://127.0.0.1:8030/graphql
+hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D bench-hey-small.json http://127.0.0.1:8030/graphql
 ```
 
 ## WRK Benchmarking
