@@ -67,7 +67,7 @@ advised to use them during production setups.
 
   Benchmark the baseline NGINX->NGINX implementation and measure statistics.
 
-- Run `hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D bench-hey.json http://127.0.0.1:8030/graphql`
+- Run `hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D bench-hey-big.json http://127.0.0.1:8030/graphql`
 
   Benchmark the Tailcall platform implementation and measure statistics.
 

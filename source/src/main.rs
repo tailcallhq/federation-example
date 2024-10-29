@@ -1,4 +1,7 @@
 use axum::{
+    extract::Request,
+    http::HeaderValue,
+    middleware::Next,
     response::Response,
     routing::{get, post},
     Router,
@@ -25,7 +28,8 @@ async fn main() {
             .route("/employees", get(employees_data))
             .route("/graphql", post(employees)),
         _ => panic!("Invalid args: {:?}. Use big|medium|small", args),
-    };
+    }
+    .layer(axum::middleware::from_fn(http_cache_middleware));
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:4006")
         .await
@@ -56,4 +60,20 @@ async fn employees() -> Response<String> {
 
 async fn employees_data() -> Response<String> {
     Response::new(resource_str!("employees-data.json").to_string())
+}
+
+async fn http_cache_middleware(request: Request, next: Next) -> Response {
+    let mut response = next.run(request).await;
+
+    response.headers_mut().insert(
+        "Cache-control",
+        HeaderValue::from_str("max-age=180, public").unwrap(),
+    );
+
+    response.headers_mut().insert(
+        "Content-type",
+        HeaderValue::from_str("application/json").unwrap(),
+    );
+
+    response
 }
