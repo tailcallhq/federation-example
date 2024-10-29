@@ -10,11 +10,9 @@ run_pair() {
 
   sleep 5
 
-  hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D "$json_file" http://127.0.0.1:8030/graphql &
-  pid2=$!
+  hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D "$json_file" http://127.0.0.1:8030/graphql
 
-  wait -n
-  kill $pid1 $pid2 2>/dev/null
+  kill $pid1 2>/dev/null
 }
 
 run_pair ./configurations/1-basic.graphql
