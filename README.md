@@ -62,18 +62,17 @@ advised to use them during production setups.
 
   To run the source of the data, that is used by the reference implementations.
 
-- In another terminal run `TC_LOG_LEVEL=error tailcall start ./configurations/1-basic.graphql`
-
-  To run the Tailcall platform. You can now navigate to Tailcall's [playground](https://tailcall.run/playground/?u=http://127.0.0.1:8030/graphql&utm_source=tailcall-debug&utm_medium=server) and run the reference query to ensure that everything is running smoothly.
-
-
 - In another terminal run `hey -n 200 -z 10s -m GET -H 'Accept: application/json' -H 'Content-Type: application/json' http://127.0.0.1:8090/big-json`
 
   Benchmark the baseline Source -> NGINX implementation and measure statistics.
 
-- Run `hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D bench-hey-big.json http://127.0.0.1:8030/graphql`
+- Run `hey -n 200 -z 10s -m GET -H 'Accept: application/json' -H 'Content-Type: application/json' http://127.0.0.1:4006/big-json`
 
-  Benchmark the Tailcall platform implementation and measure statistics.
+  Benchmark the source throughput.
+
+- Run `./benchmark.sh bench-hey-big.json`
+
+  To benchmark all the Tailcall configurations
 
 In the folder `./configuration` we can read reference upstream configurations.
 
@@ -98,7 +97,7 @@ hey -n 200 -z 10s -m GET -H 'Accept: application/json' -H 'Content-Type: applica
 On the next step we can benchmark the Tailcall Platform by running:
 
 ```
-hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D bench-hey-big.json http://127.0.0.1:8030/graphql
+Run `./benchmark.sh bench-hey-big.json`
 ```
 
 **Medium**
@@ -114,7 +113,7 @@ hey -n 200 -z 10s -m GET -H 'Accept: application/json' -H 'Content-Type: applica
 On the next step we can benchmark the Tailcall Platform by running:
 
 ```
-hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D bench-hey-medium.json http://127.0.0.1:8030/graphql
+Run `./benchmark.sh bench-hey-medium.json`
 ```
 
 **Small**
@@ -128,7 +127,7 @@ hey -n 200 -z 10s -m GET -H 'Accept: application/json' -H 'Content-Type: applica
 On the next step we can benchmark the Tailcall Platform by running:
 
 ```
-hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D bench-hey-small.json http://127.0.0.1:8030/graphql
+Run `./benchmark.sh bench-hey-small.json`
 ```
 
 ## WRK Benchmarking
