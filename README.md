@@ -56,16 +56,20 @@ advised to use them during production setups.
 
 - Run `cd nginx && docker build -t tc-benchmark . && docker run -d -p 4006:4006 -p 8090:8090 -p 4001:4001 -p 8091:8091  --name tc-benchmark tc-benchmark`
 
-  To run the static upstream server. This server provides data to tailcall.
+  To run baseline server. This server is used to compare how close tailcall comes to nginx performance.
 
-- Run `TC_LOG_LEVEL=error tailcall start ./configurations/1-basic.graphql`
+- Run `cd source && cargo run --release <test_type: big|medium|small>`
+
+  To run the source of the data, that is used by the reference implementations.
+
+- In another terminal run `TC_LOG_LEVEL=error tailcall start ./configurations/1-basic.graphql`
 
   To run the Tailcall platform. You can now navigate to Tailcall's [playground](https://tailcall.run/playground/?u=http://127.0.0.1:8030/graphql&utm_source=tailcall-debug&utm_medium=server) and run the reference query to ensure that everything is running smoothly.
 
 
-- Run `hey -n 200 -z 10s -m GET -H 'Accept: application/json' -H 'Content-Type: application/json' http://127.0.0.1:8090/big-json`
+- In another terminal run `hey -n 200 -z 10s -m GET -H 'Accept: application/json' -H 'Content-Type: application/json' http://127.0.0.1:8090/big-json`
 
-  Benchmark the baseline NGINX->NGINX implementation and measure statistics.
+  Benchmark the baseline Source -> NGINX implementation and measure statistics.
 
 - Run `hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D bench-hey-big.json http://127.0.0.1:8030/graphql`
 
