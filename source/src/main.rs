@@ -23,7 +23,8 @@ async fn main() {
             .route("/graphql", post(big)),
         "medium" => Router::new()
             .route("/medium-json", get(medium_data))
-            .route("/graphql", post(medium)),
+            .route("/graphql", post(medium))
+            .route("/big-json", get(medium_data)),
         "small" => Router::new()
             .route("/employees", get(employees_data))
             .route("/graphql", post(employees)),
@@ -31,9 +32,14 @@ async fn main() {
     }
     .layer(axum::middleware::from_fn(http_cache_middleware));
 
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:4006")
-        .await
-        .unwrap();
+    let addr = match args[1].as_str() {
+        "big" => "127.0.0.1:4006",
+        "medium" => "127.0.0.1:4006",
+        "small" => "127.0.0.1:4001",
+        _ => panic!("Invalid args: {:?}. Use big|medium|small", args),
+    };
+
+    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
     println!("listening on {}", listener.local_addr().unwrap());
     axum::serve(listener, app).await.unwrap();
 }
