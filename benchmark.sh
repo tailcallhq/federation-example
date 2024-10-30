@@ -1,6 +1,11 @@
 #!/bin/bash
 
-json_file="bench-hey-big.json"
+if [ -z "$1" ]; then
+  echo "Usage: $0 <json_file>"
+  exit 1
+fi
+
+json_file="$1"
 
 run_pair() {
   echo "Running configuration with file: $1 and JSON payload: $json_file"
