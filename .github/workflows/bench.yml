@@ -12,6 +12,7 @@ permissions:
   issues: write
 jobs:
   build:
+    runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -38,6 +39,8 @@ jobs:
 
   benchmark:
     needs: build
+    # TODO
+    runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
