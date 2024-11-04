@@ -77,11 +77,17 @@ jobs:
             grafbase_cache
           ]
     steps:
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Benchmark
         uses: addnab/docker-run-action@v3
         with:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
-          image: ${{ github.repository_owner }}/federated-benchmark:latest
+          image: ghcr.io/${{ github.repository_owner }}/federated-benchmark:latest
           run: docker_benchmark.sh ${{ matrix.response }} ${{ matrix.service }}
