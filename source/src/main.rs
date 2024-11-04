@@ -26,6 +26,7 @@ async fn main() {
             .route("/graphql", post(medium))
             .route("/big-json", get(medium_data)),
         "small" => Router::new()
+            .route("/small-json", get(employees_data))
             .route("/employees", get(employees_data))
             .route("/graphql", post(employees)),
         _ => panic!("Invalid args: {:?}. Use big|medium|small", args),
