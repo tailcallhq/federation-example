@@ -47,8 +47,8 @@ jobs:
       matrix:
         response:
           [
-            big
-            medium
+            big,
+            medium,
             small
           ]
         service:
