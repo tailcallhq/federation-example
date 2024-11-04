@@ -90,4 +90,4 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
           image: ghcr.io/${{ github.repository_owner }}/federated-benchmark:latest
-          run: docker_benchmark.sh ${{ matrix.response }} ${{ matrix.service }}
+          run: pwd && ls -la && docker_benchmark.sh ${{ matrix.response }} ${{ matrix.service }}
