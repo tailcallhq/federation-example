@@ -83,5 +83,5 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
-          image: federated-benchmark:latest
+          image: ${{ github.repository_owner }}/federated-benchmark:latest
           run: docker_benchmark.sh ${{ matrix.response }} ${{ matrix.service }}
