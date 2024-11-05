@@ -58,7 +58,7 @@ jobs:
             # source_graphql,
             # source_rest_api,
             # nginx -> source: the baseline for comparison
-            # nginx_graphql,
+            nginx_graphql,
             # nginx_rest_api,
             # tailcall configurations
             tailcall_default,
@@ -96,13 +96,13 @@ jobs:
           image: ghcr.io/${{ github.repository_owner }}/federated-benchmark:latest
           options: -v ${{ github.workspace }}:/work
           run: ./docker_benchmark.sh ${{ matrix.response }} ${{ matrix.service }} >> /work/output.log
-      - name: Print result
+      - name: Print Result
         run: cat ${{ github.workspace }}/output.log
       - name: Extract Requests Per Second
         id: extract_rps
         run: |
           RPS=$(grep "Requests/sec:" ${{ github.workspace }}/output.log | awk '{print $2}')
-          echo "rps=${{ matrix.response }} ${{ matrix.service }} ${RPS}" | tee -a "$GITHUB_OUTPUT"
+          echo "${{ matrix.response }}_${{ matrix.service }}_rps=${RPS}" | tee -a "$GITHUB_OUTPUT"
   analyze:
     needs: benchmark
     runs-on: ubuntu-latest
@@ -110,12 +110,16 @@ jobs:
       - id: collect
         name: Collect Requests Per Second from all matrix jobs
         run: |
-          DATA=$(
-            echo "size config rps"
-            for data in "${{ needs.benchmark.outputs.rps[*] }}"; do
-              echo "${data}"
-            done
-          ) echo "data=${DATA}" | tee -a "$GITHUB_OUTPUT"
-      - id: debug
-        name: Debug data
-        run: echo ${{ steps.collect.data }} | tee -a $GITHUB_STEP_SUMMARY
+          echo "| Server | 112,838 bytes | 12598 bytes | 362 bytes |"
+          echo "| --- | --- | --- | --- |"
+          echo "| Nginx Default | ${{ needs.benchmark.extract_rps.big_nginx_graphql }} | ${{ needs.benchmark.extract_rps.medium_nginx_graphql }} | ${{ needs.benchmark.extract_rps.small_nginx_graphql }} |"
+          echo "| Base | --- | --- | --- |"
+          echo "| Tailcall | ${{ needs.benchmark.extract_rps.big_tailcall_default }} | ${{ needs.benchmark.extract_rps.medium_tailcall_default }} | ${{ needs.benchmark.extract_rps.small_tailcall_default }} |"
+          echo "| Grafbase | ${{ needs.benchmark.extract_rps.big_grafbase_default }} | ${{ needs.benchmark.extract_rps.medium_grafbase_default }} | ${{ needs.benchmark.extract_rps.small_grafbase_default }} |"
+          echo "| Wundegraph | ${{ needs.benchmark.extract_rps.big_wundergraph_no_opt }} | ${{ needs.benchmark.extract_rps.medium_wundergraph_no_opt }} | ${{ needs.benchmark.extract_rps.small_wundergraph_no_opt }} |"
+          echo "| Apollo | ${{ needs.benchmark.extract_rps.big_apollo_router }} | ${{ needs.benchmark.extract_rps.medium_apollo_router }} | ${{ needs.benchmark.extract_rps.small_apollo_router }} |"
+          echo "| Cached | --- | --- | --- |"
+          echo "| Tailcall | ${{ needs.benchmark.extract_rps.big_tailcall_full_conf }} | ${{ needs.benchmark.extract_rps.medium_tailcall_full_conf }} | ${{ needs.benchmark.extract_rps.small_tailcall_full_conf }} |"
+          echo "| Grafbase Cache | ${{ needs.benchmark.extract_rps.big_grafbase_cache }} | ${{ needs.benchmark.extract_rps.medium_grafbase_cache }} | ${{ needs.benchmark.extract_rps.small_grafbase_cache }} |"
+          echo "| Wundegraph Ludicrous | ${{ needs.benchmark.extract_rps.big_wundergraph_default }} | ${{ needs.benchmark.extract_rps.medium_wundergraph_default }} | ${{ needs.benchmark.extract_rps.small_wundergraph_default }} |"
+          | tee -a "$GITHUB_STEP_SUMMARY"
