@@ -95,7 +95,7 @@ jobs:
       - name: Extract Requests Per Second
         id: extract_rps
         run: |
-          RPS=$(grep "Requests/sec:" ${{ github.workspace }}/output.log | awk '{printf int($2)}')
+          RPS=$(grep "Requests/sec:" ${{ github.workspace }}/output.log | awk '{printf "%,d\n", $2}')
           echo "${{ matrix.response }}_${{ matrix.service }}_rps=${RPS}" | tee -a "$GITHUB_OUTPUT"
     outputs:
       big_nginx_graphql: ${{ steps.extract_rps.outputs.big_nginx_graphql_rps }}
@@ -137,14 +137,14 @@ jobs:
         name: Collect Requests Per Second from all matrix jobs
         run: |
           echo "| Server | 112,838 bytes | 12598 bytes | 362 bytes |" | tee -a "$GITHUB_STEP_SUMMARY"
-          echo "| --- | --- | --- | --- |" | tee -a "$GITHUB_STEP_SUMMARY"
-          echo "| Nginx Default | ${{ needs.benchmark.outputs.big_nginx_graphql }} | ${{ needs.benchmark.outputs.medium_nginx_graphql }} | ${{ needs.benchmark.outputs.small_nginx_graphql }} |" | tee -a "$GITHUB_STEP_SUMMARY"
-          echo "| Base | --- | --- | --- |" | tee -a "$GITHUB_STEP_SUMMARY"
-          echo "| Tailcall | ${{ needs.benchmark.outputs.big_tailcall_default }} | ${{ needs.benchmark.outputs.medium_tailcall_default }} | ${{ needs.benchmark.outputs.small_tailcall_default }} |" | tee -a "$GITHUB_STEP_SUMMARY"
-          echo "| Grafbase | ${{ needs.benchmark.outputs.big_grafbase_default }} | ${{ needs.benchmark.outputs.medium_grafbase_default }} | ${{ needs.benchmark.outputs.small_grafbase_default }} |" | tee -a "$GITHUB_STEP_SUMMARY"
-          echo "| Wundegraph | ${{ needs.benchmark.outputs.big_wundergraph_no_opt }} | ${{ needs.benchmark.outputs.medium_wundergraph_no_opt }} | ${{ needs.benchmark.outputs.small_wundergraph_no_opt }} |" | tee -a "$GITHUB_STEP_SUMMARY"
-          echo "| Apollo | ${{ needs.benchmark.outputs.big_apollo_router }} | ${{ needs.benchmark.outputs.medium_apollo_router }} | ${{ needs.benchmark.outputs.small_apollo_router }} |" | tee -a "$GITHUB_STEP_SUMMARY"
-          echo "| Cached | --- | --- | --- |" | tee -a "$GITHUB_STEP_SUMMARY"
-          echo "| Tailcall | ${{ needs.benchmark.outputs.big_tailcall_full_conf }} | ${{ needs.benchmark.outputs.medium_tailcall_full_conf }} | ${{ needs.benchmark.outputs.small_tailcall_full_conf }} |" | tee -a "$GITHUB_STEP_SUMMARY"
-          echo "| Grafbase Cache | ${{ needs.benchmark.outputs.big_grafbase_cache }} | ${{ needs.benchmark.outputs.medium_grafbase_cache }} | ${{ needs.benchmark.outputs.small_grafbase_cache }} |" | tee -a "$GITHUB_STEP_SUMMARY"
-          echo "| Wundegraph Ludicrous | ${{ needs.benchmark.outputs.big_wundergraph_default }} | ${{ needs.benchmark.outputs.medium_wundergraph_default }} | ${{ needs.benchmark.outputs.small_wundergraph_default }} |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| ---: | ---: | ---: | ---: |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| [Nginx](https://nginx.org/en/) | `${{ needs.benchmark.outputs.big_nginx_graphql }} RPS` | `${{ needs.benchmark.outputs.medium_nginx_graphql }} RPS` | `${{ needs.benchmark.outputs.small_nginx_graphql }} RPS` |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| **Base** | | | |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| [Tailcall](https://github.com/tailcallhq/tailcall) | `${{ needs.benchmark.outputs.big_tailcall_default }} RPS` | `${{ needs.benchmark.outputs.medium_tailcall_default }} RPS` | `${{ needs.benchmark.outputs.small_tailcall_default }} RPS` |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| [Grafbase](https://github.com/grafbase/grafbase) | `${{ needs.benchmark.outputs.big_grafbase_default }} RPS` | `${{ needs.benchmark.outputs.medium_grafbase_default }} RPS` | `${{ needs.benchmark.outputs.small_grafbase_default }} RPS` |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| [Wundegraph](https://github.com/wundergraph/cosmo) | `${{ needs.benchmark.outputs.big_wundergraph_no_opt }} RPS` | `${{ needs.benchmark.outputs.medium_wundergraph_no_opt }} RPS` | `${{ needs.benchmark.outputs.small_wundergraph_no_opt }} RPS` |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| [Apollo](https://github.com/apollographql/router) | `${{ needs.benchmark.outputs.big_apollo_router }} RPS` | `${{ needs.benchmark.outputs.medium_apollo_router }} RPS` | `${{ needs.benchmark.outputs.small_apollo_router }} RPS` |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| **Cached** | | | |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| [Tailcall](https://github.com/tailcallhq/tailcall) | `${{ needs.benchmark.outputs.big_tailcall_full_conf }} RPS` | `${{ needs.benchmark.outputs.medium_tailcall_full_conf }} RPS` | `${{ needs.benchmark.outputs.small_tailcall_full_conf }} RPS` |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| [Grafbase](https://github.com/grafbase/grafbase) | `${{ needs.benchmark.outputs.big_grafbase_cache }} RPS` | `${{ needs.benchmark.outputs.medium_grafbase_cache }} RPS` | `${{ needs.benchmark.outputs.small_grafbase_cache }} RPS` |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| [Wundegraph](https://github.com/wundergraph/cosmo) | `${{ needs.benchmark.outputs.big_wundergraph_default }} RPS` | `${{ needs.benchmark.outputs.medium_wundergraph_default }} RPS` | `${{ needs.benchmark.outputs.small_wundergraph_default }} RPS` |" | tee -a "$GITHUB_STEP_SUMMARY"
