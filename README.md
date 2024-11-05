@@ -27,6 +27,7 @@ sudo docker run tailcallhq/federation-benchmark:latest ./benchmark_all.sh
 
 ## Benchmark Results
 
+<!-- PERFORMANCE_RESULTS_START -->
 | Server | 112,838 bytes | 12598 bytes | 362 bytes |
 | ---: | ---: | ---: | ---: |
 | [Nginx](https://nginx.org/en/) | `5,292 RPS` | `11,557 RPS` | `12,336 RPS` |
