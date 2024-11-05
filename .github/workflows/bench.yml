@@ -91,7 +91,7 @@ jobs:
           registry: ghcr.io
           image: ghcr.io/${{ github.repository_owner }}/federated-benchmark:latest
           options: -v ${{ github.workspace }}:/work
-          run: ./docker_benchmark.sh ${{ matrix.response }} ${{ matrix.service }} >> /work/output.log
+          run: ./benchmark.sh ${{ matrix.response }} ${{ matrix.service }} >> /work/output.log
       - name: Print result
         run: cat ${{ github.workspace }}/output.log
       - name: Extract Requests Per Second
@@ -159,12 +159,25 @@ jobs:
           echo "| [Wundegraph](https://github.com/wundergraph/cosmo) | \`${{ needs.benchmark.outputs.big_wundergraph_default }} RPS\` | \`${{ needs.benchmark.outputs.medium_wundergraph_default }} RPS\` | \`${{ needs.benchmark.outputs.small_wundergraph_default }} RPS\` |" >> "results.md"
       - name: Show table
         run: cat "results.md"
+      - name: Update `README.md` file
+        run: |
+          sed -i '/<!-- PERFORMANCE_RESULTS_START -->/,/<!-- PERFORMANCE_RESULTS_END -->/ { \
+              /<!-- PERFORMANCE_RESULTS_START -->/r results.md \
+              /<!-- PERFORMANCE_RESULTS_END -->/!d \
+          }'
       - name: Comment `results.md` file
         if: github.event_name == 'pull_request_target'
         uses: peter-evans/commit-comment@v3
         with:
           sha: ${{ github.event.pull_request.head.sha }}
           body-path: "results.md"
+          reactions: eyes
+      - name: Comment `README.md` file
+        if: github.event_name == 'pull_request_target'
+        uses: peter-evans/commit-comment@v3
+        with:
+          sha: ${{ github.event.pull_request.head.sha }}
+          body-path: "README.md"
           reactions: eyes
       - name: Commit and push changes (on main branch)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'

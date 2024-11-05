@@ -1,39 +1,49 @@
-## Environment
+# Federation Benchmarks
 
-In order to run our examples we have to setup some dependencies that our Demo relies on.
-Follow the link for each dependency in order to install it on your computer.
+Explore and compare the performance of the fastest GraphQL Federation routers through our comprehensive benchmarks.
 
-### Demo
+- [Introduction](#introduction)
+- [Quick Start](#quick-start)
+- [Benchmark Results](#benchmark-results)
+- [Architecture](#architecture)
+- [Setup](#setup)
+- [Resources](#resources)
+- [Contribute](#contribute)
 
-- **Rust:** https://www.rust-lang.org/tools/install/
-- **Tailcall:** https://tailcall.run/docs/
+## Introduction
 
-### Benchmark
+This document presents a comparative analysis of several renowned GraphQL Federation routers. Dive deep into the performance metrics, and get insights into their throughput.
 
-- **hey:** https://github.com/rakyll/hey/
-- **Docker:**: https://docs.docker.com/engine/install/
+> **NOTE:** This is a work in progress suite of benchmarks, and we would appreciate help from the community to add more routers or tune the existing ones for better performance.
 
-## Setup
+## Quick Start
 
-We have two different setups, the first one `Demo` is used to show the features of Tailcall,
-while the second `Benchmark` is used to show the performance throughput of Tailcall.
+```bash
+git clone git@github.com:tailcallhq/federation-example.git
+cd federation-example
+sudo docker build -t tailcallhq/federation-benchmark
+sudo docker run tailcallhq/federation-benchmark:latest ./benchmark_all.sh
+```
 
-### Demo
+## Benchmark Results
 
-The `Demo` is used to showcase the Tailcall capabilities and features.
-You can start reading to explore the features by reading the `main.graphql` file
-and diving deeper by reading each subgraph graphql file in its corresponded folder.
-Make sure to visit our [documentation](https://tailcall.run/docs/tailcall-dsl-graphql-custom-directives/) to learn more about the features.
+<!-- PERFORMANCE_RESULTS_START -->
+TODO: replace it with the results.md table
+<!-- PERFORMANCE_RESULTS_END -->
 
-#### Steps:
+## Architecture
 
-- Run `./run.sh` to start the services
-- Run `tailcall start main.graphql`
+TODO: add information
 
-#### Sample Query
+### Query
 
-You can now navigate to Tailcall's [playground](https://tailcall.run/playground/?u=http://127.0.0.1:8030/graphql&utm_source=tailcall-debug&utm_medium=server) and explore the capabilities.
-We can run the following query to ensure that everything is running smoothly.
+For both `big` and `medium` we use the following query. It provides a deeply nested structure, and with different response payloads it can be a challenge on some federation implementations to parse it.
+
+```gql
+query BigQuery($delay: Int!, $bigObjects: Int!, $deeplyNestedObjects: Int!, $nestedObjects: Int!) { bigResponse( artificialDelay: $delay bigObjects: $bigObjects deeplyNestedObjects: $deeplyNestedObjects nestedObjects: $nestedObjects ) { a: nestedObjects { ...DeeplyNestedFields } b: nestedObjects { ...DeeplyNestedFields } c: nestedObjects { ...DeeplyNestedFields } d: nestedObjects { ...DeeplyNestedFields } e: nestedObjects { ...DeeplyNestedFields } f: nestedObjects { ...DeeplyNestedFields } } } fragment DeeplyNestedFields on NestedObject { deeplyNestedObjects { aFieldOnDeeplyNestedObject bFieldOnDeeplyNestedObject cFieldOnDeeplyNestedObject dFieldOnDeeplyNestedObject eFieldOnDeeplyNestedObject fFieldOnDeeplyNestedObject gFieldOnDeeplyNestedObject hFieldOnDeeplyNestedObject iFieldOnDeeplyNestedObject jFieldOnDeeplyNestedObject kFieldOnDeeplyNestedObject lFieldOnDeeplyNestedObject mFieldOnDeeplyNestedObject nFieldOnDeeplyNestedObject oFieldOnDeeplyNestedObject pFieldOnDeeplyNestedObject qFieldOnDeeplyNestedObject rFieldOnDeeplyNestedObject sFieldOnDeeplyNestedObject tFieldOnDeeplyNestedObject uFieldOnDeeplyNestedObject vFieldOnDeeplyNestedObject wFieldOnDeeplyNestedObject xFieldOnDeeplyNestedObject yFieldOnDeeplyNestedObject zFieldOnDeeplyNestedObject } }
+```
+
+For the `small` payload setup we use the following query, that challenges the latency of the implementations.
 
 ```gql
 query {
@@ -43,103 +53,18 @@ query {
     }
   }
 }
-```
 
-### Benchmark
+## Setup
 
-The benchmark is a custom configuration that enables various performance flags on Tailcall.
-Keep in mind that those flags can give more performance, but make debugging harder, so its
-advised to use them during production setups.
+In order to run the benchmarks you have to install docker in your computer. We advise using docker because it takes the hassle of managing the benchmark dependencies away. Follow the instructions provided in the official website: https://docs.docker.com/engine/install/
 
+## Resources
 
-#### Steps:
+* [Docker](https://www.docker.com/): Docker is a set of platform as a service products that use OS-level virtualization to deliver software in packages called containers.
+* [Hey](https://github.com/rakyll/hey): hey is a tiny program that sends some load to a web application.
+* [Rust](https://www.rust-lang.org/): Rust is a general-purpose programming language emphasizing performance, type safety, and concurrency. It enforces memory safety, meaning that all references point to valid memory.
+* [GraphQL Federation](https://graphql.com/learn/federated-architecture/): GraphQL Federation is an architecture that allows multiple independent GraphQL services to form a unified graph that appears as a single graph to clients. It is a powerful way to scale and manage microservices architecture when using GraphQL.
 
-- Run `cd nginx && docker build -t tc-benchmark . && docker run -d -p 4006:4006 -p 8090:8090 -p 4001:4001 -p 8091:8091  --name tc-benchmark tc-benchmark`
+## Contribute
 
-  To run baseline server. This server is used to compare how close tailcall comes to nginx performance.
-
-- Run `cd source && cargo run --release <test_type: big|medium|small>`
-
-  To run the source of the data, that is used by the reference implementations.
-
-- In another terminal run `hey -n 200 -z 10s -m GET -H 'Accept: application/json' -H 'Content-Type: application/json' http://127.0.0.1:8090/big-json`
-
-  Benchmark the baseline Source -> NGINX implementation and measure statistics.
-
-- Run `hey -n 200 -z 10s -m GET -H 'Accept: application/json' -H 'Content-Type: application/json' http://127.0.0.1:4006/big-json`
-
-  Benchmark the source throughput.
-
-- Run `./benchmark.sh bench-hey-big.json`
-
-  To benchmark all the Tailcall configurations
-
-In the folder `./configuration` we can read reference upstream configurations.
-
-#### Sample Query
-
-You can now navigate to Tailcall's [playground](https://tailcall.run/playground/?u=http://127.0.0.1:8030/graphql&utm_source=tailcall-debug&utm_medium=server) and run the following query to ensure that everything is running smoothly.
-
-```gql
-query BigQuery($delay: Int!, $bigObjects: Int!, $deeplyNestedObjects: Int!, $nestedObjects: Int!) { bigResponse( artificialDelay: $delay bigObjects: $bigObjects deeplyNestedObjects: $deeplyNestedObjects nestedObjects: $nestedObjects ) { a: nestedObjects { ...DeeplyNestedFields } b: nestedObjects { ...DeeplyNestedFields } c: nestedObjects { ...DeeplyNestedFields } d: nestedObjects { ...DeeplyNestedFields } e: nestedObjects { ...DeeplyNestedFields } f: nestedObjects { ...DeeplyNestedFields } } } fragment DeeplyNestedFields on NestedObject { deeplyNestedObjects { aFieldOnDeeplyNestedObject bFieldOnDeeplyNestedObject cFieldOnDeeplyNestedObject dFieldOnDeeplyNestedObject eFieldOnDeeplyNestedObject fFieldOnDeeplyNestedObject gFieldOnDeeplyNestedObject hFieldOnDeeplyNestedObject iFieldOnDeeplyNestedObject jFieldOnDeeplyNestedObject kFieldOnDeeplyNestedObject lFieldOnDeeplyNestedObject mFieldOnDeeplyNestedObject nFieldOnDeeplyNestedObject oFieldOnDeeplyNestedObject pFieldOnDeeplyNestedObject qFieldOnDeeplyNestedObject rFieldOnDeeplyNestedObject sFieldOnDeeplyNestedObject tFieldOnDeeplyNestedObject uFieldOnDeeplyNestedObject vFieldOnDeeplyNestedObject wFieldOnDeeplyNestedObject xFieldOnDeeplyNestedObject yFieldOnDeeplyNestedObject zFieldOnDeeplyNestedObject } }
-```
-
-## HEY Benchmarking
-
-**Big**
-
-We can benchmark the baseline using the following command:
-
-```
-hey -n 200 -z 10s -m GET -H 'Accept: application/json' -H 'Content-Type: application/json' http://127.0.0.1:8090/big-json
-```
-
-On the next step we can benchmark the Tailcall Platform by running:
-
-```
-Run `./benchmark.sh bench-hey-big.json`
-```
-
-**Medium**
-
-**Before conducting this test replace `big` with `medium` in `nginx.conf` and rebuild.**
-
-We can benchmark the baseline using the following command:
-
-```
-hey -n 200 -z 10s -m GET -H 'Accept: application/json' -H 'Content-Type: application/json' http://127.0.0.1:8090/medium-json
-```
-
-On the next step we can benchmark the Tailcall Platform by running:
-
-```
-Run `./benchmark.sh bench-hey-medium.json`
-```
-
-**Small**
-
-We can benchmark the baseline using the following command:
-
-```
-hey -n 200 -z 10s -m GET -H 'Accept: application/json' -H 'Content-Type: application/json' http://127.0.0.1:8091/employees
-```
-
-On the next step we can benchmark the Tailcall Platform by running:
-
-```
-Run `./benchmark.sh bench-hey-small.json`
-```
-
-## WRK Benchmarking
-
-We can benchmark the baseline using the following command:
-
-```
-wrk -t12 -c200 -d10s http://127.0.0.1:8090/big-json
-```
-
-On the next step we can benchmark the Tailcall Platform by running:
-
-```
-wrk -t12 -c200 -d10s -s bench-wrk.lua http://127.0.0.1:8030/graphql
-```
+Your insights are invaluable! Test these benchmarks, share feedback, or contribute by adding more GraphQL frameworks or refining existing ones. Open an issue or a pull request, and let's build a robust benchmarking resource together!

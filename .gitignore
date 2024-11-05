@@ -1,17 +1,4 @@
-# Default ignored files
-/shelf/
-/workspace.xml
-# Editor-based HTTP Client requests
-/httpRequests/
-# Datasource local storage ignored files
-/dataSources/
-/dataSources.local.xml
 .idea
 .vscode
-employees/target/
-products/target/
-hobbies/target
-family/target
-mood/target
-test1/target
+response-generator/target
 source/target

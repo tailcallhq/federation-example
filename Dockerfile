@@ -6,10 +6,6 @@ ARG TAILCALL_URL="https://github.com/tailcallhq/tailcall/releases/download/v0.12
 
 WORKDIR /usr/src/benchmarks
 
-# Copy Configurations and Files
-COPY configurations/* .
-COPY bench-hey-big.json bench-hey-medium.json bench-hey-small.json .
-
 # Update, upgrade, and install dependencies
 RUN apt update && apt upgrade -y && \
     apt install -y hey curl gcc musl-dev build-essential nginx=1.26.0-3+b1 wget && \
@@ -45,4 +41,6 @@ RUN wget -O grafbase "$GRAFBASE_URL" && chmod +x grafbase
 # Setup Tailcall
 RUN wget -O tailcall "$TAILCALL_URL" && chmod +x tailcall
 
-COPY ./docker_benchmark.sh .
+# Copy Configurations and Scripts
+COPY configurations/* .
+COPY scripts/* .
