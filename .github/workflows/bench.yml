@@ -139,6 +139,8 @@ jobs:
           python-version: '3.13'
       - name: Install `termgraph`
         run: python -m pip install termgraph
+      - name: Install `ansi2html`
+        run: python -m pip install ansi2html
       - id: collect
         name: Collect Requests Per Second from all matrix jobs
         run: |
@@ -168,6 +170,6 @@ jobs:
           "Grafbase Cache,${{ needs.benchmark.outputs.big_grafbase_cache }},${{ needs.benchmark.outputs.medium_grafbase_cache }},${{ needs.benchmark.outputs.small_grafbase_cache }}\n" \
           "Wundegraph Ludicrous,${{ needs.benchmark.outputs.big_wundergraph_default }},${{ needs.benchmark.outputs.medium_wundergraph_default }},${{ needs.benchmark.outputs.small_wundergraph_default }}\n" | tee -a "plot2.dat"
       - name: Plot (Basic) Data
-        run: termgraph plot1.dat --color {blue,red,green} | tee -a "$GITHUB_STEP_SUMMARY"
+        run: termgraph plot1.dat --color {blue,red,green} | ansi2html | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Plot (Cached) Data
-        run: termgraph plot2.dat --color {blue,red,green} | tee -a "$GITHUB_STEP_SUMMARY"
+        run: termgraph plot2.dat --color {blue,red,green} | ansi2html | tee -a "$GITHUB_STEP_SUMMARY"
