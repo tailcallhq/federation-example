@@ -136,6 +136,11 @@ jobs:
     needs: benchmark
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
       - id: collect
         name: Collect Requests Per Second from all matrix jobs
         run: |
