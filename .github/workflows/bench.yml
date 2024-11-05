@@ -133,12 +133,6 @@ jobs:
     needs: benchmark
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-      - name: Install `termgraph`
-        run: python -m pip install termgraph
       - id: collect
         name: Collect Requests Per Second from all matrix jobs
         run: |
@@ -154,20 +148,3 @@ jobs:
           echo "| Tailcall | ${{ needs.benchmark.outputs.big_tailcall_full_conf }} | ${{ needs.benchmark.outputs.medium_tailcall_full_conf }} | ${{ needs.benchmark.outputs.small_tailcall_full_conf }} |" | tee -a "$GITHUB_STEP_SUMMARY"
           echo "| Grafbase Cache | ${{ needs.benchmark.outputs.big_grafbase_cache }} | ${{ needs.benchmark.outputs.medium_grafbase_cache }} | ${{ needs.benchmark.outputs.small_grafbase_cache }} |" | tee -a "$GITHUB_STEP_SUMMARY"
           echo "| Wundegraph Ludicrous | ${{ needs.benchmark.outputs.big_wundergraph_default }} | ${{ needs.benchmark.outputs.medium_wundergraph_default }} | ${{ needs.benchmark.outputs.small_wundergraph_default }} |" | tee -a "$GITHUB_STEP_SUMMARY"
-      - name: Prepare Plot (Basic) Data
-        run: |
-          echo -e "@ Big,Medium,Small\n" \
-          "Tailcall,${{ needs.benchmark.outputs.big_tailcall_default }},${{ needs.benchmark.outputs.medium_tailcall_default }},${{ needs.benchmark.outputs.small_tailcall_default }}\n" \
-          "Grafbase,${{ needs.benchmark.outputs.big_grafbase_default }},${{ needs.benchmark.outputs.medium_grafbase_default }},${{ needs.benchmark.outputs.small_grafbase_default }}\n" \
-          "Wundegraph,${{ needs.benchmark.outputs.big_wundergraph_no_opt }},${{ needs.benchmark.outputs.medium_wundergraph_no_opt }},${{ needs.benchmark.outputs.small_wundergraph_no_opt }}\n" \
-          "Apollo,${{ needs.benchmark.outputs.big_apollo_router }},${{ needs.benchmark.outputs.medium_apollo_router }},${{ needs.benchmark.outputs.small_apollo_router }}" | tee -a "plot1.dat"
-      - name: Prepare Plot (Cached) Data
-        run: |
-          echo -e "@ Big,Medium,Small\n" \
-          "Tailcall,${{ needs.benchmark.outputs.big_tailcall_full_conf }},${{ needs.benchmark.outputs.medium_tailcall_full_conf }},${{ needs.benchmark.outputs.small_tailcall_full_conf }}\n" \
-          "Grafbase Cache,${{ needs.benchmark.outputs.big_grafbase_cache }},${{ needs.benchmark.outputs.medium_grafbase_cache }},${{ needs.benchmark.outputs.small_grafbase_cache }}\n" \
-          "Wundegraph Ludicrous,${{ needs.benchmark.outputs.big_wundergraph_default }},${{ needs.benchmark.outputs.medium_wundergraph_default }},${{ needs.benchmark.outputs.small_wundergraph_default }}\n" | tee -a "plot2.dat"
-      - name: Plot (Basic) Data
-        run: termgraph plot1.dat | tee -a "$GITHUB_STEP_SUMMARY"
-      - name: Plot (Cached) Data
-        run: termgraph plot2.dat | tee -a "$GITHUB_STEP_SUMMARY"
