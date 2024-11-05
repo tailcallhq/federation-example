@@ -136,16 +136,15 @@ jobs:
       - id: collect
         name: Collect Requests Per Second from all matrix jobs
         run: |
-          echo "| Server | 112,838 bytes | 12598 bytes | 362 bytes |"
-          echo "| --- | --- | --- | --- |"
-          echo "| Nginx Default | ${{ needs.benchmark.outputs.big_nginx_graphql }} | ${{ needs.benchmark.outputs.medium_nginx_graphql }} | ${{ needs.benchmark.outputs.small_nginx_graphql }} |"
-          echo "| Base | --- | --- | --- |"
-          echo "| Tailcall | ${{ needs.benchmark.outputs.big_tailcall_default }} | ${{ needs.benchmark.outputs.medium_tailcall_default }} | ${{ needs.benchmark.outputs.small_tailcall_default }} |"
-          echo "| Grafbase | ${{ needs.benchmark.outputs.big_grafbase_default }} | ${{ needs.benchmark.outputs.medium_grafbase_default }} | ${{ needs.benchmark.outputs.small_grafbase_default }} |"
-          echo "| Wundegraph | ${{ needs.benchmark.outputs.big_wundergraph_no_opt }} | ${{ needs.benchmark.outputs.medium_wundergraph_no_opt }} | ${{ needs.benchmark.outputs.small_wundergraph_no_opt }} |"
-          echo "| Apollo | ${{ needs.benchmark.outputs.big_apollo_router }} | ${{ needs.benchmark.outputs.medium_apollo_router }} | ${{ needs.benchmark.outputs.small_apollo_router }} |"
-          echo "| Cached | --- | --- | --- |"
-          echo "| Tailcall | ${{ needs.benchmark.outputs.big_tailcall_full_conf }} | ${{ needs.benchmark.outputs.medium_tailcall_full_conf }} | ${{ needs.benchmark.outputs.small_tailcall_full_conf }} |"
-          echo "| Grafbase Cache | ${{ needs.benchmark.outputs.big_grafbase_cache }} | ${{ needs.benchmark.outputs.medium_grafbase_cache }} | ${{ needs.benchmark.outputs.small_grafbase_cache }} |"
-          echo "| Wundegraph Ludicrous | ${{ needs.benchmark.outputs.big_wundergraph_default }} | ${{ needs.benchmark.outputs.medium_wundergraph_default }} | ${{ needs.benchmark.outputs.small_wundergraph_default }} |" \
-          | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| Server | 112,838 bytes | 12598 bytes | 362 bytes |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| --- | --- | --- | --- |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| Nginx Default | ${{ needs.benchmark.outputs.big_nginx_graphql }} | ${{ needs.benchmark.outputs.medium_nginx_graphql }} | ${{ needs.benchmark.outputs.small_nginx_graphql }} |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| Base | --- | --- | --- |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| Tailcall | ${{ needs.benchmark.outputs.big_tailcall_default }} | ${{ needs.benchmark.outputs.medium_tailcall_default }} | ${{ needs.benchmark.outputs.small_tailcall_default }} |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| Grafbase | ${{ needs.benchmark.outputs.big_grafbase_default }} | ${{ needs.benchmark.outputs.medium_grafbase_default }} | ${{ needs.benchmark.outputs.small_grafbase_default }} |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| Wundegraph | ${{ needs.benchmark.outputs.big_wundergraph_no_opt }} | ${{ needs.benchmark.outputs.medium_wundergraph_no_opt }} | ${{ needs.benchmark.outputs.small_wundergraph_no_opt }} |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| Apollo | ${{ needs.benchmark.outputs.big_apollo_router }} | ${{ needs.benchmark.outputs.medium_apollo_router }} | ${{ needs.benchmark.outputs.small_apollo_router }} |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| Cached | --- | --- | --- |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| Tailcall | ${{ needs.benchmark.outputs.big_tailcall_full_conf }} | ${{ needs.benchmark.outputs.medium_tailcall_full_conf }} | ${{ needs.benchmark.outputs.small_tailcall_full_conf }} |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| Grafbase Cache | ${{ needs.benchmark.outputs.big_grafbase_cache }} | ${{ needs.benchmark.outputs.medium_grafbase_cache }} | ${{ needs.benchmark.outputs.small_grafbase_cache }} |" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "| Wundegraph Ludicrous | ${{ needs.benchmark.outputs.big_wundergraph_default }} | ${{ needs.benchmark.outputs.medium_wundergraph_default }} | ${{ needs.benchmark.outputs.small_wundergraph_default }} |" | tee -a "$GITHUB_STEP_SUMMARY"
