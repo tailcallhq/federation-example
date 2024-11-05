@@ -41,19 +41,13 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     # runs-on:
-      # group: benchmark-runner
+    # group: benchmark-runner
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       matrix:
-        response:
-          [
-            big,
-            medium,
-            small
-          ]
-        service:
-          [
+        response: [big, medium, small]
+        service: [
             # the theoretical maximum
             # source_graphql,
             # source_rest_api,
@@ -75,7 +69,7 @@ jobs:
             apollo_router,
             # grafbase
             grafbase_default,
-            grafbase_cache
+            grafbase_cache,
           ]
     steps:
       - name: Login to GitHub Container Registry
@@ -103,6 +97,38 @@ jobs:
         run: |
           RPS=$(grep "Requests/sec:" ${{ github.workspace }}/output.log | awk '{print $2}')
           echo "${{ matrix.response }}_${{ matrix.service }}_rps=${RPS}" | tee -a "$GITHUB_OUTPUT"
+    outputs:
+      big_nginx_graphql: ${{ steps.extract_rps.outputs.big_nginx_graphql_rps }}
+      medium_nginx_graphql: ${{ steps.extract_rps.outputs.medium_nginx_graphql_rps }}
+      small_nginx_graphql: ${{ steps.extract_rps.outputs.small_nginx_graphql_rps }}
+
+      big_tailcall_default: ${{ steps.extract_rps.outputs.big_tailcall_default_rps }}
+      medium_tailcall_default: ${{ steps.extract_rps.outputs.medium_tailcall_default_rps }}
+      small_tailcall_default: ${{ steps.extract_rps.outputs.small_tailcall_default_rps }}
+
+      big_grafbase_default: ${{ steps.extract_rps.outputs.big_grafbase_default_rps }}
+      medium_grafbase_default: ${{ steps.extract_rps.outputs.medium_grafbase_default_rps }}
+      small_grafbase_default: ${{ steps.extract_rps.outputs.small_grafbase_default_rps }}
+
+      big_wundergraph_no_opt: ${{ steps.extract_rps.outputs.big_wundergraph_no_opt_rps }}
+      medium_wundergraph_no_opt: ${{ steps.extract_rps.outputs.medium_wundergraph_no_opt_rps }}
+      small_wundergraph_no_opt: ${{ steps.extract_rps.outputs.small_wundergraph_no_opt_rps }}
+
+      big_apollo_router: ${{ steps.extract_rps.outputs.big_apollo_router_rps }}
+      medium_apollo_router: ${{ steps.extract_rps.outputs.medium_apollo_router_rps }}
+      small_apollo_router: ${{ steps.extract_rps.outputs.small_apollo_router_rps }}
+
+      big_tailcall_full_conf: ${{ steps.extract_rps.outputs.big_tailcall_full_conf_rps }}
+      medium_tailcall_full_conf: ${{ steps.extract_rps.outputs.medium_tailcall_full_conf_rps }}
+      small_tailcall_full_conf: ${{ steps.extract_rps.outputs.small_tailcall_full_conf_rps }}
+
+      big_grafbase_cache: ${{ steps.extract_rps.outputs.big_grafbase_cache_rps }}
+      medium_grafbase_cache: ${{ steps.extract_rps.outputs.medium_grafbase_cache_rps }}
+      small_grafbase_cache: ${{ steps.extract_rps.outputs.small_grafbase_cache_rps }}
+
+      big_wundergraph_default: ${{ steps.extract_rps.outputs.big_wundergraph_default_rps }}
+      medium_wundergraph_default: ${{ steps.extract_rps.outputs.medium_wundergraph_default_rps }}
+      small_wundergraph_default: ${{ steps.extract_rps.outputs.small_wundergraph_default_rps }}
   analyze:
     needs: benchmark
     runs-on: ubuntu-latest
@@ -112,14 +138,14 @@ jobs:
         run: |
           echo "| Server | 112,838 bytes | 12598 bytes | 362 bytes |"
           echo "| --- | --- | --- | --- |"
-          echo "| Nginx Default | ${{ needs.benchmark.extract_rps.outputs.big_nginx_graphql_rps }} | ${{ needs.benchmark.extract_rps.outputs.medium_nginx_graphql_rps }} | ${{ needs.benchmark.extract_rps.outputs.small_nginx_graphql_rps }} |"
+          echo "| Nginx Default | ${{ needs.benchmark.outputs.big_nginx_graphql }} | ${{ needs.benchmark.outputs.medium_nginx_graphql }} | ${{ needs.benchmark.outputs.small_nginx_graphql }} |"
           echo "| Base | --- | --- | --- |"
-          echo "| Tailcall | ${{ needs.benchmark.extract_rps.outputs.big_tailcall_default_rps }} | ${{ needs.benchmark.extract_rps.outputs.medium_tailcall_default_rps }} | ${{ needs.benchmark.extract_rps.outputs.small_tailcall_default_rps }} |"
-          echo "| Grafbase | ${{ needs.benchmark.extract_rps.outputs.big_grafbase_default_rps }} | ${{ needs.benchmark.extract_rps.outputs.medium_grafbase_default_rps }} | ${{ needs.benchmark.extract_rps.outputs.small_grafbase_default_rps }} |"
-          echo "| Wundegraph | ${{ needs.benchmark.extract_rps.outputs.big_wundergraph_no_opt_rps }} | ${{ needs.benchmark.extract_rps.outputs.medium_wundergraph_no_opt_rps }} | ${{ needs.benchmark.extract_rps.outputs.small_wundergraph_no_opt_rps }} |"
-          echo "| Apollo | ${{ needs.benchmark.extract_rps.outputs.big_apollo_router_rps }} | ${{ needs.benchmark.extract_rps.outputs.medium_apollo_router_rps }} | ${{ needs.benchmark.extract_rps.outputs.small_apollo_router_rps }} |"
+          echo "| Tailcall | ${{ needs.benchmark.outputs.big_tailcall_default }} | ${{ needs.benchmark.outputs.medium_tailcall_default }} | ${{ needs.benchmark.outputs.small_tailcall_default }} |"
+          echo "| Grafbase | ${{ needs.benchmark.outputs.big_grafbase_default }} | ${{ needs.benchmark.outputs.medium_grafbase_default }} | ${{ needs.benchmark.outputs.small_grafbase_default }} |"
+          echo "| Wundegraph | ${{ needs.benchmark.outputs.big_wundergraph_no_opt }} | ${{ needs.benchmark.outputs.medium_wundergraph_no_opt }} | ${{ needs.benchmark.outputs.small_wundergraph_no_opt }} |"
+          echo "| Apollo | ${{ needs.benchmark.outputs.big_apollo_router }} | ${{ needs.benchmark.outputs.medium_apollo_router }} | ${{ needs.benchmark.outputs.small_apollo_router }} |"
           echo "| Cached | --- | --- | --- |"
-          echo "| Tailcall | ${{ needs.benchmark.extract_rps.outputs.big_tailcall_full_conf_rps }} | ${{ needs.benchmark.extract_rps.outputs.medium_tailcall_full_conf_rps }} | ${{ needs.benchmark.extract_rps.outputs.small_tailcall_full_conf_rps }} |"
-          echo "| Grafbase Cache | ${{ needs.benchmark.extract_rps.outputs.big_grafbase_cache_rps }} | ${{ needs.benchmark.extract_rps.outputs.medium_grafbase_cache_rps }} | ${{ needs.benchmark.extract_rps.outputs.small_grafbase_cache_rps }} |"
-          echo "| Wundegraph Ludicrous | ${{ needs.benchmark.extract_rps.outputs.big_wundergraph_default_rps }} | ${{ needs.benchmark.extract_rps.outputs.medium_wundergraph_default_rps }} | ${{ needs.benchmark.extract_rps.outputs.small_wundergraph_default_rps }} |" \
+          echo "| Tailcall | ${{ needs.benchmark.outputs.big_tailcall_full_conf }} | ${{ needs.benchmark.outputs.medium_tailcall_full_conf }} | ${{ needs.benchmark.outputs.small_tailcall_full_conf }} |"
+          echo "| Grafbase Cache | ${{ needs.benchmark.outputs.big_grafbase_cache }} | ${{ needs.benchmark.outputs.medium_grafbase_cache }} | ${{ needs.benchmark.outputs.small_grafbase_cache }} |"
+          echo "| Wundegraph Ludicrous | ${{ needs.benchmark.outputs.big_wundergraph_default }} | ${{ needs.benchmark.outputs.medium_wundergraph_default }} | ${{ needs.benchmark.outputs.small_wundergraph_default }} |" \
           | tee -a "$GITHUB_STEP_SUMMARY"
