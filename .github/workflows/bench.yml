@@ -85,7 +85,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Create "output.log" file
-        run: touch "output.log"
+        run: touch ${{ github.workspace }}/output.log
       - id: benchmark
         name: Benchmark
         uses: addnab/docker-run-action@v3
@@ -94,13 +94,14 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
           image: ghcr.io/${{ github.repository_owner }}/federated-benchmark:latest
-          run: ./docker_benchmark.sh ${{ matrix.response }} ${{ matrix.service }} >> "output.log"
+          options: -v ${{ github.workspace }}:/work
+          run: ./docker_benchmark.sh ${{ matrix.response }} ${{ matrix.service }} >> /work/output.log
       - name: Print result
-        run: cat "output.log"
+        run: cat ${{ github.workspace }}/output.log
       - name: Extract Requests Per Second
         id: extract_rps
         run: |
-          RPS=$(grep "Requests/sec:" output.log | awk '{print $2}')
+          RPS=$(grep "Requests/sec:" ${{ github.workspace }}/output.log | awk '{print $2}')
           echo "rps=${{ matrix.response }} ${{ matrix.service }} ${RPS}" | tee -a "$GITHUB_OUTPUT"
   analyze:
     needs: benchmark
