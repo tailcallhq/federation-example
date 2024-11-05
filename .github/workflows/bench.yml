@@ -39,8 +39,9 @@ jobs:
 
   benchmark:
     needs: build
-    runs-on:
-      group: benchmark-runner
+    runs-on: ubuntu-latest
+    # runs-on:
+      # group: benchmark-runner
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
