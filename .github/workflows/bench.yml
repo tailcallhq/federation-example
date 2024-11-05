@@ -144,21 +144,20 @@ jobs:
       - id: collect
         name: Collect Requests Per Second from all matrix jobs
         run: |
-          DATA=$(echo -e "| Server | 112,838 bytes | 12598 bytes | 362 bytes |\n" \
-          "| ---: | ---: | ---: | ---: |\n" \
-          "| [Nginx](https://nginx.org/en/) | `${{ needs.benchmark.outputs.big_nginx_graphql }} RPS` | `${{ needs.benchmark.outputs.medium_nginx_graphql }} RPS` | `${{ needs.benchmark.outputs.small_nginx_graphql }} RPS` |\n" \
-          "| **Base** | | | |\n" \
-          "| [Tailcall](https://github.com/tailcallhq/tailcall) | `${{ needs.benchmark.outputs.big_tailcall_default }} RPS` | `${{ needs.benchmark.outputs.medium_tailcall_default }} RPS` | `${{ needs.benchmark.outputs.small_tailcall_default }} RPS` |\n" \
-          "| [Grafbase](https://github.com/grafbase/grafbase) | `${{ needs.benchmark.outputs.big_grafbase_default }} RPS` | `${{ needs.benchmark.outputs.medium_grafbase_default }} RPS` | `${{ needs.benchmark.outputs.small_grafbase_default }} RPS` |\n" \
-          "| [Wundegraph](https://github.com/wundergraph/cosmo) | `${{ needs.benchmark.outputs.big_wundergraph_no_opt }} RPS` | `${{ needs.benchmark.outputs.medium_wundergraph_no_opt }} RPS` | `${{ needs.benchmark.outputs.small_wundergraph_no_opt }} RPS` |\n" \
-          "| [Apollo](https://github.com/apollographql/router) | `${{ needs.benchmark.outputs.big_apollo_router }} RPS` | `${{ needs.benchmark.outputs.medium_apollo_router }} RPS` | `${{ needs.benchmark.outputs.small_apollo_router }} RPS` |\n" \
-          "| **Cached** | | | |\n" \
-          "| [Tailcall](https://github.com/tailcallhq/tailcall) | `${{ needs.benchmark.outputs.big_tailcall_full_conf }} RPS` | `${{ needs.benchmark.outputs.medium_tailcall_full_conf }} RPS` | `${{ needs.benchmark.outputs.small_tailcall_full_conf }} RPS` |\n" \
-          "| [Grafbase](https://github.com/grafbase/grafbase) | `${{ needs.benchmark.outputs.big_grafbase_cache }} RPS` | `${{ needs.benchmark.outputs.medium_grafbase_cache }} RPS` | `${{ needs.benchmark.outputs.small_grafbase_cache }} RPS` |\n" \
-          "| [Wundegraph](https://github.com/wundergraph/cosmo) | `${{ needs.benchmark.outputs.big_wundergraph_default }} RPS` | `${{ needs.benchmark.outputs.medium_wundergraph_default }} RPS` | `${{ needs.benchmark.outputs.small_wundergraph_default }} RPS` |\n") \
-          echo "data=${DATA}" | tee -a "$GITHUB_OUTPUT"
-      - name: Create `results.md` file
-        run: echo "${{ steps.collect.outputs.data }}" > "results.md"
+          echo "| Server | 112,838 bytes | 12598 bytes | 362 bytes |" >> "results.md"
+          echo "| ---: | ---: | ---: | ---: |" >> "results.md"
+          echo "| [Nginx](https://nginx.org/en/) | `${{ needs.benchmark.outputs.big_nginx_graphql }} RPS` | `${{ needs.benchmark.outputs.medium_nginx_graphql }} RPS` | `${{ needs.benchmark.outputs.small_nginx_graphql }} RPS` |" >> "results.md"
+          echo "| **Base** | | | |" >> "results.md"
+          echo "| [Tailcall](https://github.com/tailcallhq/tailcall) | `${{ needs.benchmark.outputs.big_tailcall_default }} RPS` | `${{ needs.benchmark.outputs.medium_tailcall_default }} RPS` | `${{ needs.benchmark.outputs.small_tailcall_default }} RPS` |" >> "results.md"
+          echo "| [Grafbase](https://github.com/grafbase/grafbase) | `${{ needs.benchmark.outputs.big_grafbase_default }} RPS` | `${{ needs.benchmark.outputs.medium_grafbase_default }} RPS` | `${{ needs.benchmark.outputs.small_grafbase_default }} RPS` |" >> "results.md"
+          echo "| [Wundegraph](https://github.com/wundergraph/cosmo) | `${{ needs.benchmark.outputs.big_wundergraph_no_opt }} RPS` | `${{ needs.benchmark.outputs.medium_wundergraph_no_opt }} RPS` | `${{ needs.benchmark.outputs.small_wundergraph_no_opt }} RPS` |" >> "results.md"
+          echo "| [Apollo](https://github.com/apollographql/router) | `${{ needs.benchmark.outputs.big_apollo_router }} RPS` | `${{ needs.benchmark.outputs.medium_apollo_router }} RPS` | `${{ needs.benchmark.outputs.small_apollo_router }} RPS` |" >> "results.md"
+          echo "| **Cached** | | | |" >> "results.md"
+          echo "| [Tailcall](https://github.com/tailcallhq/tailcall) | `${{ needs.benchmark.outputs.big_tailcall_full_conf }} RPS` | `${{ needs.benchmark.outputs.medium_tailcall_full_conf }} RPS` | `${{ needs.benchmark.outputs.small_tailcall_full_conf }} RPS` |" >> "results.md"
+          echo "| [Grafbase](https://github.com/grafbase/grafbase) | `${{ needs.benchmark.outputs.big_grafbase_cache }} RPS` | `${{ needs.benchmark.outputs.medium_grafbase_cache }} RPS` | `${{ needs.benchmark.outputs.small_grafbase_cache }} RPS` |" >> "results.md"
+          echo "| [Wundegraph](https://github.com/wundergraph/cosmo) | `${{ needs.benchmark.outputs.big_wundergraph_default }} RPS` | `${{ needs.benchmark.outputs.medium_wundergraph_default }} RPS` | `${{ needs.benchmark.outputs.small_wundergraph_default }} RPS` |" >> "results.md"
+      - name: Show table
+        run: cat "results.md"
       - name: Comment `results.md` file
         if: github.event_name == 'pull_request_target'
         uses: peter-evans/commit-comment@v3
@@ -174,4 +173,4 @@ jobs:
           commit_author: Author <actions@github.com>
           commit_message: "[ci skip] update performance results in README.md"
       - name: Summarize
-        run: echo "${{ steps.collect.outputs.data }}" >> "$GITHUB_STEP_SUMMARY"
+        run: cat "results.md >> "$GITHUB_STEP_SUMMARY"
