@@ -121,5 +121,5 @@ jobs:
           echo "| Cached | --- | --- | --- |"
           echo "| Tailcall | ${{ needs.benchmark.extract_rps.big_tailcall_full_conf_rps }} | ${{ needs.benchmark.extract_rps.medium_tailcall_full_conf_rps }} | ${{ needs.benchmark.extract_rps.small_tailcall_full_conf_rps }} |"
           echo "| Grafbase Cache | ${{ needs.benchmark.extract_rps.big_grafbase_cache_rps }} | ${{ needs.benchmark.extract_rps.medium_grafbase_cache_rps }} | ${{ needs.benchmark.extract_rps.small_grafbase_cache_rps }} |"
-          echo "| Wundegraph Ludicrous | ${{ needs.benchmark.extract_rps.big_wundergraph_default_rps }} | ${{ needs.benchmark.extract_rps.medium_wundergraph_default_rps }} | ${{ needs.benchmark.extract_rps.small_wundergraph_default_rps }} |"
+          echo "| Wundegraph Ludicrous | ${{ needs.benchmark.extract_rps.big_wundergraph_default_rps }} | ${{ needs.benchmark.extract_rps.medium_wundergraph_default_rps }} | ${{ needs.benchmark.extract_rps.small_wundergraph_default_rps }} |" \
           | tee -a "$GITHUB_STEP_SUMMARY"
