@@ -1,120 +1,284 @@
 schema
   @link(url: "https://specs.apollo.dev/link/v1.0")
   @link(url: "https://specs.apollo.dev/join/v0.3", for: EXECUTION)
-  @link(url: "https://specs.apollo.dev/tag/v0.3", import: ["@tag"]) {
+  @link(url: "https://specs.apollo.dev/tag/v0.3", import: ["@tag"])
+{
   query: Query
+  mutation: Mutation
+  subscription: Subscription
 }
 
 directive @authenticated on FIELD_DEFINITION | OBJECT | INTERFACE | SCALAR | ENUM
 
 directive @join__enumValue(graph: join__Graph!) repeatable on ENUM_VALUE
 
-directive @join__field(
-  graph: join__Graph
-  requires: join__FieldSet
-  provides: join__FieldSet
-  type: String
-  external: Boolean
-  override: String
-  usedOverridden: Boolean
-) repeatable on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
+directive @join__field(graph: join__Graph, requires: join__FieldSet, provides: join__FieldSet, type: String, external: Boolean, override: String, usedOverridden: Boolean) repeatable on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 
 directive @join__graph(name: String!, url: String!) on ENUM_VALUE
 
-directive @join__implements(
-  graph: join__Graph!
-  interface: String!
-) repeatable on OBJECT | INTERFACE
+directive @join__implements(graph: join__Graph!, interface: String!) repeatable on OBJECT | INTERFACE
 
-directive @join__type(
-  graph: join__Graph!
-  key: join__FieldSet
-  extension: Boolean! = false
-  resolvable: Boolean! = true
-  isInterfaceObject: Boolean! = false
-) repeatable on OBJECT | INTERFACE | UNION | ENUM | INPUT_OBJECT | SCALAR
+directive @join__type(graph: join__Graph!, key: join__FieldSet, extension: Boolean! = false, resolvable: Boolean! = true, isInterfaceObject: Boolean! = false) repeatable on OBJECT | INTERFACE | UNION | ENUM | INPUT_OBJECT | SCALAR
 
-directive @join__unionMember(
-  graph: join__Graph!
-  member: String!
-) repeatable on UNION
+directive @join__unionMember(graph: join__Graph!, member: String!) repeatable on UNION
 
-directive @link(
-  url: String
-  as: String
-  for: link__Purpose
-  import: [link__Import]
-) repeatable on SCHEMA
+directive @link(url: String, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
 
-directive @requiresScopes(
-  scopes: [[requiresScopes__Scope!]!]!
-) on FIELD_DEFINITION | OBJECT | INTERFACE | SCALAR | ENUM
+directive @requiresScopes(scopes: [[requiresScopes__Scope!]!]!) on FIELD_DEFINITION | OBJECT | INTERFACE | SCALAR | ENUM
 
-directive @tag(
+directive @tag(name: String!) repeatable on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION | SCHEMA
+
+type ABigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnABigObject: String!
+  bFieldOnABigObject: Int!
+  cFieldOnABigObject: Boolean!
+  dFieldOnABigObject: Float!
+  eFieldOnABigObject: String!
+  fFieldOnABigObject: Int!
+  gFieldOnABigObject: Boolean!
+  hFieldOnABigObject: Float!
+  iFieldOnABigObject: String!
+  jFieldOnABigObject: Int!
+  kFieldOnABigObject: Boolean!
+  lFieldOnABigObject: Float!
+  mFieldOnABigObject: String!
+  nFieldOnABigObject: Int!
+  oFieldOnABigObject: Boolean!
+  pFieldOnABigObject: Float!
+  qFieldOnABigObject: String!
+  rFieldOnABigObject: Int!
+  sFieldOnABigObject: Boolean!
+  tFieldOnABigObject: Float!
+  uFieldOnABigObject: String!
+  vFieldOnABigObject: Int!
+  wFieldOnABigObject: Boolean!
+  xFieldOnABigObject: Float!
+  yFieldOnABigObject: String!
+  zFieldOnABigObject: Int!
+}
+
+type Alligator implements Pet & Animal
+  @join__implements(graph: FAMILY, interface: "Pet")
+  @join__implements(graph: FAMILY, interface: "Animal")
+  @join__type(graph: FAMILY)
+{
+  class: Class!
+  dangerous: String!
+  gender: Gender!
   name: String!
-) repeatable on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION | SCHEMA
-
-type Query @join__type(graph: EMPLOYEES) @join__type(graph: GENERIC) {
-  employees: [Employee] @join__field(graph: EMPLOYEES)
-  bigResponse(
-    artificialDelay: Int! = 0
-    bigObjects: Int! = 100
-    nestedObjects: Int! = 100
-    deeplyNestedObjects: Int! = 100
-  ): [BigObject!]! @join__field(graph: GENERIC)
 }
 
-enum Department @join__type(graph: EMPLOYEES) {
-  ENGINEERING @join__enumValue(graph: EMPLOYEES)
-  MARKETING @join__enumValue(graph: EMPLOYEES)
-  OPERATIONS @join__enumValue(graph: EMPLOYEES)
+interface Animal
+  @join__type(graph: FAMILY)
+{
+  class: Class!
+  gender: Gender!
 }
 
-interface Identifiable @join__type(graph: EMPLOYEES) {
-  id: Int!
+type BBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnBBigObject: String!
+  bFieldOnBBigObject: Int!
+  cFieldOnBBigObject: Boolean!
+  dFieldOnBBigObject: Float!
+  eFieldOnBBigObject: String!
+  fFieldOnBBigObject: Int!
+  gFieldOnBBigObject: Boolean!
+  hFieldOnBBigObject: Float!
+  iFieldOnBBigObject: String!
+  jFieldOnBBigObject: Int!
+  kFieldOnBBigObject: Boolean!
+  lFieldOnBBigObject: Float!
+  mFieldOnBBigObject: String!
+  nFieldOnBBigObject: Int!
+  oFieldOnBBigObject: Boolean!
+  pFieldOnBBigObject: Float!
+  qFieldOnBBigObject: String!
+  rFieldOnBBigObject: Int!
+  sFieldOnBBigObject: Boolean!
+  tFieldOnBBigObject: Float!
+  uFieldOnBBigObject: String!
+  vFieldOnBBigObject: Int!
+  wFieldOnBBigObject: Boolean!
+  xFieldOnBBigObject: Float!
+  yFieldOnBBigObject: String!
+  zFieldOnBBigObject: Int!
 }
 
-scalar join__FieldSet
+union BigAbstractResponse
+  @join__type(graph: TEST1)
+  @join__unionMember(graph: TEST1, member: "ABigObject")
+  @join__unionMember(graph: TEST1, member: "BBigObject")
+  @join__unionMember(graph: TEST1, member: "CBigObject")
+  @join__unionMember(graph: TEST1, member: "DBigObject")
+  @join__unionMember(graph: TEST1, member: "EBigObject")
+  @join__unionMember(graph: TEST1, member: "FBigObject")
+  @join__unionMember(graph: TEST1, member: "GBigObject")
+  @join__unionMember(graph: TEST1, member: "HBigObject")
+  @join__unionMember(graph: TEST1, member: "IBigObject")
+  @join__unionMember(graph: TEST1, member: "JBigObject")
+  @join__unionMember(graph: TEST1, member: "KBigObject")
+  @join__unionMember(graph: TEST1, member: "LBigObject")
+  @join__unionMember(graph: TEST1, member: "MBigObject")
+  @join__unionMember(graph: TEST1, member: "NBigObject")
+  @join__unionMember(graph: TEST1, member: "OBigObject")
+  @join__unionMember(graph: TEST1, member: "PBigObject")
+  @join__unionMember(graph: TEST1, member: "QBigObject")
+  @join__unionMember(graph: TEST1, member: "RBigObject")
+  @join__unionMember(graph: TEST1, member: "SBigObject")
+  @join__unionMember(graph: TEST1, member: "TBigObject")
+  @join__unionMember(graph: TEST1, member: "UBigObject")
+  @join__unionMember(graph: TEST1, member: "VBigObject")
+  @join__unionMember(graph: TEST1, member: "WBigObject")
+  @join__unionMember(graph: TEST1, member: "XBigObject")
+  @join__unionMember(graph: TEST1, member: "YBigObject")
+  @join__unionMember(graph: TEST1, member: "ZBigObject")
+ = ABigObject | BBigObject | CBigObject | DBigObject | EBigObject | FBigObject | GBigObject | HBigObject | IBigObject | JBigObject | KBigObject | LBigObject | MBigObject | NBigObject | OBigObject | PBigObject | QBigObject | RBigObject | SBigObject | TBigObject | UBigObject | VBigObject | WBigObject | XBigObject | YBigObject | ZBigObject
 
-enum join__Graph {
-  EMPLOYEES
-    @join__graph(name: "employees", url: "http://127.0.0.1:4001/graphql")
-  GENERIC @join__graph(name: "GENERIC", url: "http://127.0.0.1:4006/graphql")
-}
-
-scalar link__Import
-
-enum link__Purpose {
-  """
-  `SECURITY` features provide metadata necessary to securely resolve fields.
-  """
-  SECURITY
-
-  """
-  `EXECUTION` features provide metadata necessary for operation execution.
-  """
-  EXECUTION
-}
-
-scalar Map @join__type(graph: GENERIC)
-
-type Employee implements Identifiable
-  @join__type(graph: EMPLOYEES, key: "id")
-  @join__implements(graph: EMPLOYEES, interface: "Identifiable") {
-  id: Int!
-  details: Details!
-  tag: String!
-  role: RoleType!
-  notes: String
-  updatedAt: String!
-  startDate: String!
-}
-
-type BigObject @join__type(graph: GENERIC) {
+type BigObject
+  @join__type(graph: TEST1)
+{
   nestedObjects: [NestedObject!]!
 }
 
-type DeeplyNestedObject @join__type(graph: GENERIC) {
+type Cat implements Pet & Animal
+  @join__implements(graph: FAMILY, interface: "Pet")
+  @join__implements(graph: FAMILY, interface: "Animal")
+  @join__type(graph: FAMILY)
+{
+  class: Class!
+  gender: Gender!
+  name: String!
+  type: CatType!
+}
+
+enum CatType
+  @join__type(graph: FAMILY)
+{
+  HOME @join__enumValue(graph: FAMILY)
+  STREET @join__enumValue(graph: FAMILY)
+}
+
+type CBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnCBigObject: String!
+  bFieldOnCBigObject: Int!
+  cFieldOnCBigObject: Boolean!
+  dFieldOnCBigObject: Float!
+  eFieldOnCBigObject: String!
+  fFieldOnCBigObject: Int!
+  gFieldOnCBigObject: Boolean!
+  hFieldOnCBigObject: Float!
+  iFieldOnCBigObject: String!
+  jFieldOnCBigObject: Int!
+  kFieldOnCBigObject: Boolean!
+  lFieldOnCBigObject: Float!
+  mFieldOnCBigObject: String!
+  nFieldOnCBigObject: Int!
+  oFieldOnCBigObject: Boolean!
+  pFieldOnCBigObject: Float!
+  qFieldOnCBigObject: String!
+  rFieldOnCBigObject: Int!
+  sFieldOnCBigObject: Boolean!
+  tFieldOnCBigObject: Float!
+  uFieldOnCBigObject: String!
+  vFieldOnCBigObject: Int!
+  wFieldOnCBigObject: Boolean!
+  xFieldOnCBigObject: Float!
+  yFieldOnCBigObject: String!
+  zFieldOnCBigObject: Int!
+}
+
+type City
+  @join__type(graph: EMPLOYEES)
+{
+  type: String!
+  name: String!
+  country: Country
+}
+
+enum Class
+  @join__type(graph: FAMILY)
+{
+  FISH @join__enumValue(graph: FAMILY)
+  MAMMAL @join__enumValue(graph: FAMILY)
+  REPTILE @join__enumValue(graph: FAMILY)
+}
+
+type Consultancy
+  @join__type(graph: EMPLOYEES, key: "upc")
+  @join__type(graph: PRODUCTS, key: "upc")
+{
+  upc: ID!
+  lead: Employee! @join__field(graph: EMPLOYEES)
+  isLeadAvailable: Boolean @join__field(graph: EMPLOYEES, requires: "lead { isAvailable }")
+  name: ProductName! @join__field(graph: PRODUCTS)
+}
+
+type Cosmo implements IProduct
+  @join__implements(graph: EMPLOYEES, interface: "IProduct")
+  @join__type(graph: EMPLOYEES, key: "upc")
+  @join__type(graph: PRODUCTS, key: "upc")
+{
+  upc: ID!
+  engineers: [Employee!]! @join__field(graph: EMPLOYEES)
+  lead: Employee! @join__field(graph: EMPLOYEES)
+  name: ProductName! @join__field(graph: PRODUCTS)
+  repositoryURL: String! @join__field(graph: PRODUCTS)
+}
+
+type Country
+  @join__type(graph: EMPLOYEES, key: "key { name }", resolvable: false)
+  @join__type(graph: HOBBIES, key: "key { name }", resolvable: false)
+{
+  key: CountryKey!
+}
+
+type CountryKey
+  @join__type(graph: EMPLOYEES)
+  @join__type(graph: HOBBIES)
+{
+  name: String!
+}
+
+type DBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnDBigObject: String!
+  bFieldOnDBigObject: Int!
+  cFieldOnDBigObject: Boolean!
+  dFieldOnDBigObject: Float!
+  eFieldOnDBigObject: String!
+  fFieldOnDBigObject: Int!
+  gFieldOnDBigObject: Boolean!
+  hFieldOnDBigObject: Float!
+  iFieldOnDBigObject: String!
+  jFieldOnDBigObject: Int!
+  kFieldOnDBigObject: Boolean!
+  lFieldOnDBigObject: Float!
+  mFieldOnDBigObject: String!
+  nFieldOnDBigObject: Int!
+  oFieldOnDBigObject: Boolean!
+  pFieldOnDBigObject: Float!
+  qFieldOnDBigObject: String!
+  rFieldOnDBigObject: Int!
+  sFieldOnDBigObject: Boolean!
+  tFieldOnDBigObject: Float!
+  uFieldOnDBigObject: String!
+  vFieldOnDBigObject: Int!
+  wFieldOnDBigObject: Boolean!
+  xFieldOnDBigObject: Float!
+  yFieldOnDBigObject: String!
+  zFieldOnDBigObject: Int!
+}
+
+type DeeplyNestedObject
+  @join__type(graph: TEST1)
+{
   aFieldOnDeeplyNestedObject: String!
   bFieldOnDeeplyNestedObject: Int!
   cFieldOnDeeplyNestedObject: Boolean!
@@ -143,50 +307,1270 @@ type DeeplyNestedObject @join__type(graph: GENERIC) {
   zFieldOnDeeplyNestedObject: Int!
 }
 
-type Details @join__type(graph: EMPLOYEES) {
+enum Department
+  @join__type(graph: EMPLOYEES)
+{
+  ENGINEERING @join__enumValue(graph: EMPLOYEES)
+  MARKETING @join__enumValue(graph: EMPLOYEES)
+  OPERATIONS @join__enumValue(graph: EMPLOYEES)
+}
+
+type Details
+  @join__type(graph: EMPLOYEES)
+  @join__type(graph: FAMILY)
+{
   forename: String!
+  location: Country! @join__field(graph: EMPLOYEES)
   surname: String!
+  pastLocations: [City!]! @join__field(graph: EMPLOYEES)
+  middlename: String @join__field(graph: FAMILY) @deprecated
+  hasChildren: Boolean! @join__field(graph: FAMILY)
+  maritalStatus: MaritalStatus @join__field(graph: FAMILY)
+  nationality: Nationality! @join__field(graph: FAMILY)
+  pets: [Pet] @join__field(graph: FAMILY)
+}
+
+type DirectiveFact implements TopSecretFact
+  @join__implements(graph: PRODUCTS, interface: "TopSecretFact")
+  @join__type(graph: PRODUCTS)
+  @authenticated
+{
+  title: String!
+  description: FactContent!
+  factType: TopSecretFactType
+}
+
+type Documentation
+  @join__type(graph: PRODUCTS)
+{
+  url(product: ProductName!): String!
+  urls(products: [ProductName!]!): [String!]!
+}
+
+type Dog implements Pet & Animal
+  @join__implements(graph: FAMILY, interface: "Pet")
+  @join__implements(graph: FAMILY, interface: "Animal")
+  @join__type(graph: FAMILY)
+{
+  breed: DogBreed!
+  class: Class!
+  gender: Gender!
+  name: String!
+}
+
+enum DogBreed
+  @join__type(graph: FAMILY)
+{
+  GOLDEN_RETRIEVER @join__enumValue(graph: FAMILY)
+  POODLE @join__enumValue(graph: FAMILY)
+  ROTTWEILER @join__enumValue(graph: FAMILY)
+  YORKSHIRE_TERRIER @join__enumValue(graph: FAMILY)
+}
+
+type EBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnEBigObject: String!
+  bFieldOnEBigObject: Int!
+  cFieldOnEBigObject: Boolean!
+  dFieldOnEBigObject: Float!
+  eFieldOnEBigObject: String!
+  fFieldOnEBigObject: Int!
+  gFieldOnEBigObject: Boolean!
+  hFieldOnEBigObject: Float!
+  iFieldOnEBigObject: String!
+  jFieldOnEBigObject: Int!
+  kFieldOnEBigObject: Boolean!
+  lFieldOnEBigObject: Float!
+  mFieldOnEBigObject: String!
+  nFieldOnEBigObject: Int!
+  oFieldOnEBigObject: Boolean!
+  pFieldOnEBigObject: Float!
+  qFieldOnEBigObject: String!
+  rFieldOnEBigObject: Int!
+  sFieldOnEBigObject: Boolean!
+  tFieldOnEBigObject: Float!
+  uFieldOnEBigObject: String!
+  vFieldOnEBigObject: Int!
+  wFieldOnEBigObject: Boolean!
+  xFieldOnEBigObject: Float!
+  yFieldOnEBigObject: String!
+  zFieldOnEBigObject: Int!
+}
+
+type Employee implements Identifiable
+  @join__implements(graph: EMPLOYEES, interface: "Identifiable")
+  @join__type(graph: AVAILABILITY, key: "id")
+  @join__type(graph: EMPLOYEES, key: "id")
+  @join__type(graph: FAMILY, key: "id")
+  @join__type(graph: HOBBIES, key: "id")
+  @join__type(graph: MOOD, key: "id")
+  @join__type(graph: PRODUCTS, key: "id")
+  @join__type(graph: TEST1, key: "id")
+{
+  id: Int!
+  isAvailable: Boolean! @join__field(graph: AVAILABILITY) @join__field(graph: EMPLOYEES, external: true)
+  details: Details @join__field(graph: EMPLOYEES, type: "Details!") @join__field(graph: FAMILY, type: "Details")
+  tag: String! @join__field(graph: EMPLOYEES)
+  role: RoleType! @join__field(graph: EMPLOYEES)
+  notes: String @join__field(graph: PRODUCTS, override: "employees")
+  updatedAt: String! @join__field(graph: EMPLOYEES)
+  startDate: String! @join__field(graph: EMPLOYEES) @requiresScopes(scopes: [["read:employee", "read:private"], ["read:all"]])
+  currentMood: Mood! @join__field(graph: EMPLOYEES, external: true) @join__field(graph: MOOD)
+  derivedMood: Mood! @join__field(graph: EMPLOYEES, requires: "currentMood")
+  rootFieldThrowsError: String @join__field(graph: EMPLOYEES)
+  rootFieldErrorWrapper: ErrorWrapper @join__field(graph: EMPLOYEES)
+  hobbies: [Hobby!] @join__field(graph: HOBBIES)
+  products: [ProductName!]! @join__field(graph: PRODUCTS)
+  fieldThrowsError: String @join__field(graph: TEST1)
 }
 
 type Engineer implements RoleType
   @join__implements(graph: EMPLOYEES, interface: "RoleType")
-  @join__type(graph: EMPLOYEES) {
+  @join__type(graph: EMPLOYEES)
+{
   departments: [Department!]!
   title: [String!]!
   employees: [Employee!]!
   engineerType: EngineerType!
 }
 
-enum EngineerType @join__type(graph: EMPLOYEES) {
+enum EngineerType
+  @join__type(graph: EMPLOYEES)
+{
   BACKEND @join__enumValue(graph: EMPLOYEES)
   FRONTEND @join__enumValue(graph: EMPLOYEES)
   FULLSTACK @join__enumValue(graph: EMPLOYEES)
 }
 
-type NestedObject @join__type(graph: GENERIC) {
+type EntityFact implements TopSecretFact
+  @join__implements(graph: PRODUCTS, interface: "TopSecretFact")
+  @join__type(graph: PRODUCTS)
+  @requiresScopes(scopes: [["read:entity"]])
+{
+  title: String!
+  description: FactContent!
+  factType: TopSecretFactType
+}
+
+enum EnumType
+  @join__type(graph: TEST1)
+{
+  A @join__enumValue(graph: TEST1)
+  B @join__enumValue(graph: TEST1)
+  C @join__enumValue(graph: TEST1)
+}
+
+type ErrorWrapper
+  @join__type(graph: EMPLOYEES)
+{
+  okField: String
+  errorField: String
+}
+
+type Exercise implements Hobby
+  @join__implements(graph: HOBBIES, interface: "Hobby")
+  @join__type(graph: HOBBIES)
+{
+  employees: [Employee!]!
+  category: ExerciseType!
+}
+
+enum ExerciseType
+  @join__type(graph: HOBBIES)
+{
+  CALISTHENICS @join__enumValue(graph: HOBBIES)
+  HIKING @join__enumValue(graph: HOBBIES)
+  SPORT @join__enumValue(graph: HOBBIES)
+  STRENGTH_TRAINING @join__enumValue(graph: HOBBIES)
+}
+
+interface Experience
+  @join__type(graph: HOBBIES)
+{
+  yearsOfExperience: Float!
+}
+
+scalar FactContent
+  @join__type(graph: PRODUCTS)
+  @requiresScopes(scopes: [["read:scalar"], ["read:all"]])
+
+type FBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnFBigObject: String!
+  bFieldOnFBigObject: Int!
+  cFieldOnFBigObject: Boolean!
+  dFieldOnFBigObject: Float!
+  eFieldOnFBigObject: String!
+  fFieldOnFBigObject: Int!
+  gFieldOnFBigObject: Boolean!
+  hFieldOnFBigObject: Float!
+  iFieldOnFBigObject: String!
+  jFieldOnFBigObject: Int!
+  kFieldOnFBigObject: Boolean!
+  lFieldOnFBigObject: Float!
+  mFieldOnFBigObject: String!
+  nFieldOnFBigObject: Int!
+  oFieldOnFBigObject: Boolean!
+  pFieldOnFBigObject: Float!
+  qFieldOnFBigObject: String!
+  rFieldOnFBigObject: Int!
+  sFieldOnFBigObject: Boolean!
+  tFieldOnFBigObject: Float!
+  uFieldOnFBigObject: String!
+  vFieldOnFBigObject: Int!
+  wFieldOnFBigObject: Boolean!
+  xFieldOnFBigObject: Float!
+  yFieldOnFBigObject: String!
+  zFieldOnFBigObject: Int!
+}
+
+type Flying implements Experience & Hobby
+  @join__implements(graph: HOBBIES, interface: "Experience")
+  @join__implements(graph: HOBBIES, interface: "Hobby")
+  @join__type(graph: HOBBIES)
+{
+  employees: [Employee!]!
+  planeModels: [String!]!
+  yearsOfExperience: Float!
+}
+
+enum GameGenre
+  @join__type(graph: HOBBIES)
+{
+  ADVENTURE @join__enumValue(graph: HOBBIES)
+  BOARD @join__enumValue(graph: HOBBIES)
+  FPS @join__enumValue(graph: HOBBIES)
+  CARD @join__enumValue(graph: HOBBIES)
+  RPG @join__enumValue(graph: HOBBIES)
+  ROGUELITE @join__enumValue(graph: HOBBIES)
+  SIMULATION @join__enumValue(graph: HOBBIES)
+  STRATEGY @join__enumValue(graph: HOBBIES)
+}
+
+type Gaming implements Experience & Hobby
+  @join__implements(graph: HOBBIES, interface: "Experience")
+  @join__implements(graph: HOBBIES, interface: "Hobby")
+  @join__type(graph: HOBBIES)
+{
+  employees: [Employee!]!
+  genres: [GameGenre!]!
+  name: String!
+  yearsOfExperience: Float!
+}
+
+type GBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnGBigObject: String!
+  bFieldOnGBigObject: Int!
+  cFieldOnGBigObject: Boolean!
+  dFieldOnGBigObject: Float!
+  eFieldOnGBigObject: String!
+  fFieldOnGBigObject: Int!
+  gFieldOnGBigObject: Boolean!
+  hFieldOnGBigObject: Float!
+  iFieldOnGBigObject: String!
+  jFieldOnGBigObject: Int!
+  kFieldOnGBigObject: Boolean!
+  lFieldOnGBigObject: Float!
+  mFieldOnGBigObject: String!
+  nFieldOnGBigObject: Int!
+  oFieldOnGBigObject: Boolean!
+  pFieldOnGBigObject: Float!
+  qFieldOnGBigObject: String!
+  rFieldOnGBigObject: Int!
+  sFieldOnGBigObject: Boolean!
+  tFieldOnGBigObject: Float!
+  uFieldOnGBigObject: String!
+  vFieldOnGBigObject: Int!
+  wFieldOnGBigObject: Boolean!
+  xFieldOnGBigObject: Float!
+  yFieldOnGBigObject: String!
+  zFieldOnGBigObject: Int!
+}
+
+enum Gender
+  @join__type(graph: FAMILY)
+{
+  FEMALE @join__enumValue(graph: FAMILY)
+  MALE @join__enumValue(graph: FAMILY)
+  UNKNOWN @join__enumValue(graph: FAMILY)
+}
+
+type HBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnHBigObject: String!
+  bFieldOnHBigObject: Int!
+  cFieldOnHBigObject: Boolean!
+  dFieldOnHBigObject: Float!
+  eFieldOnHBigObject: String!
+  fFieldOnHBigObject: Int!
+  gFieldOnHBigObject: Boolean!
+  hFieldOnHBigObject: Float!
+  iFieldOnHBigObject: String!
+  jFieldOnHBigObject: Int!
+  kFieldOnHBigObject: Boolean!
+  lFieldOnHBigObject: Float!
+  mFieldOnHBigObject: String!
+  nFieldOnHBigObject: Int!
+  oFieldOnHBigObject: Boolean!
+  pFieldOnHBigObject: Float!
+  qFieldOnHBigObject: String!
+  rFieldOnHBigObject: Int!
+  sFieldOnHBigObject: Boolean!
+  tFieldOnHBigObject: Float!
+  uFieldOnHBigObject: String!
+  vFieldOnHBigObject: Int!
+  wFieldOnHBigObject: Boolean!
+  xFieldOnHBigObject: Float!
+  yFieldOnHBigObject: String!
+  zFieldOnHBigObject: Int!
+}
+
+interface Hobby
+  @join__type(graph: HOBBIES)
+{
+  employees: [Employee!]!
+}
+
+type IBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnIBigObject: String!
+  bFieldOnIBigObject: Int!
+  cFieldOnIBigObject: Boolean!
+  dFieldOnIBigObject: Float!
+  eFieldOnIBigObject: String!
+  fFieldOnIBigObject: Int!
+  gFieldOnIBigObject: Boolean!
+  hFieldOnIBigObject: Float!
+  iFieldOnIBigObject: String!
+  jFieldOnIBigObject: Int!
+  kFieldOnIBigObject: Boolean!
+  lFieldOnIBigObject: Float!
+  mFieldOnIBigObject: String!
+  nFieldOnIBigObject: Int!
+  oFieldOnIBigObject: Boolean!
+  pFieldOnIBigObject: Float!
+  qFieldOnIBigObject: String!
+  rFieldOnIBigObject: Int!
+  sFieldOnIBigObject: Boolean!
+  tFieldOnIBigObject: Float!
+  uFieldOnIBigObject: String!
+  vFieldOnIBigObject: Int!
+  wFieldOnIBigObject: Boolean!
+  xFieldOnIBigObject: Float!
+  yFieldOnIBigObject: String!
+  zFieldOnIBigObject: Int!
+}
+
+interface Identifiable
+  @join__type(graph: EMPLOYEES)
+{
+  id: Int!
+}
+
+input InputArg
+  @join__type(graph: TEST1)
+{
+  enums: [EnumType!]
+  enum: EnumType
+  string: String
+  strings: [String!]
+}
+
+type InputResponse
+  @join__type(graph: TEST1)
+{
+  arg: String!
+}
+
+input InputType
+  @join__type(graph: TEST1)
+{
+  arg: String!
+}
+
+interface IProduct
+  @join__type(graph: EMPLOYEES)
+{
+  upc: ID!
+  engineers: [Employee!]!
+}
+
+type JBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnJBigObject: String!
+  bFieldOnJBigObject: Int!
+  cFieldOnJBigObject: Boolean!
+  dFieldOnJBigObject: Float!
+  eFieldOnJBigObject: String!
+  fFieldOnJBigObject: Int!
+  gFieldOnJBigObject: Boolean!
+  hFieldOnJBigObject: Float!
+  iFieldOnJBigObject: String!
+  jFieldOnJBigObject: Int!
+  kFieldOnJBigObject: Boolean!
+  lFieldOnJBigObject: Float!
+  mFieldOnJBigObject: String!
+  nFieldOnJBigObject: Int!
+  oFieldOnJBigObject: Boolean!
+  pFieldOnJBigObject: Float!
+  qFieldOnJBigObject: String!
+  rFieldOnJBigObject: Int!
+  sFieldOnJBigObject: Boolean!
+  tFieldOnJBigObject: Float!
+  uFieldOnJBigObject: String!
+  vFieldOnJBigObject: Int!
+  wFieldOnJBigObject: Boolean!
+  xFieldOnJBigObject: Float!
+  yFieldOnJBigObject: String!
+  zFieldOnJBigObject: Int!
+}
+
+scalar join__FieldSet
+
+enum join__Graph {
+  AVAILABILITY @join__graph(name: "availability", url: "http://127.0.0.1:4007/graphql")
+  EMPLOYEES @join__graph(name: "employees", url: "http://127.0.0.1:4001/graphql")
+  FAMILY @join__graph(name: "family", url: "http://127.0.0.1:4002/graphql")
+  HOBBIES @join__graph(name: "hobbies", url: "http://127.0.0.1:4003/graphql")
+  MOOD @join__graph(name: "mood", url: "http://127.0.0.1:4008/graphql")
+  PRODUCTS @join__graph(name: "products", url: "http://127.0.0.1:4004/graphql")
+  TEST1 @join__graph(name: "test1", url: "http://127.0.0.1:4006/graphql")
+}
+
+type KBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnKBigObject: String!
+  bFieldOnKBigObject: Int!
+  cFieldOnKBigObject: Boolean!
+  dFieldOnKBigObject: Float!
+  eFieldOnKBigObject: String!
+  fFieldOnKBigObject: Int!
+  gFieldOnKBigObject: Boolean!
+  hFieldOnKBigObject: Float!
+  iFieldOnKBigObject: String!
+  jFieldOnKBigObject: Int!
+  kFieldOnKBigObject: Boolean!
+  lFieldOnKBigObject: Float!
+  mFieldOnKBigObject: String!
+  nFieldOnKBigObject: Int!
+  oFieldOnKBigObject: Boolean!
+  pFieldOnKBigObject: Float!
+  qFieldOnKBigObject: String!
+  rFieldOnKBigObject: Int!
+  sFieldOnKBigObject: Boolean!
+  tFieldOnKBigObject: Float!
+  uFieldOnKBigObject: String!
+  vFieldOnKBigObject: Int!
+  wFieldOnKBigObject: Boolean!
+  xFieldOnKBigObject: Float!
+  yFieldOnKBigObject: String!
+  zFieldOnKBigObject: Int!
+}
+
+type LBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnLBigObject: String!
+  bFieldOnLBigObject: Int!
+  cFieldOnLBigObject: Boolean!
+  dFieldOnLBigObject: Float!
+  eFieldOnLBigObject: String!
+  fFieldOnLBigObject: Int!
+  gFieldOnLBigObject: Boolean!
+  hFieldOnLBigObject: Float!
+  iFieldOnLBigObject: String!
+  jFieldOnLBigObject: Int!
+  kFieldOnLBigObject: Boolean!
+  lFieldOnLBigObject: Float!
+  mFieldOnLBigObject: String!
+  nFieldOnLBigObject: Int!
+  oFieldOnLBigObject: Boolean!
+  pFieldOnLBigObject: Float!
+  qFieldOnLBigObject: String!
+  rFieldOnLBigObject: Int!
+  sFieldOnLBigObject: Boolean!
+  tFieldOnLBigObject: Float!
+  uFieldOnLBigObject: String!
+  vFieldOnLBigObject: Int!
+  wFieldOnLBigObject: Boolean!
+  xFieldOnLBigObject: Float!
+  yFieldOnLBigObject: String!
+  zFieldOnLBigObject: Int!
+}
+
+scalar link__Import
+
+enum link__Purpose {
+  """
+  `SECURITY` features provide metadata necessary to securely resolve fields.
+  """
+  SECURITY
+
+  """
+  `EXECUTION` features provide metadata necessary for operation execution.
+  """
+  EXECUTION
+}
+
+scalar Map
+  @join__type(graph: TEST1)
+
+enum MaritalStatus
+  @join__type(graph: FAMILY)
+{
+  ENGAGED @join__enumValue(graph: FAMILY)
+  MARRIED @join__enumValue(graph: FAMILY)
+}
+
+type Marketer implements RoleType
+  @join__implements(graph: EMPLOYEES, interface: "RoleType")
+  @join__type(graph: EMPLOYEES)
+{
+  departments: [Department!]!
+  title: [String!]!
+  employees: [Employee!]!
+}
+
+type MBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnMBigObject: String!
+  bFieldOnMBigObject: Int!
+  cFieldOnMBigObject: Boolean!
+  dFieldOnMBigObject: Float!
+  eFieldOnMBigObject: String!
+  fFieldOnMBigObject: Int!
+  gFieldOnMBigObject: Boolean!
+  hFieldOnMBigObject: Float!
+  iFieldOnMBigObject: String!
+  jFieldOnMBigObject: Int!
+  kFieldOnMBigObject: Boolean!
+  lFieldOnMBigObject: Float!
+  mFieldOnMBigObject: String!
+  nFieldOnMBigObject: Int!
+  oFieldOnMBigObject: Boolean!
+  pFieldOnMBigObject: Float!
+  qFieldOnMBigObject: String!
+  rFieldOnMBigObject: Int!
+  sFieldOnMBigObject: Boolean!
+  tFieldOnMBigObject: Float!
+  uFieldOnMBigObject: String!
+  vFieldOnMBigObject: Int!
+  wFieldOnMBigObject: Boolean!
+  xFieldOnMBigObject: Float!
+  yFieldOnMBigObject: String!
+  zFieldOnMBigObject: Int!
+}
+
+type MiscellaneousFact implements TopSecretFact
+  @join__implements(graph: PRODUCTS, interface: "TopSecretFact")
+  @join__type(graph: PRODUCTS)
+{
+  title: String!
+  description: FactContent! @requiresScopes(scopes: [["read:miscellaneous"]])
+  factType: TopSecretFactType
+}
+
+enum Mood
+  @join__type(graph: EMPLOYEES)
+  @join__type(graph: MOOD)
+{
+  HAPPY @join__enumValue(graph: EMPLOYEES) @join__enumValue(graph: MOOD)
+  SAD @join__enumValue(graph: EMPLOYEES) @join__enumValue(graph: MOOD)
+}
+
+type Mouse implements Pet & Animal
+  @join__implements(graph: FAMILY, interface: "Pet")
+  @join__implements(graph: FAMILY, interface: "Animal")
+  @join__type(graph: FAMILY)
+{
+  class: Class!
+  gender: Gender!
+  name: String!
+}
+
+type Mutation
+  @join__type(graph: AVAILABILITY)
+  @join__type(graph: EMPLOYEES)
+  @join__type(graph: MOOD)
+  @join__type(graph: PRODUCTS)
+{
+  updateAvailability(employeeID: Int!, isAvailable: Boolean!): Employee! @join__field(graph: AVAILABILITY)
+  updateEmployeeTag(id: Int!, tag: String!): Employee @join__field(graph: EMPLOYEES)
+  singleUpload(file: Upload!): Boolean! @join__field(graph: EMPLOYEES)
+  multipleUpload(files: [Upload!]!): Boolean! @join__field(graph: EMPLOYEES)
+  updateMood(employeeID: Int!, mood: Mood!): Employee! @join__field(graph: MOOD)
+  addFact(fact: TopSecretFactInput!): TopSecretFact! @join__field(graph: PRODUCTS) @requiresScopes(scopes: [["write:fact"], ["write:all"]])
+}
+
+enum Nationality
+  @join__type(graph: FAMILY)
+{
+  AMERICAN @join__enumValue(graph: FAMILY)
+  DUTCH @join__enumValue(graph: FAMILY)
+  ENGLISH @join__enumValue(graph: FAMILY)
+  GERMAN @join__enumValue(graph: FAMILY)
+  INDIAN @join__enumValue(graph: FAMILY)
+  SPANISH @join__enumValue(graph: FAMILY)
+  UKRAINIAN @join__enumValue(graph: FAMILY)
+}
+
+type NBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnNBigObject: String!
+  bFieldOnNBigObject: Int!
+  cFieldOnNBigObject: Boolean!
+  dFieldOnNBigObject: Float!
+  eFieldOnNBigObject: String!
+  fFieldOnNBigObject: Int!
+  gFieldOnNBigObject: Boolean!
+  hFieldOnNBigObject: Float!
+  iFieldOnNBigObject: String!
+  jFieldOnNBigObject: Int!
+  kFieldOnNBigObject: Boolean!
+  lFieldOnNBigObject: Float!
+  mFieldOnNBigObject: String!
+  nFieldOnNBigObject: Int!
+  oFieldOnNBigObject: Boolean!
+  pFieldOnNBigObject: Float!
+  qFieldOnNBigObject: String!
+  rFieldOnNBigObject: Int!
+  sFieldOnNBigObject: Boolean!
+  tFieldOnNBigObject: Float!
+  uFieldOnNBigObject: String!
+  vFieldOnNBigObject: Int!
+  wFieldOnNBigObject: Boolean!
+  xFieldOnNBigObject: Float!
+  yFieldOnNBigObject: String!
+  zFieldOnNBigObject: Int!
+}
+
+type NestedObject
+  @join__type(graph: TEST1)
+{
   deeplyNestedObjects: [DeeplyNestedObject!]!
+}
+
+input NestedSearchInput
+  @join__type(graph: FAMILY)
+{
+  maritalStatus: MaritalStatus
+  hasChildren: Boolean
+}
+
+type OBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnOBigObject: String!
+  bFieldOnOBigObject: Int!
+  cFieldOnOBigObject: Boolean!
+  dFieldOnOBigObject: Float!
+  eFieldOnOBigObject: String!
+  fFieldOnOBigObject: Int!
+  gFieldOnOBigObject: Boolean!
+  hFieldOnOBigObject: Float!
+  iFieldOnOBigObject: String!
+  jFieldOnOBigObject: Int!
+  kFieldOnOBigObject: Boolean!
+  lFieldOnOBigObject: Float!
+  mFieldOnOBigObject: String!
+  nFieldOnOBigObject: Int!
+  oFieldOnOBigObject: Boolean!
+  pFieldOnOBigObject: Float!
+  qFieldOnOBigObject: String!
+  rFieldOnOBigObject: Int!
+  sFieldOnOBigObject: Boolean!
+  tFieldOnOBigObject: Float!
+  uFieldOnOBigObject: String!
+  vFieldOnOBigObject: Int!
+  wFieldOnOBigObject: Boolean!
+  xFieldOnOBigObject: Float!
+  yFieldOnOBigObject: String!
+  zFieldOnOBigObject: Int!
+}
+
+enum OperationType
+  @join__type(graph: EMPLOYEES)
+{
+  FINANCE @join__enumValue(graph: EMPLOYEES)
+  HUMAN_RESOURCES @join__enumValue(graph: EMPLOYEES)
 }
 
 type Operator implements RoleType
   @join__implements(graph: EMPLOYEES, interface: "RoleType")
-  @join__type(graph: EMPLOYEES) {
+  @join__type(graph: EMPLOYEES)
+{
   departments: [Department!]!
   title: [String!]!
   employees: [Employee!]!
   operatorType: [OperationType!]!
 }
 
-type Marketer implements RoleType
-  @join__implements(graph: EMPLOYEES, interface: "RoleType")
-  @join__type(graph: EMPLOYEES) {
-  departments: [Department!]!
-  title: [String!]!
+type Other implements Hobby
+  @join__implements(graph: HOBBIES, interface: "Hobby")
+  @join__type(graph: HOBBIES)
+{
+  employees: [Employee!]!
+  name: String!
+}
+
+type PBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnPBigObject: String!
+  bFieldOnPBigObject: Int!
+  cFieldOnPBigObject: Boolean!
+  dFieldOnPBigObject: Float!
+  eFieldOnPBigObject: String!
+  fFieldOnPBigObject: Int!
+  gFieldOnPBigObject: Boolean!
+  hFieldOnPBigObject: Float!
+  iFieldOnPBigObject: String!
+  jFieldOnPBigObject: Int!
+  kFieldOnPBigObject: Boolean!
+  lFieldOnPBigObject: Float!
+  mFieldOnPBigObject: String!
+  nFieldOnPBigObject: Int!
+  oFieldOnPBigObject: Boolean!
+  pFieldOnPBigObject: Float!
+  qFieldOnPBigObject: String!
+  rFieldOnPBigObject: Int!
+  sFieldOnPBigObject: Boolean!
+  tFieldOnPBigObject: Float!
+  uFieldOnPBigObject: String!
+  vFieldOnPBigObject: Int!
+  wFieldOnPBigObject: Boolean!
+  xFieldOnPBigObject: Float!
+  yFieldOnPBigObject: String!
+  zFieldOnPBigObject: Int!
+}
+
+interface Pet implements Animal
+  @join__implements(graph: FAMILY, interface: "Animal")
+  @join__type(graph: FAMILY)
+{
+  class: Class!
+  gender: Gender!
+  name: String!
+}
+
+type Pony implements Pet & Animal
+  @join__implements(graph: FAMILY, interface: "Pet")
+  @join__implements(graph: FAMILY, interface: "Animal")
+  @join__type(graph: FAMILY)
+{
+  class: Class!
+  gender: Gender!
+  name: String!
+}
+
+enum ProductName
+  @join__type(graph: PRODUCTS)
+{
+  CONSULTANCY @join__enumValue(graph: PRODUCTS)
+  COSMO @join__enumValue(graph: PRODUCTS)
+  ENGINE @join__enumValue(graph: PRODUCTS)
+  FINANCE @join__enumValue(graph: PRODUCTS)
+  HUMAN_RESOURCES @join__enumValue(graph: PRODUCTS)
+  MARKETING @join__enumValue(graph: PRODUCTS)
+  SDK @join__enumValue(graph: PRODUCTS)
+}
+
+union Products
+  @join__type(graph: EMPLOYEES)
+  @join__type(graph: PRODUCTS)
+  @join__unionMember(graph: EMPLOYEES, member: "Consultancy")
+  @join__unionMember(graph: PRODUCTS, member: "Consultancy")
+  @join__unionMember(graph: EMPLOYEES, member: "Cosmo")
+  @join__unionMember(graph: PRODUCTS, member: "Cosmo")
+  @join__unionMember(graph: EMPLOYEES, member: "SDK")
+  @join__unionMember(graph: PRODUCTS, member: "Documentation")
+ = Consultancy | Cosmo | SDK | Documentation
+
+type Programming implements Hobby
+  @join__implements(graph: HOBBIES, interface: "Hobby")
+  @join__type(graph: HOBBIES)
+{
+  employees: [Employee!]!
+  languages: [ProgrammingLanguage!]!
+}
+
+enum ProgrammingLanguage
+  @join__type(graph: HOBBIES)
+{
+  CSHARP @join__enumValue(graph: HOBBIES)
+  GO @join__enumValue(graph: HOBBIES)
+  RUST @join__enumValue(graph: HOBBIES)
+  TYPESCRIPT @join__enumValue(graph: HOBBIES)
+}
+
+type QBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnQBigObject: String!
+  bFieldOnQBigObject: Int!
+  cFieldOnQBigObject: Boolean!
+  dFieldOnQBigObject: Float!
+  eFieldOnQBigObject: String!
+  fFieldOnQBigObject: Int!
+  gFieldOnQBigObject: Boolean!
+  hFieldOnQBigObject: Float!
+  iFieldOnQBigObject: String!
+  jFieldOnQBigObject: Int!
+  kFieldOnQBigObject: Boolean!
+  lFieldOnQBigObject: Float!
+  mFieldOnQBigObject: String!
+  nFieldOnQBigObject: Int!
+  oFieldOnQBigObject: Boolean!
+  pFieldOnQBigObject: Float!
+  qFieldOnQBigObject: String!
+  rFieldOnQBigObject: Int!
+  sFieldOnQBigObject: Boolean!
+  tFieldOnQBigObject: Float!
+  uFieldOnQBigObject: String!
+  vFieldOnQBigObject: Int!
+  wFieldOnQBigObject: Boolean!
+  xFieldOnQBigObject: Float!
+  yFieldOnQBigObject: String!
+  zFieldOnQBigObject: Int!
+}
+
+type Query
+  @join__type(graph: AVAILABILITY)
+  @join__type(graph: EMPLOYEES)
+  @join__type(graph: FAMILY)
+  @join__type(graph: HOBBIES)
+  @join__type(graph: MOOD)
+  @join__type(graph: PRODUCTS)
+  @join__type(graph: TEST1)
+{
+  employee(id: Int!): Employee @join__field(graph: EMPLOYEES)
+  employeeAsList(id: Int!): [Employee] @join__field(graph: EMPLOYEES)
+  employees: [Employee] @join__field(graph: EMPLOYEES)
+  products: [Products!]! @join__field(graph: EMPLOYEES)
+  teammates(team: Department!): [Employee!]! @join__field(graph: EMPLOYEES)
+  firstEmployee: Employee! @join__field(graph: EMPLOYEES) @tag(name: "internal")
+  findEmployees(criteria: SearchInput): [Employee!]! @join__field(graph: FAMILY)
+  productTypes: [Products!]! @join__field(graph: PRODUCTS)
+  topSecretFederationFacts: [TopSecretFact!]! @join__field(graph: PRODUCTS) @requiresScopes(scopes: [["read:fact"], ["read:all"]])
+  factTypes: [TopSecretFactType!] @join__field(graph: PRODUCTS)
+
+  """Returns the value of the received HTTP header."""
+  headerValue(name: String!): String! @join__field(graph: TEST1)
+
+  """Returns the value of the given key in the WS initial payload."""
+  initPayloadValue(key: String!): String! @join__field(graph: TEST1)
+  initialPayload: Map @join__field(graph: TEST1)
+
+  """Returns response after the given delay"""
+  delay(response: String!, ms: Int!): String! @join__field(graph: TEST1)
+  bigResponse(artificialDelay: Int! = 0, bigObjects: Int! = 100, nestedObjects: Int! = 100, deeplyNestedObjects: Int! = 100): [BigObject!]! @join__field(graph: TEST1)
+  bigAbstractResponse: BigAbstractResponse @join__field(graph: TEST1)
+  rootFieldWithListArg(arg: [String!]!): [String!]! @join__field(graph: TEST1)
+  rootFieldWithNestedListArg(arg: [[String!]!]!): [[String!]!]! @join__field(graph: TEST1)
+  rootFieldWithListOfInputArg(arg: [InputType!]!): [InputResponse!]! @join__field(graph: TEST1)
+  rootFieldWithListOfEnumArg(arg: [EnumType!]!): [EnumType!]! @join__field(graph: TEST1)
+  rootFieldWithInput(arg: InputArg!): String! @join__field(graph: TEST1)
+}
+
+type RBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnRBigObject: String!
+  bFieldOnRBigObject: Int!
+  cFieldOnRBigObject: Boolean!
+  dFieldOnRBigObject: Float!
+  eFieldOnRBigObject: String!
+  fFieldOnRBigObject: Int!
+  gFieldOnRBigObject: Boolean!
+  hFieldOnRBigObject: Float!
+  iFieldOnRBigObject: String!
+  jFieldOnRBigObject: Int!
+  kFieldOnRBigObject: Boolean!
+  lFieldOnRBigObject: Float!
+  mFieldOnRBigObject: String!
+  nFieldOnRBigObject: Int!
+  oFieldOnRBigObject: Boolean!
+  pFieldOnRBigObject: Float!
+  qFieldOnRBigObject: String!
+  rFieldOnRBigObject: Int!
+  sFieldOnRBigObject: Boolean!
+  tFieldOnRBigObject: Float!
+  uFieldOnRBigObject: String!
+  vFieldOnRBigObject: Int!
+  wFieldOnRBigObject: Boolean!
+  xFieldOnRBigObject: Float!
+  yFieldOnRBigObject: String!
+  zFieldOnRBigObject: Int!
 }
 
 scalar requiresScopes__Scope
 
-interface RoleType @join__type(graph: EMPLOYEES) {
+interface RoleType
+  @join__type(graph: EMPLOYEES)
+{
   departments: [Department!]!
   title: [String!]!
   employees: [Employee!]!
+}
+
+type SBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnSBigObject: String!
+  bFieldOnSBigObject: Int!
+  cFieldOnSBigObject: Boolean!
+  dFieldOnSBigObject: Float!
+  eFieldOnSBigObject: String!
+  fFieldOnSBigObject: Int!
+  gFieldOnSBigObject: Boolean!
+  hFieldOnSBigObject: Float!
+  iFieldOnSBigObject: String!
+  jFieldOnSBigObject: Int!
+  kFieldOnSBigObject: Boolean!
+  lFieldOnSBigObject: Float!
+  mFieldOnSBigObject: String!
+  nFieldOnSBigObject: Int!
+  oFieldOnSBigObject: Boolean!
+  pFieldOnSBigObject: Float!
+  qFieldOnSBigObject: String!
+  rFieldOnSBigObject: Int!
+  sFieldOnSBigObject: Boolean!
+  tFieldOnSBigObject: Float!
+  uFieldOnSBigObject: String!
+  vFieldOnSBigObject: Int!
+  wFieldOnSBigObject: Boolean!
+  xFieldOnSBigObject: Float!
+  yFieldOnSBigObject: String!
+  zFieldOnSBigObject: Int!
+}
+
+type SDK implements IProduct
+  @join__implements(graph: EMPLOYEES, interface: "IProduct")
+  @join__type(graph: EMPLOYEES, key: "upc")
+  @join__type(graph: HOBBIES, key: "upc")
+{
+  upc: ID!
+  engineers: [Employee!]! @join__field(graph: EMPLOYEES)
+  owner: Employee! @join__field(graph: EMPLOYEES)
+  unicode: String! @join__field(graph: EMPLOYEES)
+  clientLanguages: [ProgrammingLanguage!]! @join__field(graph: HOBBIES)
+}
+
+input SearchInput
+  @join__type(graph: FAMILY)
+{
+  hasPets: Boolean
+  nationality: Nationality
+  nested: NestedSearchInput
+}
+
+type Subscription
+  @join__type(graph: EMPLOYEES)
+  @join__type(graph: HOBBIES)
+  @join__type(graph: TEST1)
+{
+  """`currentTime` will return a stream of `Time` objects."""
+  currentTime: Time! @join__field(graph: EMPLOYEES)
+  countEmp(max: Int!, intervalMilliseconds: Int!): Int! @join__field(graph: EMPLOYEES)
+  countEmp2(max: Int!, intervalMilliseconds: Int!): Int! @join__field(graph: EMPLOYEES)
+  countHob(max: Int!, intervalMilliseconds: Int!): Int! @join__field(graph: HOBBIES)
+
+  """Returns a stream with the value of the received HTTP header."""
+  headerValue(name: String!, repeat: Int): TimestampedString! @join__field(graph: TEST1)
+
+  """
+  Returns a stream with the value of value of the given key in the WS initial payload.
+  """
+  initPayloadValue(key: String!, repeat: Int): TimestampedString! @join__field(graph: TEST1)
+
+  """Returns a stream with the value of the WS initial payload."""
+  initialPayload(repeat: Int): Map @join__field(graph: TEST1)
+  returnsError: String @join__field(graph: TEST1)
+}
+
+type TBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnTBigObject: String!
+  bFieldOnTBigObject: Int!
+  cFieldOnTBigObject: Boolean!
+  dFieldOnTBigObject: Float!
+  eFieldOnTBigObject: String!
+  fFieldOnTBigObject: Int!
+  gFieldOnTBigObject: Boolean!
+  hFieldOnTBigObject: Float!
+  iFieldOnTBigObject: String!
+  jFieldOnTBigObject: Int!
+  kFieldOnTBigObject: Boolean!
+  lFieldOnTBigObject: Float!
+  mFieldOnTBigObject: String!
+  nFieldOnTBigObject: Int!
+  oFieldOnTBigObject: Boolean!
+  pFieldOnTBigObject: Float!
+  qFieldOnTBigObject: String!
+  rFieldOnTBigObject: Int!
+  sFieldOnTBigObject: Boolean!
+  tFieldOnTBigObject: Float!
+  uFieldOnTBigObject: String!
+  vFieldOnTBigObject: Int!
+  wFieldOnTBigObject: Boolean!
+  xFieldOnTBigObject: Float!
+  yFieldOnTBigObject: String!
+  zFieldOnTBigObject: Int!
+}
+
+type Time
+  @join__type(graph: EMPLOYEES)
+{
+  unixTime: Int!
+  timeStamp: String!
+}
+
+type TimestampedString
+  @join__type(graph: TEST1)
+{
+  """The value of the string."""
+  value: String!
+
+  """The timestamp when the response was generated."""
+  unixTime: Int!
+
+  """Sequence number"""
+  seq: Int!
+
+  """Total number of responses to be sent"""
+  total: Int!
+  initialPayload: Map
+}
+
+interface TopSecretFact
+  @join__type(graph: PRODUCTS)
+  @authenticated
+{
+  description: FactContent!
+  factType: TopSecretFactType
+}
+
+input TopSecretFactInput
+  @join__type(graph: PRODUCTS)
+{
+  title: String!
+  description: FactContent!
+  factType: TopSecretFactType!
+}
+
+enum TopSecretFactType
+  @join__type(graph: PRODUCTS)
+  @authenticated
+{
+  DIRECTIVE @join__enumValue(graph: PRODUCTS)
+  ENTITY @join__enumValue(graph: PRODUCTS)
+  MISCELLANEOUS @join__enumValue(graph: PRODUCTS)
+}
+
+type Travelling implements Hobby
+  @join__implements(graph: HOBBIES, interface: "Hobby")
+  @join__type(graph: HOBBIES)
+{
+  employees: [Employee!]!
+  countriesLived: [Country!]!
+}
+
+type UBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnUBigObject: String!
+  bFieldOnUBigObject: Int!
+  cFieldOnUBigObject: Boolean!
+  dFieldOnUBigObject: Float!
+  eFieldOnUBigObject: String!
+  fFieldOnUBigObject: Int!
+  gFieldOnUBigObject: Boolean!
+  hFieldOnUBigObject: Float!
+  iFieldOnUBigObject: String!
+  jFieldOnUBigObject: Int!
+  kFieldOnUBigObject: Boolean!
+  lFieldOnUBigObject: Float!
+  mFieldOnUBigObject: String!
+  nFieldOnUBigObject: Int!
+  oFieldOnUBigObject: Boolean!
+  pFieldOnUBigObject: Float!
+  qFieldOnUBigObject: String!
+  rFieldOnUBigObject: Int!
+  sFieldOnUBigObject: Boolean!
+  tFieldOnUBigObject: Float!
+  uFieldOnUBigObject: String!
+  vFieldOnUBigObject: Int!
+  wFieldOnUBigObject: Boolean!
+  xFieldOnUBigObject: Float!
+  yFieldOnUBigObject: String!
+  zFieldOnUBigObject: Int!
+}
+
+scalar Upload
+  @join__type(graph: EMPLOYEES)
+
+type VBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnVBigObject: String!
+  bFieldOnVBigObject: Int!
+  cFieldOnVBigObject: Boolean!
+  dFieldOnVBigObject: Float!
+  eFieldOnVBigObject: String!
+  fFieldOnVBigObject: Int!
+  gFieldOnVBigObject: Boolean!
+  hFieldOnVBigObject: Float!
+  iFieldOnVBigObject: String!
+  jFieldOnVBigObject: Int!
+  kFieldOnVBigObject: Boolean!
+  lFieldOnVBigObject: Float!
+  mFieldOnVBigObject: String!
+  nFieldOnVBigObject: Int!
+  oFieldOnVBigObject: Boolean!
+  pFieldOnVBigObject: Float!
+  qFieldOnVBigObject: String!
+  rFieldOnVBigObject: Int!
+  sFieldOnVBigObject: Boolean!
+  tFieldOnVBigObject: Float!
+  uFieldOnVBigObject: String!
+  vFieldOnVBigObject: Int!
+  wFieldOnVBigObject: Boolean!
+  xFieldOnVBigObject: Float!
+  yFieldOnVBigObject: String!
+  zFieldOnVBigObject: Int!
+}
+
+type WBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnWBigObject: String!
+  bFieldOnWBigObject: Int!
+  cFieldOnWBigObject: Boolean!
+  dFieldOnWBigObject: Float!
+  eFieldOnWBigObject: String!
+  fFieldOnWBigObject: Int!
+  gFieldOnWBigObject: Boolean!
+  hFieldOnWBigObject: Float!
+  iFieldOnWBigObject: String!
+  jFieldOnWBigObject: Int!
+  kFieldOnWBigObject: Boolean!
+  lFieldOnWBigObject: Float!
+  mFieldOnWBigObject: String!
+  nFieldOnWBigObject: Int!
+  oFieldOnWBigObject: Boolean!
+  pFieldOnWBigObject: Float!
+  qFieldOnWBigObject: String!
+  rFieldOnWBigObject: Int!
+  sFieldOnWBigObject: Boolean!
+  tFieldOnWBigObject: Float!
+  uFieldOnWBigObject: String!
+  vFieldOnWBigObject: Int!
+  wFieldOnWBigObject: Boolean!
+  xFieldOnWBigObject: Float!
+  yFieldOnWBigObject: String!
+  zFieldOnWBigObject: Int!
+}
+
+type XBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnXBigObject: String!
+  bFieldOnXBigObject: Int!
+  cFieldOnXBigObject: Boolean!
+  dFieldOnXBigObject: Float!
+  eFieldOnXBigObject: String!
+  fFieldOnXBigObject: Int!
+  gFieldOnXBigObject: Boolean!
+  hFieldOnXBigObject: Float!
+  iFieldOnXBigObject: String!
+  jFieldOnXBigObject: Int!
+  kFieldOnXBigObject: Boolean!
+  lFieldOnXBigObject: Float!
+  mFieldOnXBigObject: String!
+  nFieldOnXBigObject: Int!
+  oFieldOnXBigObject: Boolean!
+  pFieldOnXBigObject: Float!
+  qFieldOnXBigObject: String!
+  rFieldOnXBigObject: Int!
+  sFieldOnXBigObject: Boolean!
+  tFieldOnXBigObject: Float!
+  uFieldOnXBigObject: String!
+  vFieldOnXBigObject: Int!
+  wFieldOnXBigObject: Boolean!
+  xFieldOnXBigObject: Float!
+  yFieldOnXBigObject: String!
+  zFieldOnXBigObject: Int!
+}
+
+type YBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnYBigObject: String!
+  bFieldOnYBigObject: Int!
+  cFieldOnYBigObject: Boolean!
+  dFieldOnYBigObject: Float!
+  eFieldOnYBigObject: String!
+  fFieldOnYBigObject: Int!
+  gFieldOnYBigObject: Boolean!
+  hFieldOnYBigObject: Float!
+  iFieldOnYBigObject: String!
+  jFieldOnYBigObject: Int!
+  kFieldOnYBigObject: Boolean!
+  lFieldOnYBigObject: Float!
+  mFieldOnYBigObject: String!
+  nFieldOnYBigObject: Int!
+  oFieldOnYBigObject: Boolean!
+  pFieldOnYBigObject: Float!
+  qFieldOnYBigObject: String!
+  rFieldOnYBigObject: Int!
+  sFieldOnYBigObject: Boolean!
+  tFieldOnYBigObject: Float!
+  uFieldOnYBigObject: String!
+  vFieldOnYBigObject: Int!
+  wFieldOnYBigObject: Boolean!
+  xFieldOnYBigObject: Float!
+  yFieldOnYBigObject: String!
+  zFieldOnYBigObject: Int!
+}
+
+type ZBigObject
+  @join__type(graph: TEST1)
+{
+  aFieldOnZBigObject: String!
+  bFieldOnZBigObject: Int!
+  cFieldOnZBigObject: Boolean!
+  dFieldOnZBigObject: Float!
+  eFieldOnZBigObject: String!
+  fFieldOnZBigObject: Int!
+  gFieldOnZBigObject: Boolean!
+  hFieldOnZBigObject: Float!
+  iFieldOnZBigObject: String!
+  jFieldOnZBigObject: Int!
+  kFieldOnZBigObject: Boolean!
+  lFieldOnZBigObject: Float!
+  mFieldOnZBigObject: String!
+  nFieldOnZBigObject: Int!
+  oFieldOnZBigObject: Boolean!
+  pFieldOnZBigObject: Float!
+  qFieldOnZBigObject: String!
+  rFieldOnZBigObject: Int!
+  sFieldOnZBigObject: Boolean!
+  tFieldOnZBigObject: Float!
+  uFieldOnZBigObject: String!
+  vFieldOnZBigObject: Int!
+  wFieldOnZBigObject: Boolean!
+  xFieldOnZBigObject: Float!
+  yFieldOnZBigObject: String!
+  zFieldOnZBigObject: Int!
 }
