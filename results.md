@@ -1,12 +1,12 @@
 | Server | 112,838 bytes | 12598 bytes | 362 bytes |
 | ---: | ---: | ---: | ---: |
-| [Nginx](https://nginx.org/en/) | `4,997 RPS` | `10,487 RPS` | `12,041 RPS` |
+| [Nginx](https://nginx.org/en/) | `4,981 RPS` | `11,349 RPS` | `12,129 RPS` |
 | **Base** | | | |
-| [Tailcall](https://github.com/tailcallhq/tailcall) | `3,227 RPS` | `10,013 RPS` | `17,658 RPS` |
-| [Grafbase](https://github.com/grafbase/grafbase) | `58,899 RPS` | `59,910 RPS` | `57,962 RPS` |
-| [Wundegraph](https://github.com/wundergraph/cosmo) | `2,177 RPS` | `3,643 RPS` | `6,963 RPS` |
-| [Apollo](https://github.com/apollographql/router) | `60,552 RPS` | `60,239 RPS` | `59,123 RPS` |
+| [Tailcall](https://github.com/tailcallhq/tailcall) | `3,246 RPS` | `10,134 RPS` | `16,957 RPS` |
+| [Grafbase](https://github.com/grafbase/grafbase) | `3,764 RPS` | `8,159 RPS` | `9,986 RPS` |
+| [Wundegraph](https://github.com/wundergraph/cosmo) | `2,156 RPS` | `3,643 RPS` | `7,030 RPS` |
+| [Apollo](https://github.com/apollographql/router) | `2,434 RPS` | `4,018 RPS` | `4,827 RPS` |
 | **Cached** | | | |
-| [Tailcall](https://github.com/tailcallhq/tailcall) | `17,650 RPS` | `30,278 RPS` | `41,337 RPS` |
-| [Grafbase](https://github.com/grafbase/grafbase) | `59,412 RPS` | `59,013 RPS` | `58,773 RPS` |
-| [Wundegraph](https://github.com/wundergraph/cosmo) | `2,939 RPS` | `6,372 RPS` | `10,815 RPS` |
+| [Tailcall](https://github.com/tailcallhq/tailcall) | `17,889 RPS` | `30,484 RPS` | `42,490 RPS` |
+| [Grafbase](https://github.com/grafbase/grafbase) | `4,633 RPS` | `11,626 RPS` | `16,408 RPS` |
+| [Wundegraph](https://github.com/wundergraph/cosmo) | `2,920 RPS` | `6,251 RPS` | `10,799 RPS` |
