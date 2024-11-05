@@ -84,6 +84,8 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create "output.log" file
+        run: touch "output.log"
       - id: benchmark
         name: Benchmark
         uses: addnab/docker-run-action@v3
