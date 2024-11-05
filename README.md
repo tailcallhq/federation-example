@@ -44,7 +44,7 @@ sudo docker run tailcallhq/federation-benchmark:latest ./benchmark_all.sh
 
 ## Architecture
 
-TODO: add information
+![image info](./files/diagram.png)
 
 ### Query
 
@@ -64,6 +64,7 @@ query {
     }
   }
 }
+```
 
 ## Setup
 
