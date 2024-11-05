@@ -112,14 +112,14 @@ jobs:
         run: |
           echo "| Server | 112,838 bytes | 12598 bytes | 362 bytes |"
           echo "| --- | --- | --- | --- |"
-          echo "| Nginx Default | ${{ needs.benchmark.extract_rps.big_nginx_graphql_rps }} | ${{ needs.benchmark.extract_rps.medium_nginx_graphql_rps }} | ${{ needs.benchmark.extract_rps.small_nginx_graphql_rps }} |"
+          echo "| Nginx Default | ${{ needs.benchmark.extract_rps.outputs.big_nginx_graphql_rps }} | ${{ needs.benchmark.extract_rps.outputs.medium_nginx_graphql_rps }} | ${{ needs.benchmark.extract_rps.outputs.small_nginx_graphql_rps }} |"
           echo "| Base | --- | --- | --- |"
-          echo "| Tailcall | ${{ needs.benchmark.extract_rps.big_tailcall_default_rps }} | ${{ needs.benchmark.extract_rps.medium_tailcall_default_rps }} | ${{ needs.benchmark.extract_rps.small_tailcall_default_rps }} |"
-          echo "| Grafbase | ${{ needs.benchmark.extract_rps.big_grafbase_default_rps }} | ${{ needs.benchmark.extract_rps.medium_grafbase_default_rps }} | ${{ needs.benchmark.extract_rps.small_grafbase_default_rps }} |"
-          echo "| Wundegraph | ${{ needs.benchmark.extract_rps.big_wundergraph_no_opt_rps }} | ${{ needs.benchmark.extract_rps.medium_wundergraph_no_opt_rps }} | ${{ needs.benchmark.extract_rps.small_wundergraph_no_opt_rps }} |"
-          echo "| Apollo | ${{ needs.benchmark.extract_rps.big_apollo_router_rps }} | ${{ needs.benchmark.extract_rps.medium_apollo_router_rps }} | ${{ needs.benchmark.extract_rps.small_apollo_router_rps }} |"
+          echo "| Tailcall | ${{ needs.benchmark.extract_rps.outputs.big_tailcall_default_rps }} | ${{ needs.benchmark.extract_rps.outputs.medium_tailcall_default_rps }} | ${{ needs.benchmark.extract_rps.outputs.small_tailcall_default_rps }} |"
+          echo "| Grafbase | ${{ needs.benchmark.extract_rps.outputs.big_grafbase_default_rps }} | ${{ needs.benchmark.extract_rps.outputs.medium_grafbase_default_rps }} | ${{ needs.benchmark.extract_rps.outputs.small_grafbase_default_rps }} |"
+          echo "| Wundegraph | ${{ needs.benchmark.extract_rps.outputs.big_wundergraph_no_opt_rps }} | ${{ needs.benchmark.extract_rps.outputs.medium_wundergraph_no_opt_rps }} | ${{ needs.benchmark.extract_rps.outputs.small_wundergraph_no_opt_rps }} |"
+          echo "| Apollo | ${{ needs.benchmark.extract_rps.outputs.big_apollo_router_rps }} | ${{ needs.benchmark.extract_rps.outputs.medium_apollo_router_rps }} | ${{ needs.benchmark.extract_rps.outputs.small_apollo_router_rps }} |"
           echo "| Cached | --- | --- | --- |"
-          echo "| Tailcall | ${{ needs.benchmark.extract_rps.big_tailcall_full_conf_rps }} | ${{ needs.benchmark.extract_rps.medium_tailcall_full_conf_rps }} | ${{ needs.benchmark.extract_rps.small_tailcall_full_conf_rps }} |"
-          echo "| Grafbase Cache | ${{ needs.benchmark.extract_rps.big_grafbase_cache_rps }} | ${{ needs.benchmark.extract_rps.medium_grafbase_cache_rps }} | ${{ needs.benchmark.extract_rps.small_grafbase_cache_rps }} |"
-          echo "| Wundegraph Ludicrous | ${{ needs.benchmark.extract_rps.big_wundergraph_default_rps }} | ${{ needs.benchmark.extract_rps.medium_wundergraph_default_rps }} | ${{ needs.benchmark.extract_rps.small_wundergraph_default_rps }} |" \
+          echo "| Tailcall | ${{ needs.benchmark.extract_rps.outputs.big_tailcall_full_conf_rps }} | ${{ needs.benchmark.extract_rps.outputs.medium_tailcall_full_conf_rps }} | ${{ needs.benchmark.extract_rps.outputs.small_tailcall_full_conf_rps }} |"
+          echo "| Grafbase Cache | ${{ needs.benchmark.extract_rps.outputs.big_grafbase_cache_rps }} | ${{ needs.benchmark.extract_rps.outputs.medium_grafbase_cache_rps }} | ${{ needs.benchmark.extract_rps.outputs.small_grafbase_cache_rps }} |"
+          echo "| Wundegraph Ludicrous | ${{ needs.benchmark.extract_rps.outputs.big_wundergraph_default_rps }} | ${{ needs.benchmark.extract_rps.outputs.medium_wundergraph_default_rps }} | ${{ needs.benchmark.extract_rps.outputs.small_wundergraph_default_rps }} |" \
           | tee -a "$GITHUB_STEP_SUMMARY"
