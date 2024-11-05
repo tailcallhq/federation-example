@@ -97,7 +97,7 @@ jobs:
       - name: Extract Requests Per Second
         id: extract_rps
         run: |
-          RPS=$(grep "Requests/sec:" ${{ github.workspace }}/output.log | awk '{printf "%,d\n", $2}')
+          RPS=$(grep "Requests/sec:" ${{ github.workspace }}/output.log | awk '{printf "%\047d\n", int($2)}')
           echo "${{ matrix.response }}_${{ matrix.service }}_rps=${RPS}" | tee -a "$GITHUB_OUTPUT"
     outputs:
       big_nginx_graphql: ${{ steps.extract_rps.outputs.big_nginx_graphql_rps }}
@@ -173,4 +173,4 @@ jobs:
           commit_author: Author <actions@github.com>
           commit_message: "[ci skip] update performance results in README.md"
       - name: Summarize
-        run: cat "results.md >> "$GITHUB_STEP_SUMMARY"
+        run: cat "results.md" >> "$GITHUB_STEP_SUMMARY"
