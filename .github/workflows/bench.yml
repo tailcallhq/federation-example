@@ -95,7 +95,7 @@ jobs:
       - name: Extract Requests Per Second
         id: extract_rps
         run: |
-          RPS=$(grep "Requests/sec:" ${{ github.workspace }}/output.log | awk '{print $2}')
+          RPS=$(grep "Requests/sec:" ${{ github.workspace }}/output.log | awk '{printf int($2)}')
           echo "${{ matrix.response }}_${{ matrix.service }}_rps=${RPS}" | tee -a "$GITHUB_OUTPUT"
     outputs:
       big_nginx_graphql: ${{ steps.extract_rps.outputs.big_nginx_graphql_rps }}
@@ -133,6 +133,12 @@ jobs:
     needs: benchmark
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install `termgraph`
+        run: python -m pip install termgraph
       - id: collect
         name: Collect Requests Per Second from all matrix jobs
         run: |
@@ -148,3 +154,21 @@ jobs:
           echo "| Tailcall | ${{ needs.benchmark.outputs.big_tailcall_full_conf }} | ${{ needs.benchmark.outputs.medium_tailcall_full_conf }} | ${{ needs.benchmark.outputs.small_tailcall_full_conf }} |" | tee -a "$GITHUB_STEP_SUMMARY"
           echo "| Grafbase Cache | ${{ needs.benchmark.outputs.big_grafbase_cache }} | ${{ needs.benchmark.outputs.medium_grafbase_cache }} | ${{ needs.benchmark.outputs.small_grafbase_cache }} |" | tee -a "$GITHUB_STEP_SUMMARY"
           echo "| Wundegraph Ludicrous | ${{ needs.benchmark.outputs.big_wundergraph_default }} | ${{ needs.benchmark.outputs.medium_wundergraph_default }} | ${{ needs.benchmark.outputs.small_wundergraph_default }} |" | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Prepare Plot (Basic) Data
+        run: |
+          echo -e "@ Big,Medium,Small\n" \
+          echo "Nginx Default,${{ needs.benchmark.outputs.big_nginx_graphql }},${{ needs.benchmark.outputs.medium_nginx_graphql }},${{ needs.benchmark.outputs.small_nginx_graphql }}\n" \
+          echo "Tailcall,${{ needs.benchmark.outputs.big_tailcall_default }},${{ needs.benchmark.outputs.medium_tailcall_default }},${{ needs.benchmark.outputs.small_tailcall_default }}\n" \
+          echo "Grafbase,${{ needs.benchmark.outputs.big_grafbase_default }},${{ needs.benchmark.outputs.medium_grafbase_default }},${{ needs.benchmark.outputs.small_grafbase_default }}\n" \
+          echo "Wundegraph,${{ needs.benchmark.outputs.big_wundergraph_no_opt }},${{ needs.benchmark.outputs.medium_wundergraph_no_opt }},${{ needs.benchmark.outputs.small_wundergraph_no_opt }}\n" \
+          echo "Apollo,${{ needs.benchmark.outputs.big_apollo_router }},${{ needs.benchmark.outputs.medium_apollo_router }},${{ needs.benchmark.outputs.small_apollo_router }}" | tee -a "plot1.dat"
+      - name: Prepare Plot (Cached) Data
+        run: |
+          echo -e "@ Big,Medium,Small\n" \
+          echo "Tailcall,${{ needs.benchmark.outputs.big_tailcall_full_conf }},${{ needs.benchmark.outputs.medium_tailcall_full_conf }},${{ needs.benchmark.outputs.small_tailcall_full_conf }}\n" \
+          echo "Grafbase Cache,${{ needs.benchmark.outputs.big_grafbase_cache }},${{ needs.benchmark.outputs.medium_grafbase_cache }},${{ needs.benchmark.outputs.small_grafbase_cache }}\n" \
+          echo "Wundegraph Ludicrous,${{ needs.benchmark.outputs.big_wundergraph_default }},${{ needs.benchmark.outputs.medium_wundergraph_default }},${{ needs.benchmark.outputs.small_wundergraph_default }}\n" | tee -a "plot2.dat"
+      - name: Plot (Basic) Data
+        run: termgraph plot1.dat --color {blue,red,orange} | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Plot (Cached) Data
+        run: termgraph plot2.dat --color {blue,red,orange} | tee -a "$GITHUB_STEP_SUMMARY"
