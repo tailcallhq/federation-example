@@ -39,8 +39,8 @@ jobs:
 
   benchmark:
     needs: build
-    # TODO
-    runs-on: ubuntu-latest
+    runs-on:
+      group: benchmark-runner
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
@@ -54,21 +54,21 @@ jobs:
         service:
           [
             # the theoretical maximum
-            source_graphql,
-            source_rest_api,
+            # source_graphql,
+            # source_rest_api,
             # nginx -> source: the baseline for comparison
-            nginx_graphql,
-            nginx_rest_api,
+            # nginx_graphql,
+            # nginx_rest_api,
             # tailcall configurations
             tailcall_default,
-            tailcall_tweaks,
-            tailcall_http_cache,
-            tailcall_cache_dir,
-            tailcall_dedupe_op,
+            # tailcall_tweaks,
+            # tailcall_http_cache,
+            # tailcall_cache_dir,
+            # tailcall_dedupe_op,
             tailcall_full_conf,
             # wundergraph configurations
             wundergraph_no_opt,
-            wundergraph_dedupe,
+            # wundergraph_dedupe,
             wundergraph_default,
             # apollo
             apollo_router,
@@ -83,11 +83,33 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Benchmark
+      - id: benchmark
+        name: Benchmark
         uses: addnab/docker-run-action@v3
         with:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
           image: ghcr.io/${{ github.repository_owner }}/federated-benchmark:latest
-          run: ./docker_benchmark.sh ${{ matrix.response }} ${{ matrix.service }}
+          run: ./docker_benchmark.sh ${{ matrix.response }} ${{ matrix.service }} | tee -a "output.log"
+      - name: Extract Requests Per Second
+        id: extract_rps
+        run: |
+          RPS=$(grep "Requests/sec:" output.log | awk '{print $2}')
+          echo "rps=${{ matrix.response }} ${{ matrix.service }} ${RPS}" | tee -a "$GITHUB_OUTPUT"
+  analyze:
+    needs: benchmark
+    runs-on: ubuntu-latest
+    steps:
+      - id: collect
+        name: Collect Requests Per Second from all matrix jobs
+        run: |
+          DATA=$(
+            echo "size config rps"
+            for data in "${{ needs.benchmark.outputs.rps[*] }}"; do
+              echo "${data}"
+            done
+          ) echo "data=${DATA}" | tee -a "$GITHUB_OUTPUT"
+      - id: debug
+        name: Debug data
+        run: echo ${{ steps.collect.data }} | tee -a $GITHUB_STEP_SUMMARY

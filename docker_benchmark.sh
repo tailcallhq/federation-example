@@ -36,27 +36,27 @@ elif [ "$2" = "nginx_rest_api" ]; then
     sleep 5
     hey -n 200 -z 10s -m GET -H 'Accept: application/json' -H 'Content-Type: application/json' http://127.0.0.1:$nginx_port/$1-json
 elif [ "$2" = "tailcall_default" ]; then
-    TC_LOG_LEVEL=error tailcall start ./1-basic.graphql &
+    TC_LOG_LEVEL=error ./tailcall start ./1-basic.graphql &
     sleep 5
     hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D "bench-hey-$1.json" http://127.0.0.1:8030/graphql
 elif [ "$2" = "tailcall_tweaks" ]; then
-    TC_LOG_LEVEL=error tailcall start ./2-http-tweaks.graphql &
+    TC_LOG_LEVEL=error ./tailcall start ./2-http-tweaks.graphql &
     sleep 5
     hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D "bench-hey-$1.json" http://127.0.0.1:8030/graphql
 elif [ "$2" = "tailcall_http_cache" ]; then
-    TC_LOG_LEVEL=error tailcall start ./3-http-cache.graphql &
+    TC_LOG_LEVEL=error ./tailcall start ./3-http-cache.graphql &
     sleep 5
     hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D "bench-hey-$1.json" http://127.0.0.1:8030/graphql
 elif [ "$2" = "tailcall_cache_dir" ]; then
-    TC_LOG_LEVEL=error tailcall start ./4-http-cache-directive.graphql &
+    TC_LOG_LEVEL=error ./tailcall start ./4-http-cache-directive.graphql &
     sleep 5
     hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D "bench-hey-$1.json" http://127.0.0.1:8030/graphql
 elif [ "$2" = "tailcall_dedupe_op" ]; then
-    TC_LOG_LEVEL=error tailcall start ./5-dedupe.graphql &
+    TC_LOG_LEVEL=error ./tailcall start ./5-dedupe.graphql &
     sleep 5
     hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D "bench-hey-$1.json" http://127.0.0.1:8030/graphql
 elif [ "$2" = "tailcall_full_conf" ]; then
-    TC_LOG_LEVEL=error tailcall start ./6-all.graphql &
+    TC_LOG_LEVEL=error ./tailcall start ./6-all.graphql &
     sleep 5
     hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D "bench-hey-$1.json" http://127.0.0.1:8030/graphql
 elif [ "$2" = "wundergraph_no_opt" ]; then
