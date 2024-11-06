@@ -18,18 +18,12 @@ This document presents a comparative analysis of several renowned GraphQL Federa
 ## Benchmark Results
 
 <!-- PERFORMANCE_RESULTS_START -->
-| Server | [112,838 bytes](./source/big.json)| [12598 bytes](./source/medium.json)| [362 bytes](./source/small.json) |
+| Server | [112,838 bytes](./source/big.json) status / rps / latency | [12,598 bytes](./source/medium.json) status / rps / latency | [362 bytes](./source/small.json) status / rps / latency |
 | ---: | ---: | ---: | ---: |
-| [Nginx](https://nginx.org/en/) | ` RPS` | ` RPS` | ` RPS` |
-| **Base** | | | |
-| [Tailcall](https://github.com/tailcallhq/tailcall) | ` RPS` | ` RPS` | ` RPS` |
-| [Grafbase](https://github.com/grafbase/grafbase) | ` RPS` | ` RPS` | ` RPS` |
-| [Wundegraph](https://github.com/wundergraph/cosmo) | ` RPS` | ` RPS` | ` RPS` |
-| [Apollo](https://github.com/apollographql/router) | ` RPS` | ` RPS` | ` RPS` |
-| **Cached** | | | |
-| [Tailcall](https://github.com/tailcallhq/tailcall) | ` RPS` | ` RPS` | ` RPS` |
-| [Grafbase](https://github.com/grafbase/grafbase) | ` RPS` | ` RPS` | ` RPS` |
-| [Wundegraph](https://github.com/wundergraph/cosmo) | ` RPS` | ` RPS` | ` RPS` |
+| [Nginx](https://nginx.org/en/) | `❌ / 5,042 RPS / 0.0091 sec` | `❌ / 12,155 RPS / 0.0223 sec` | `❌ / 10,140 RPS / 0.0047 sec` |
+| [Grafbase](https://github.com/grafbase/grafbase) | `❌ / 3,777 RPS / 0.009 sec` | `❌ / 9,841 RPS / 0.0545 sec` | `❌ / 3,645 RPS / 0.0131 sec` |
+| [Apollo](https://github.com/apollographql/router) | `❌ / 2,066 RPS / 0.0167 sec` | `❌ / 5,119 RPS / 0.0045 sec` | `❌ / 31,499 RPS / 0.0021 sec` |
+| [Grafbase](https://github.com/grafbase/grafbase) | `❌ / 4,586 RPS / 0.0076 sec` | `❌ / 16,269 RPS / 0.0405 sec` | `❌ / 6,681 RPS / 0.0109 sec` |
 <!-- PERFORMANCE_RESULTS_END -->
 
 ## Architecture
