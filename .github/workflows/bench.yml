@@ -301,7 +301,7 @@ jobs:
           Apollo       ${{ fromJson(needs.read.outputs.result).rps.small_apollo_router }}       ${{ fromJson(needs.read.outputs.result).rps.medium_apollo_router }}       ${{ fromJson(needs.read.outputs.result).rps.big_apollo_router }}
           EOF
       - name: Create RPS basic plot
-        run: gnuplot -e "file_name='files/rps_default.png'; title_text='RPS Default'"
+        run: gnuplot -e "file_name='files/rps_default.png'; title_text='RPS Default'" plot_script.gp
       - name: Cleanup files
         run: |
           rm "results.md"
