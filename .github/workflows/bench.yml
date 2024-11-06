@@ -275,7 +275,7 @@ jobs:
         run: |
           cat << 'EOF' > plot_script.gp
           set terminal png size 800,500 enhanced font "Arial,20"
-          set output ARG1
+          set output file_name
 
           small = "#D81B60"; medium = "#1E88E5"; big = "#FFC107";
           set yrange [0:20]
@@ -286,7 +286,7 @@ jobs:
           set xtics format ""
           set grid ytics
 
-          set title ARG2
+          set title title_text
           plot 'data.dat' using 2:xtic(1) title "Small" linecolor rgb small, \
                'data.dat' using 3 title "Medium" linecolor rgb medium, \
                'data.dat' using 4 title "Big" linecolor rgb big
@@ -301,7 +301,7 @@ jobs:
           Apollo       ${{ fromJson(needs.read.outputs.result).rps.small_apollo_router }}       ${{ fromJson(needs.read.outputs.result).rps.medium_apollo_router }}       ${{ fromJson(needs.read.outputs.result).rps.big_apollo_router }}
           EOF
       - name: Create RPS basic plot
-        run: gnuplot -c "files/rps_default.png" "RPS Default"
+        run: gnuplot -e "file_name='files/rps_default.png'" "title_text='RPS Default'"
       - name: Cleanup files
         run: |
           rm "results.md"
