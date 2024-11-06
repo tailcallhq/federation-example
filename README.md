@@ -18,42 +18,42 @@ Explore and compare the performance of the fastest GraphQL federation routers th
 ### [Small Payload - 362 bytes](./source/small.json)
 | Server | Status | RPS | Latency |
 | ---: | ---: | ---: | ---: |
-| [Nginx](https://nginx.org/en/) | ✅ | `12,234 RPS` | `0.011 sec` |
+| [Nginx](https://nginx.org/en/) | ✅ | `12,075 RPS` | `0.0091 sec` |
 | **Base** | | | |
-| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `17,442 RPS` | `0.0044 sec` |
-| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `10,527 RPS` | `0.0069 sec` |
-| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `6,879 RPS` | `0.0132 sec` |
-| [Apollo](https://github.com/apollographql/router) | ✅ | `4,599 RPS` | `0.016 sec` |
+| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `17,083 RPS` | `0.0047 sec` |
+| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `9,978 RPS` | `0.0075 sec` |
+| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `6,927 RPS` | `0.0132 sec` |
+| [Apollo](https://github.com/apollographql/router) | ✅ | `4,553 RPS` | `0.0161 sec` |
 | **Cached** | | | |
-| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `41,395 RPS` | `0.0022 sec` |
-| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `16,871 RPS` | `0.0054 sec` |
-| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `10,571 RPS` | `0.0112 sec` |
+| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `40,558 RPS` | `0.0022 sec` |
+| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `16,967 RPS` | `0.0054 sec` |
+| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `10,763 RPS` | `0.011 sec` |
 ### [Medium Payload - 12,598 bytes](./source/medium.json)
 | Server | Status | RPS | Latency |
 | ---: | ---: | ---: | ---: |
-| [Nginx](https://nginx.org/en/) | ✅ | `11,571 RPS` | `0.0107 sec` |
+| [Nginx](https://nginx.org/en/) | ✅ | `11,426 RPS` | `0.0108 sec` |
 | **Base** | | | |
-| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `10,378 RPS` | `0.007 sec` |
-| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `7,965 RPS` | `0.0093 sec` |
-| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `3,832 RPS` | `0.0212 sec` |
-| [Apollo](https://github.com/apollographql/router) | ✅ | `3,857 RPS` | `0.0193 sec` |
+| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `10,005 RPS` | `0.0074 sec` |
+| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `8,394 RPS` | `0.0086 sec` |
+| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `3,702 RPS` | `0.0224 sec` |
+| [Apollo](https://github.com/apollographql/router) | ✅ | `4,146 RPS` | `0.0181 sec` |
 | **Cached** | | | |
-| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `30,531 RPS` | `0.0029 sec` |
-| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `12,257 RPS` | `0.0069 sec` |
-| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `6,473 RPS` | `0.0172 sec` |
+| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `30,781 RPS` | `0.0028 sec` |
+| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `12,354 RPS` | `0.007 sec` |
+| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `6,339 RPS` | `0.018 sec` |
 ### [Big Payload - 112,838 bytes](./source/big.json)
 | Server | Status | RPS | Latency |
 | ---: | ---: | ---: | ---: |
-| [Nginx](https://nginx.org/en/) | ✅ | `5,065 RPS` | `0.0186 sec` |
+| [Nginx](https://nginx.org/en/) | ✅ | `5,299 RPS` | `0.0163 sec` |
 | **Base** | | | |
-| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `3,260 RPS` | `0.0224 sec` |
-| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `3,727 RPS` | `0.0201 sec` |
-| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `2,160 RPS` | `0.0557 sec` |
-| [Apollo](https://github.com/apollographql/router) | ✅ | `2,011 RPS` | `0.0384 sec` |
+| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `3,261 RPS` | `0.0225 sec` |
+| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `3,810 RPS` | `0.0198 sec` |
+| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `2,174 RPS` | `0.0546 sec` |
+| [Apollo](https://github.com/apollographql/router) | ✅ | `2,282 RPS` | `0.0326 sec` |
 | **Cached** | | | |
-| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `17,920 RPS` | `0.0044 sec` |
-| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `4,919 RPS` | `0.0171 sec` |
-| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `2,905 RPS` | `0.0408 sec` |
+| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `17,631 RPS` | `0.0045 sec` |
+| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `4,609 RPS` | `0.0188 sec` |
+| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `2,933 RPS` | `0.0394 sec` |
 <!-- PERFORMANCE_RESULTS_END -->
 
 Specifications of the machine used for benchmarking:
