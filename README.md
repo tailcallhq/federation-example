@@ -63,6 +63,14 @@ Explore and compare the performance of the fastest GraphQL federation routers th
 
 <!-- PERFORMANCE_RESULTS_END -->
 
+Specifications of the machine used for benchmarking:
+
+```
+Platform: Linux x64
+Size:
+2-cores · 8 GB RAM · 75 GB SSD
+```
+
 ## Architecture
 
 ![Architecture Image](./files/architecture.svg)
