@@ -99,7 +99,7 @@ jobs:
       - name: Determine if run had errors
         id: extract_has_error
         run: |
-          HAS_ERROR=$((grep -q "Error distribution:" ${{ github.workspace }}/output.log && echo true || echo false) | sed 's/true/✅/; s/false/❌/')
+          HAS_ERROR=$((grep -q "Error distribution:" ${{ github.workspace }}/output.log && echo true || echo false) | sed 's/true/❌/; s/false/✅/')
           echo "error=${HAS_ERROR}" | tee -a "$GITHUB_OUTPUT"
       - name: Extract RPS
         id: extract_rps
