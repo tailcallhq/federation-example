@@ -27,6 +27,8 @@ sudo docker run tailcallhq/federation-benchmark:latest ./benchmark_all.sh
 
 ## Benchmark Results
 
+In our benchmark we try to test various GraphQL federation implementations. We have 3 different benchmark setups, with variuing response sizes. On the table bellow we can observe the throughput of the various implementations compared to the different payload sizes.
+
 <!-- PERFORMANCE_RESULTS_START -->
 | Server | 112,838 bytes | 12598 bytes | 362 bytes |
 | ---: | ---: | ---: | ---: |
