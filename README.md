@@ -2,18 +2,12 @@
 
 Explore and compare the performance of the fastest GraphQL federation routers through our comprehensive benchmarks.
 
-- [Introduction](#introduction)
 - [Benchmark Results](#benchmark-results)
+- [Introduction](#introduction)
 - [Architecture](#architecture)
 - [Quick Start](#quick-start)
 - [Resources](#resources)
 - [Contribute](#contribute)
-
-## Introduction
-
-This document presents a comparative analysis of several renowned GraphQL Federation routers. Dive deep into the performance metrics and get insights regarding their throughput and latency.
-
-> **NOTE:** This is a work-in-progress suite of benchmarks, and we would appreciate help from the community to add more routers or tune the existing ones for better performance.
 
 ## Benchmark Results
 
@@ -25,6 +19,12 @@ This document presents a comparative analysis of several renowned GraphQL Federa
 | [Apollo](https://github.com/apollographql/router) | `❌ / 2,066 RPS / 0.0167 sec` | `❌ / 5,119 RPS / 0.0045 sec` | `❌ / 31,499 RPS / 0.0021 sec` |
 | [Grafbase](https://github.com/grafbase/grafbase) | `❌ / 4,586 RPS / 0.0076 sec` | `❌ / 16,269 RPS / 0.0405 sec` | `❌ / 6,681 RPS / 0.0109 sec` |
 <!-- PERFORMANCE_RESULTS_END -->
+
+## Introduction
+
+This document presents a comparative analysis of several renowned GraphQL Federation routers. Dive deep into the performance metrics and get insights regarding their throughput and latency.
+
+> **NOTE:** This is a work-in-progress suite of benchmarks, and we would appreciate help from the community to add more routers or tune the existing ones for better performance.
 
 ## Architecture
 
@@ -40,7 +40,7 @@ This document presents a comparative analysis of several renowned GraphQL Federa
 
 To run the benchmarks, you have to install Docker on your computer. We advise using Docker because it eliminates the hassle of managing benchmark dependencies. Follow the instructions provided on the official website: https://docs.docker.com/engine/install/
 
-"`bash
+```bash
 git clone git@github.com:tailcallhq/federation-example.git
 cd federation-example
 sudo docker build -t tailcallhq/federation-benchmark .
