@@ -99,7 +99,7 @@ jobs:
       - name: Determine if run had errors
         id: extract_has_error
         run: |
-          HAS_ERROR=$(grep -q "Error distribution:" ${{ github.workspace }}/output.log && echo true || echo false | sed 's/true/✅/; s/false/❌/')
+          HAS_ERROR=$((grep -q "Error distribution:" ${{ github.workspace }}/output.log && echo true || echo false) | sed 's/true/✅/; s/false/❌/')
           echo "error=${HAS_ERROR}" | tee -a "$GITHUB_OUTPUT"
       - name: Extract RPS
         id: extract_rps
@@ -143,7 +143,7 @@ jobs:
       - name: Collect results table
         run: |
           # Initialize the Markdown file with headers
-          echo "| Server | [112,838 bytes](./source/big.json) status / rps / latency | [12,598 bytes](./source/medium.json) status / rps / latency | [362 bytes](./source/small.json) status / rps / latency |" > "results.md"
+          echo "| Server | [112,838 bytes](./source/big.json) (status/rps/latency) | [12,598 bytes](./source/medium.json) (status/rps/latency) | [362 bytes](./source/small.json) (status/rps/latency) |" > "results.md"
           echo "| ---: | ---: | ---: | ---: |" >> "results.md"
 
           # Add Nginx row
