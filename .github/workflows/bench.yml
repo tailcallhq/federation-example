@@ -141,7 +141,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
       - name: Print Matrix output
-        run: echo "${{ fromJson(needs.read.outputs.result) }}"
+        run: echo "${{ needs.read.outputs.result }}"
       - name: Collect RPS from all matrix jobs
         run: |
           echo "| Server | [112,838 bytes](./source/big.json)| [12598 bytes](./source/medium.json)| [362 bytes](./source/small.json) |" > "results_rps.md"
@@ -190,6 +190,12 @@ jobs:
               }
           }' README.md
           sed -i '/<!-- LATENCY_RESULTS_START -->/r results_p95.md' README.md
+      - name: Summarize
+        run: |
+          echo "### RPS Table" >> "$GITHUB_STEP_SUMMARY"
+          cat "results_rps.md" >> "$GITHUB_STEP_SUMMARY"
+          echo "### P95 Latency Table" >> "$GITHUB_STEP_SUMMARY"
+          cat "results_p95.md" >> "$GITHUB_STEP_SUMMARY"
       - name: Cleanup files
         run: |
           rm "results_rps.md"
@@ -208,9 +214,3 @@ jobs:
           branch: main
           commit_author: Author <actions@github.com>
           commit_message: "[ci skip] update performance results in README.md"
-      - name: Summarize
-        run: |
-          echo "### RPS Table" >> "$GITHUB_STEP_SUMMARY"
-          cat "results_rps.md" >> "$GITHUB_STEP_SUMMARY"
-          echo "### P95 Latency Table" >> "$GITHUB_STEP_SUMMARY"
-          cat "results_p95.md" >> "$GITHUB_STEP_SUMMARY"
