@@ -14,10 +14,10 @@ Explore and compare the performance of the fastest GraphQL federation routers th
 <!-- PERFORMANCE_RESULTS_START -->
 | Server | [112,838 bytes](./source/big.json) (status/rps/latency) | [12,598 bytes](./source/medium.json) (status/rps/latency) | [362 bytes](./source/small.json) (status/rps/latency) |
 | ---: | ---: | ---: | ---: |
-| [Nginx](https://nginx.org/en/) | `❌ / 5,246 RPS / 0.01 sec` | `❌ / 12,297 RPS / 0.0222 sec` | `❌ / 9,924 RPS / 0.0046 sec` |
-| [Grafbase](https://github.com/grafbase/grafbase) | `❌ / 3,786 RPS / 0.0092 sec` | `❌ / 10,167 RPS / 0.0522 sec` | `❌ / 3,681 RPS / 0.0139 sec` |
-| [Apollo](https://github.com/apollographql/router) | `❌ / 2,104 RPS / 0.0151 sec` | `❌ / 5,090 RPS / 0.0042 sec` | `❌ / 31,002 RPS / 0.0022 sec` |
-| [Grafbase](https://github.com/grafbase/grafbase) | `❌ / 4,629 RPS / 0.0072 sec` | `❌ / 16,063 RPS / 0.0402 sec` | `❌ / 6,454 RPS / 0.01 sec` |
+| [Nginx](https://nginx.org/en/) | `✅ / 4,904 RPS / 0.0137 sec` | `✅ / 11,903 RPS / 0.0226 sec` | `✅ / 10,015 RPS / 0.0044 sec` |
+| [Grafbase](https://github.com/grafbase/grafbase) | `✅ / 3,714 RPS / 0.0089 sec` | `✅ / 10,461 RPS / 0.0555 sec` | `✅ / 3,687 RPS / 0.0132 sec` |
+| [Apollo](https://github.com/apollographql/router) | `✅ / 2,086 RPS / 0.0167 sec` | `✅ / 5,181 RPS / 0.0045 sec` | `✅ / 30,275 RPS / 0.0022 sec` |
+| [Grafbase](https://github.com/grafbase/grafbase) | `✅ / 4,853 RPS / 0.0077 sec` | `✅ / 16,529 RPS / 0.0372 sec` | `✅ / 6,129 RPS / 0.011 sec` |
 <!-- PERFORMANCE_RESULTS_END -->
 
 ## Introduction
