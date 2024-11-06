@@ -46,6 +46,12 @@ sudo docker run tailcallhq/federation-benchmark:latest ./benchmark_all.sh
 
 ![image info](./files/diagram.png)
 
+### Components
+
+* `hey`: We use `hey` cli benchmarking tool to cause synthetic load in order to benchmark the `router` component. We benchmark for `10 seconds` using `200 threads` using `POST` method with graphql payload. The settings for the benchmarks are in the `bench-hey-**.json` files.
+* `router`: This is the component we are targeting to benchmark. We use a collection of different federation implementation with different settings to have a comprehensive comparison.
+* `subgraph`: This component is used to provide data to the `router` component. It mimics a GraphQL subgraph, but in reality it serves a static response. We do that so we can eliminate any overheads that are caused by processing the request in a real GraphQL subgraph.
+
 ### Query
 
 For both `big` and `medium` we use the following query. It provides a deeply nested structure, and with different response payloads it can be a challenge on some federation implementations to parse it.
