@@ -22,7 +22,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
-      - name: Set up Docker Buildx
+      - name: Set up Docker buildx
         uses: docker/setup-buildx-action@v3
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -30,7 +30,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and Push Docker Image
+      - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           push: true
@@ -41,8 +41,9 @@ jobs:
   benchmark:
     if: github.event.head_commit.message != 'Update performance results in README.md'
     needs: build
-    runs-on:
-      group: benchmarking-runner
+    runs-on: ubuntu-latest
+    # runs-on:
+    #   group: benchmarking-runner
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
@@ -93,46 +94,43 @@ jobs:
           run: ./benchmark.sh ${{ matrix.response }} ${{ matrix.service }} >> /work/output.log
       - name: Print result
         run: cat ${{ github.workspace }}/output.log
-      - name: Extract Requests Per Second
+      - name: Determine if run had errors
+        id: extract_has_error
+        run: |
+          HAS_ERROR=$(grep -q "Error distribution:" ${{ github.workspace }}/output.log && echo true || echo false)
+          echo "error=${HAS_ERROR}" | tee -a "$GITHUB_OUTPUT"
+      - name: Extract RPS
         id: extract_rps
         run: |
           RPS=$(grep "Requests/sec:" ${{ github.workspace }}/output.log | awk '{printf int($2)}' | sed -E ':a;s/([0-9])([0-9]{3})$/\1,\2/;ta')
-          echo "${{ matrix.response }}_${{ matrix.service }}_rps=${RPS}" | tee -a "$GITHUB_OUTPUT"
-    outputs:
-      big_nginx_graphql: ${{ steps.extract_rps.outputs.big_nginx_graphql_rps }}
-      medium_nginx_graphql: ${{ steps.extract_rps.outputs.medium_nginx_graphql_rps }}
-      small_nginx_graphql: ${{ steps.extract_rps.outputs.small_nginx_graphql_rps }}
-
-      big_tailcall_default: ${{ steps.extract_rps.outputs.big_tailcall_default_rps }}
-      medium_tailcall_default: ${{ steps.extract_rps.outputs.medium_tailcall_default_rps }}
-      small_tailcall_default: ${{ steps.extract_rps.outputs.small_tailcall_default_rps }}
-
-      big_grafbase_default: ${{ steps.extract_rps.outputs.big_grafbase_default_rps }}
-      medium_grafbase_default: ${{ steps.extract_rps.outputs.medium_grafbase_default_rps }}
-      small_grafbase_default: ${{ steps.extract_rps.outputs.small_grafbase_default_rps }}
-
-      big_wundergraph_no_opt: ${{ steps.extract_rps.outputs.big_wundergraph_no_opt_rps }}
-      medium_wundergraph_no_opt: ${{ steps.extract_rps.outputs.medium_wundergraph_no_opt_rps }}
-      small_wundergraph_no_opt: ${{ steps.extract_rps.outputs.small_wundergraph_no_opt_rps }}
-
-      big_apollo_router: ${{ steps.extract_rps.outputs.big_apollo_router_rps }}
-      medium_apollo_router: ${{ steps.extract_rps.outputs.medium_apollo_router_rps }}
-      small_apollo_router: ${{ steps.extract_rps.outputs.small_apollo_router_rps }}
-
-      big_tailcall_full_conf: ${{ steps.extract_rps.outputs.big_tailcall_full_conf_rps }}
-      medium_tailcall_full_conf: ${{ steps.extract_rps.outputs.medium_tailcall_full_conf_rps }}
-      small_tailcall_full_conf: ${{ steps.extract_rps.outputs.small_tailcall_full_conf_rps }}
-
-      big_grafbase_cache: ${{ steps.extract_rps.outputs.big_grafbase_cache_rps }}
-      medium_grafbase_cache: ${{ steps.extract_rps.outputs.medium_grafbase_cache_rps }}
-      small_grafbase_cache: ${{ steps.extract_rps.outputs.small_grafbase_cache_rps }}
-
-      big_wundergraph_default: ${{ steps.extract_rps.outputs.big_wundergraph_default_rps }}
-      medium_wundergraph_default: ${{ steps.extract_rps.outputs.medium_wundergraph_default_rps }}
-      small_wundergraph_default: ${{ steps.extract_rps.outputs.small_wundergraph_default_rps }}
+          echo "rps=${RPS}" | tee -a "$GITHUB_OUTPUT"
+      - name: Extract P95 Latency
+        id: extract_p95
+        run: |
+          P95=$(grep "95%" ${{ github.workspace }}/output.log | awk '{print $4, $5}')
+          echo "p95=${P95}" | tee -a "$GITHUB_OUTPUT"
+        - uses: cloudposse/github-action-matrix-outputs-write@v1
+          id: out
+          with:
+            matrix-step-name: ${{ github.job }}
+            matrix-key: ${{ matrix.response }}_${{ matrix.service }}
+            outputs: |-
+              has_error: ${{ steps.extract_has_error.error }}
+              rps: ${{ steps.extract_rps.error }}
+              p95: ${{ steps.extract_p95.error }}
+  read:
+      runs-on: ubuntu-latest
+      needs: [benchmark]
+      steps:
+        - uses: cloudposse/github-action-matrix-outputs-read@v1
+          id: read
+          with:
+            matrix-step-name: benchmark
+      outputs:
+        result: "${{ steps.read.outputs.result }}"
   analyze:
     if: github.event.head_commit.message != 'Update performance results in README.md'
-    needs: benchmark
+    needs: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -140,39 +138,54 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
-      - id: collect
-        name: Collect Requests Per Second from all matrix jobs
+      - name: Collect RPS from all matrix jobs
         run: |
-          rm -f results.md
-          echo "| Server | 112,838 bytes | 12598 bytes | 362 bytes |" > "results.md"
-          echo "| ---: | ---: | ---: | ---: |" >> "results.md"
-          echo "| [Nginx](https://nginx.org/en/) | \`${{ needs.benchmark.outputs.big_nginx_graphql }} RPS\` | \`${{ needs.benchmark.outputs.medium_nginx_graphql }} RPS\` | \`${{ needs.benchmark.outputs.small_nginx_graphql }} RPS\` |" >> "results.md"
-          echo "| **Base** | | | |" >> "results.md"
-          echo "| [Tailcall](https://github.com/tailcallhq/tailcall) | \`${{ needs.benchmark.outputs.big_tailcall_default }} RPS\` | \`${{ needs.benchmark.outputs.medium_tailcall_default }} RPS\` | \`${{ needs.benchmark.outputs.small_tailcall_default }} RPS\` |" >> "results.md"
-          echo "| [Grafbase](https://github.com/grafbase/grafbase) | \`${{ needs.benchmark.outputs.big_grafbase_default }} RPS\` | \`${{ needs.benchmark.outputs.medium_grafbase_default }} RPS\` | \`${{ needs.benchmark.outputs.small_grafbase_default }} RPS\` |" >> "results.md"
-          echo "| [Wundegraph](https://github.com/wundergraph/cosmo) | \`${{ needs.benchmark.outputs.big_wundergraph_no_opt }} RPS\` | \`${{ needs.benchmark.outputs.medium_wundergraph_no_opt }} RPS\` | \`${{ needs.benchmark.outputs.small_wundergraph_no_opt }} RPS\` |" >> "results.md"
-          echo "| [Apollo](https://github.com/apollographql/router) | \`${{ needs.benchmark.outputs.big_apollo_router }} RPS\` | \`${{ needs.benchmark.outputs.medium_apollo_router }} RPS\` | \`${{ needs.benchmark.outputs.small_apollo_router }} RPS\` |" >> "results.md"
-          echo "| **Cached** | | | |" >> "results.md"
-          echo "| [Tailcall](https://github.com/tailcallhq/tailcall) | \`${{ needs.benchmark.outputs.big_tailcall_full_conf }} RPS\` | \`${{ needs.benchmark.outputs.medium_tailcall_full_conf }} RPS\` | \`${{ needs.benchmark.outputs.small_tailcall_full_conf }} RPS\` |" >> "results.md"
-          echo "| [Grafbase](https://github.com/grafbase/grafbase) | \`${{ needs.benchmark.outputs.big_grafbase_cache }} RPS\` | \`${{ needs.benchmark.outputs.medium_grafbase_cache }} RPS\` | \`${{ needs.benchmark.outputs.small_grafbase_cache }} RPS\` |" >> "results.md"
-          echo "| [Wundegraph](https://github.com/wundergraph/cosmo) | \`${{ needs.benchmark.outputs.big_wundergraph_default }} RPS\` | \`${{ needs.benchmark.outputs.medium_wundergraph_default }} RPS\` | \`${{ needs.benchmark.outputs.small_wundergraph_default }} RPS\` |" >> "results.md"
-      - name: Show table
-        run: cat "results.md"
-      - name: Update `README.md` file
+          echo "| Server | [112,838 bytes](./source/big.json)| [12598 bytes](./source/medium.json)| [362 bytes](./source/small.json) |" > "results_rps.md"
+          echo "| ---: | ---: | ---: | ---: |" >> "results_rps.md"
+          echo "| [Nginx](https://nginx.org/en/) | \`${{ fromJson(needs.read.outputs.result).big_nginx_graphql.rps }} RPS\` | \`${{ fromJson(needs.read.outputs.result).medium_nginx_graphql.rps }} RPS\` | \`${{ fromJson(needs.read.outputs.result).small_nginx_graphql.rps }} RPS\` |" >> "results_rps.md"
+          echo "| **Base** | | | |" >> "results_rps.md"
+          echo "| [Tailcall](https://github.com/tailcallhq/tailcall) | \`${{ fromJson(needs.read.outputs.result).big_tailcall_default.rps }} RPS\` | \`${{ fromJson(needs.read.outputs.result).medium_tailcall_default.rps }} RPS\` | \`${{ fromJson(needs.read.outputs.result).small_tailcall_default.rps }} RPS\` |" >> "results_rps.md"
+          echo "| [Grafbase](https://github.com/grafbase/grafbase) | \`${{ fromJson(needs.read.outputs.result).big_grafbase_default.rps }} RPS\` | \`${{ fromJson(needs.read.outputs.result).medium_grafbase_default.rps }} RPS\` | \`${{ fromJson(needs.read.outputs.result).small_grafbase_default.rps }} RPS\` |" >> "results_rps.md"
+          echo "| [Wundegraph](https://github.com/wundergraph/cosmo) | \`${{ fromJson(needs.read.outputs.result).big_wundergraph_no_opt.rps }} RPS\` | \`${{ fromJson(needs.read.outputs.result).medium_wundergraph_no_opt.rps }} RPS\` | \`${{ fromJson(needs.read.outputs.result).small_wundergraph_no_opt.rps }} RPS\` |" >> "results_rps.md"
+          echo "| [Apollo](https://github.com/apollographql/router) | \`${{ fromJson(needs.read.outputs.result).big_apollo_router.rps }} RPS\` | \`${{ fromJson(needs.read.outputs.result).medium_apollo_router.rps }} RPS\` | \`${{ fromJson(needs.read.outputs.result).small_apollo_router.rps }} RPS\` |" >> "results_rps.md"
+          echo "| **Cached** | | | |" >> "results_rps.md"
+          echo "| [Tailcall](https://github.com/tailcallhq/tailcall) | \`${{ fromJson(needs.read.outputs.result).big_tailcall_full_conf.rps }} RPS\` | \`${{ fromJson(needs.read.outputs.result).medium_tailcall_full_conf.rps }} RPS\` | \`${{ fromJson(needs.read.outputs.result).small_tailcall_full_conf.rps }} RPS\` |" >> "results_rps.md"
+          echo "| [Grafbase](https://github.com/grafbase/grafbase) | \`${{ fromJson(needs.read.outputs.result).big_grafbase_cache.rps }} RPS\` | \`${{ fromJson(needs.read.outputs.result).medium_grafbase_cache.rps }} RPS\` | \`${{ fromJson(needs.read.outputs.result).small_grafbase_cache.rps }} RPS\` |" >> "results_rps.md"
+          echo "| [Wundegraph](https://github.com/wundergraph/cosmo) | \`${{ fromJson(needs.read.outputs.result).big_wundergraph_default.rps }} RPS\` | \`${{ fromJson(needs.read.outputs.result).medium_wundergraph_default.rps }} RPS\` | \`${{ fromJson(needs.read.outputs.result).small_wundergraph_default.rps }} RPS\` |" >> "results_rps.md"
+      - name: Show RPS table
+        run: cat "results_rps.md"
+      - name: Collect latency from all matrix jobs
+        run: |
+          echo "| Server | [112,838 bytes](./source/big.json)| [12598 bytes](./source/medium.json)| [362 bytes](./source/small.json) |" > "results_p95.md"
+          echo "| ---: | ---: | ---: | ---: |" >> "results_p95.md"
+          echo "| [Nginx](https://nginx.org/en/) | \`${{ fromJson(needs.read.outputs.result).big_nginx_graphql.p95 }}\` | \`${{ fromJson(needs.read.outputs.result).medium_nginx_graphql.p95 }}\` | \`${{ fromJson(needs.read.outputs.result).small_nginx_graphql.p95 }}\` |" >> "results_p95.md"
+          echo "| **Base** | | | |" >> "results_p95.md"
+          echo "| [Tailcall](https://github.com/tailcallhq/tailcall) | \`${{ fromJson(needs.read.outputs.result).big_tailcall_default.p95 }}\` | \`${{ fromJson(needs.read.outputs.result).medium_tailcall_default.p95 }}\` | \`${{ fromJson(needs.read.outputs.result).small_tailcall_default.p95 }}\` |" >> "results_p95.md"
+          echo "| [Grafbase](https://github.com/grafbase/grafbase) | \`${{ fromJson(needs.read.outputs.result).big_grafbase_default.p95 }}\` | \`${{ fromJson(needs.read.outputs.result).medium_grafbase_default.p95 }}\` | \`${{ fromJson(needs.read.outputs.result).small_grafbase_default.p95 }}\` |" >> "results_p95.md"
+          echo "| [Wundegraph](https://github.com/wundergraph/cosmo) | \`${{ fromJson(needs.read.outputs.result).big_wundergraph_no_opt.p95 }}\` | \`${{ fromJson(needs.read.outputs.result).medium_wundergraph_no_opt.p95 }}\` | \`${{ fromJson(needs.read.outputs.result).small_wundergraph_no_opt.p95 }}\` |" >> "results_p95.md"
+          echo "| [Apollo](https://github.com/apollographql/router) | \`${{ fromJson(needs.read.outputs.result).big_apollo_router.p95 }}\` | \`${{ fromJson(needs.read.outputs.result).medium_apollo_router.p95 }}\` | \`${{ fromJson(needs.read.outputs.result).small_apollo_router.p95 }}\` |" >> "results_p95.md"
+          echo "| **Cached** | | | |" >> "results_p95.md"
+          echo "| [Tailcall](https://github.com/tailcallhq/tailcall) | \`${{ fromJson(needs.read.outputs.result).big_tailcall_full_conf.p95 }}\` | \`${{ fromJson(needs.read.outputs.result).medium_tailcall_full_conf.p95 }}\` | \`${{ fromJson(needs.read.outputs.result).small_tailcall_full_conf.p95 }}\` |" >> "results_p95.md"
+          echo "| [Grafbase](https://github.com/grafbase/grafbase) | \`${{ fromJson(needs.read.outputs.result).big_grafbase_cache.p95 }}\` | \`${{ fromJson(needs.read.outputs.result).medium_grafbase_cache.p95 }}\` | \`${{ fromJson(needs.read.outputs.result).small_grafbase_cache.p95 }}\` |" >> "results_p95.md"
+          echo "| [Wundegraph](https://github.com/wundergraph/cosmo) | \`${{ fromJson(needs.read.outputs.result).big_wundergraph_default.p95 }}\` | \`${{ fromJson(needs.read.outputs.result).medium_wundergraph_default.p95 }}\` | \`${{ fromJson(needs.read.outputs.result).small_wundergraph_default.p95 }}\` |" >> "results_p95.md"
+      - name: Show P95 Latency table
+        run: cat "results_p95.md"
+      - name: Update `README.md` file with RPS data
         run: |
           sed -i '/<!-- PERFORMANCE_RESULTS_START -->/,/<!-- PERFORMANCE_RESULTS_END -->/ {
               /<!-- PERFORMANCE_RESULTS_START -->/!{
                 /<!-- PERFORMANCE_RESULTS_END -->/!d
               }
           }' README.md
-          sed -i '/<!-- PERFORMANCE_RESULTS_START -->/r results.md' README.md
-      - name: Comment `results.md` file
-        if: github.event_name == 'pull_request_target'
-        uses: peter-evans/commit-comment@v3
-        with:
-          sha: ${{ github.event.pull_request.head.sha }}
-          body-path: "results.md"
-          reactions: eyes
+          sed -i '/<!-- PERFORMANCE_RESULTS_START -->/r results_rps.md' README.md
+      - name: Update `README.md` file with P95 latency data
+        run: |
+          sed -i '/<!-- LATENCY_RESULTS_START -->/,/<!-- LATENCY_RESULTS_END -->/ {
+              /<!-- LATENCY_RESULTS_START -->/!{
+                /<!-- LATENCY_RESULTS_END -->/!d
+              }
+          }' README.md
+          sed -i '/<!-- LATENCY_RESULTS_START -->/r results_p95.md' README.md
       - name: Comment `README.md` file
         if: github.event_name == 'pull_request_target'
         uses: peter-evans/commit-comment@v3
@@ -188,4 +201,8 @@ jobs:
           commit_author: Author <actions@github.com>
           commit_message: "[ci skip] update performance results in README.md"
       - name: Summarize
-        run: cat "results.md" >> "$GITHUB_STEP_SUMMARY"
+        run: |
+          echo "### RPS Table" >> "$GITHUB_STEP_SUMMARY"
+          cat "results_rps.md" >> "$GITHUB_STEP_SUMMARY"
+          echo "### P95 Latency Table" >> "$GITHUB_STEP_SUMMARY"
+          cat "results_p95.md" >> "$GITHUB_STEP_SUMMARY"

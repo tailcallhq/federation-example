@@ -1,36 +1,26 @@
 # Federation Benchmarks
 
-Explore and compare the performance of the fastest GraphQL Federation routers through our comprehensive benchmarks.
+Explore and compare the performance of the fastest GraphQL federation routers through our comprehensive benchmarks.
 
 - [Introduction](#introduction)
-- [Quick Start](#quick-start)
 - [Benchmark Results](#benchmark-results)
 - [Architecture](#architecture)
-- [Setup](#setup)
+- [Quick Start](#quick-start)
 - [Resources](#resources)
 - [Contribute](#contribute)
 
 ## Introduction
 
-This document presents a comparative analysis of several renowned GraphQL Federation routers. Dive deep into the performance metrics, and get insights into their throughput.
+This document presents a comparative analysis of several renowned GraphQL Federation routers. Dive deep into the performance metrics and get insights regarding their throughput and latency.
 
-> **NOTE:** This is a work in progress suite of benchmarks, and we would appreciate help from the community to add more routers or tune the existing ones for better performance.
-
-## Quick Start
-
-```bash
-git clone git@github.com:tailcallhq/federation-example.git
-cd federation-example
-sudo docker build -t tailcallhq/federation-benchmark
-sudo docker run tailcallhq/federation-benchmark:latest ./benchmark_all.sh
-```
+> **NOTE:** This is a work-in-progress suite of benchmarks, and we would appreciate help from the community to add more routers or tune the existing ones for better performance.
 
 ## Benchmark Results
 
-In our benchmark we try to test various GraphQL federation implementations. We have 3 different benchmark setups, with variuing response sizes. On the table bellow we can observe the throughput of the various implementations compared to the different payload sizes.
+### Requests Per Second
 
 <!-- PERFORMANCE_RESULTS_START -->
-| Server | 112,838 bytes | 12598 bytes | 362 bytes |
+| Server | [112,838 bytes](./source/big.json)| [12598 bytes](./source/medium.json)| [362 bytes](./source/small.json) |
 | ---: | ---: | ---: | ---: |
 | [Nginx](https://nginx.org/en/) | `2,415 RPS` | `4,759 RPS` | `4,779 RPS` |
 | **Base** | | | |
@@ -44,47 +34,40 @@ In our benchmark we try to test various GraphQL federation implementations. We h
 | [Wundegraph](https://github.com/wundergraph/cosmo) | `1,559 RPS` | `3,382 RPS` | `5,718 RPS` |
 <!-- PERFORMANCE_RESULTS_END -->
 
+### Latency
+
+<!-- LATENCY_RESULTS_START -->
+TODO: populate
+<!-- LATENCY_RESULTS_END -->
+
 ## Architecture
 
 ![image info](./files/diagram.png)
 
 ### Components
 
-* `hey`: We use `hey` cli benchmarking tool to cause synthetic load in order to benchmark the `router` component. We benchmark for `10 seconds` using `200 threads` using `POST` method with graphql payload. The settings for the benchmarks are in the `bench-hey-**.json` files.
-* `router`: This is the component we are targeting to benchmark. We use a collection of different federation implementation with different settings to have a comprehensive comparison.
-* `subgraph`: This component is used to provide data to the `router` component. It mimics a GraphQL subgraph, but in reality it serves a static response. We do that so we can eliminate any overheads that are caused by processing the request in a real GraphQL subgraph.
+* `hey`: We use `hey` cli benchmarking tool to cause synthetic load to benchmark the different router `implementations`. We benchmark for '10 seconds` using `200 connections`. We constructed three different request payload configurations: [big](./scripts/bench-hey-big.json), [medium](./scripts/bench-hey-medium.json), [small](./scripts/bench-hey-small.json). Each configuration queries a response of payload size of [112,838 bytes](./source/big.json), [12598 bytes](./source/medium.json), and [362 bytes](./source/small.json) respectively.
+* `Implementations`: We use a collection of different federation implementations, and for each of them, we also have different configuration setups located in the [configurations folder](./configurations/). We benchmark each implementation with varying configurations for every data configuration setup (big, medium, small). Most federation router `implementations` make GraphQL requests to the `Mock API` except `Tailcall`, which follows a different approach, enabling regular `Rest API` calls.
+* `Mock API`: This component provides data to the `implementations`. It mocks a GraphQL subgraph and a Rest API. This component is written in Rust and serves static data. We do that to eliminate any overheads caused by processing the request in a real GraphQL subgraph.
 
-### Query
+## Quick Start
 
-For both `big` and `medium` we use the following query. It provides a deeply nested structure, and with different response payloads it can be a challenge on some federation implementations to parse it.
+To run the benchmarks, you have to install Docker on your computer. We advise using Docker because it eliminates the hassle of managing benchmark dependencies. Follow the instructions provided on the official website: https://docs.docker.com/engine/install/
 
-```gql
-query BigQuery($delay: Int!, $bigObjects: Int!, $deeplyNestedObjects: Int!, $nestedObjects: Int!) { bigResponse( artificialDelay: $delay bigObjects: $bigObjects deeplyNestedObjects: $deeplyNestedObjects nestedObjects: $nestedObjects ) { a: nestedObjects { ...DeeplyNestedFields } b: nestedObjects { ...DeeplyNestedFields } c: nestedObjects { ...DeeplyNestedFields } d: nestedObjects { ...DeeplyNestedFields } e: nestedObjects { ...DeeplyNestedFields } f: nestedObjects { ...DeeplyNestedFields } } } fragment DeeplyNestedFields on NestedObject { deeplyNestedObjects { aFieldOnDeeplyNestedObject bFieldOnDeeplyNestedObject cFieldOnDeeplyNestedObject dFieldOnDeeplyNestedObject eFieldOnDeeplyNestedObject fFieldOnDeeplyNestedObject gFieldOnDeeplyNestedObject hFieldOnDeeplyNestedObject iFieldOnDeeplyNestedObject jFieldOnDeeplyNestedObject kFieldOnDeeplyNestedObject lFieldOnDeeplyNestedObject mFieldOnDeeplyNestedObject nFieldOnDeeplyNestedObject oFieldOnDeeplyNestedObject pFieldOnDeeplyNestedObject qFieldOnDeeplyNestedObject rFieldOnDeeplyNestedObject sFieldOnDeeplyNestedObject tFieldOnDeeplyNestedObject uFieldOnDeeplyNestedObject vFieldOnDeeplyNestedObject wFieldOnDeeplyNestedObject xFieldOnDeeplyNestedObject yFieldOnDeeplyNestedObject zFieldOnDeeplyNestedObject } }
+"`bash
+git clone git@github.com:tailcallhq/federation-example.git
+cd federation-example
+sudo docker build -t tailcallhq/federation-benchmark .
+sudo Docker run tailcallhq/federation-benchmark:latest ./benchmark_all.sh
 ```
-
-For the `small` payload setup we use the following query, that challenges the latency of the implementations.
-
-```gql
-query {
-  employees {
-    details {
-      forename
-    }
-  }
-}
-```
-
-## Setup
-
-In order to run the benchmarks you have to install docker in your computer. We advise using docker because it takes the hassle of managing the benchmark dependencies away. Follow the instructions provided in the official website: https://docs.docker.com/engine/install/
 
 ## Resources
 
-* [Docker](https://www.docker.com/): Docker is a set of platform as a service products that use OS-level virtualization to deliver software in packages called containers.
+* [Docker](https://www.docker.com/): Docker is a set of platform-as-a-service products that use OS-level virtualization to deliver software in packages called containers.
 * [Hey](https://github.com/rakyll/hey): hey is a tiny program that sends some load to a web application.
 * [Rust](https://www.rust-lang.org/): Rust is a general-purpose programming language emphasizing performance, type safety, and concurrency. It enforces memory safety, meaning that all references point to valid memory.
 * [GraphQL Federation](https://graphql.com/learn/federated-architecture/): GraphQL Federation is an architecture that allows multiple independent GraphQL services to form a unified graph that appears as a single graph to clients. It is a powerful way to scale and manage microservices architecture when using GraphQL.
 
 ## Contribute
 
-Your insights are invaluable! Test these benchmarks, share feedback, or contribute by adding more GraphQL frameworks or refining existing ones. Open an issue or a pull request, and let's build a robust benchmarking resource together!
+Your insights are invaluable! Test these benchmarks, share feedback, or contribute by adding more GraphQL frameworks or refining existing ones. Please open an issue or a pull request, and let's build a robust benchmarking resource together!
