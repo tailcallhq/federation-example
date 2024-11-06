@@ -32,6 +32,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
+        env:
+          DOCKER_BUILD_RECORD_UPLOAD: false
         with:
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/federated-benchmark:latest
@@ -107,7 +109,7 @@ jobs:
       - name: Extract P95 Latency
         id: extract_p95
         run: |
-          P95=$(grep "95%" ${{ github.workspace }}/output.log | awk '{print $4, $5}')
+          P95=$(grep "95%" ${{ github.workspace }}/output.log | awk '{print $3, $4}')
           echo "p95=${P95}" | tee -a "$GITHUB_OUTPUT"
       - uses: cloudposse/github-action-matrix-outputs-write@v1
         id: out
@@ -115,9 +117,9 @@ jobs:
           matrix-step-name: ${{ github.job }}
           matrix-key: ${{ matrix.response }}_${{ matrix.service }}
           outputs: |-
-            has_error: ${{ steps.extract_has_error.error }}
-            rps: ${{ steps.extract_rps.error }}
-            p95: ${{ steps.extract_p95.error }}
+            has_error: ${{ steps.extract_has_error.outputs.error }}
+            rps: ${{ steps.extract_rps.outputs.rps }}
+            p95: ${{ steps.extract_p95.outputs.p95 }}
   read:
       runs-on: ubuntu-latest
       needs: [benchmark]
