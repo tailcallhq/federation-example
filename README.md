@@ -56,6 +56,16 @@ Explore and compare the performance of the fastest GraphQL federation routers th
 | [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `2,933 RPS` | `0.0394 sec` |
 <!-- PERFORMANCE_RESULTS_END -->
 
+### RPS Plots
+
+![Requests Per Second: bar plot, default configuration](./files/rps_default.png)
+![Requests Per Second: bar plot, cached configuration](./files/rps_cached.png)
+
+### Latency 95%
+
+![Latency 95%: bar plot, default configuration](./files/p95_default.png)
+![Latency 95%: bar plot, cached configuration](./files/p95_cached.png)
+
 Specifications of the machine used for benchmarking:
 
 ```
