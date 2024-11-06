@@ -43,8 +43,9 @@ jobs:
   benchmark:
     if: github.event.head_commit.message != 'Update performance results in README.md'
     needs: build
-    runs-on:
-      group: benchmarking-runner
+    runs-on: ubuntu-latest
+    # runs-on:
+    #   group: benchmarking-runner
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
@@ -270,11 +271,11 @@ jobs:
         run: |
           echo "### Results" >> "$GITHUB_STEP_SUMMARY"
           cat "results.md" >> "$GITHUB_STEP_SUMMARY"
-      - name: Run gnuplot script
+      - name: Write plot script
         run: |
           cat << 'EOF' > plot_script.gp
           set terminal png size 800,500 enhanced font "Arial,20"
-          set output 'files/rps_default.png'
+          set output ARG1
 
           small = "#D81B60"; medium = "#1E88E5"; big = "#FFC107";
           set yrange [0:20]
@@ -285,23 +286,26 @@ jobs:
           set xtics format ""
           set grid ytics
 
-          set title "RPS Default"
-          plot '-' using 2:xtic(1) title "Small" linecolor rgb small, \
-              '' using 3 title "Medium" linecolor rgb medium, \
-              '' using 4 title "Big" linecolor rgb big
-
-          # Inline data
+          set title ARG2
+          plot 'data.dat' using 2:xtic(1) title "Small" linecolor rgb small, \
+               'data.dat' using 3 title "Medium" linecolor rgb medium, \
+               'data.dat' using 4 title "Big" linecolor rgb big
+          EOF
+      - name: Save RPS basic plot data
+        run: |
+          cat << 'EOF' > data.dat
           #            Small          Medium         Big
           Tailcall     ${{ fromJson(needs.read.outputs.result).rps.small_tailcall_default }}    ${{ fromJson(needs.read.outputs.result).rps.medium_tailcall_default }}    ${{ fromJson(needs.read.outputs.result).rps.big_tailcall_default }}
-          Grafbase     ${{ fromJson(needs.read.outputs.result).rps.small_grafbase_default }}    ${{ fromJson(needs.read.outputs.result).rps.medium_grafbase_default }}     ${{ fromJson(needs.read.outputs.result).rps.big_grafbase_default }}
-          Wundergraph  ${{ fromJson(needs.read.outputs.result).rps.small_wundergraph_no_opt }}    ${{ fromJson(needs.read.outputs.result).rps.medium_wundergraph_no_opt }}    ${{ fromJson(needs.read.outputs.result).rps.big_wundergraph_no_opt }}
-          Apollo       ${{ fromJson(needs.read.outputs.result).rps.small_apollo_router }}    ${{ fromJson(needs.read.outputs.result).rps.medium_apollo_router }}    ${{ fromJson(needs.read.outputs.result).rps.big_apollo_router }}
-          e
+          Grafbase     ${{ fromJson(needs.read.outputs.result).rps.small_grafbase_default }}    ${{ fromJson(needs.read.outputs.result).rps.medium_grafbase_default }}    ${{ fromJson(needs.read.outputs.result).rps.big_grafbase_default }}
+          Wundergraph  ${{ fromJson(needs.read.outputs.result).rps.small_wundergraph_no_opt }}  ${{ fromJson(needs.read.outputs.result).rps.medium_wundergraph_no_opt }}  ${{ fromJson(needs.read.outputs.result).rps.big_wundergraph_no_opt }}
+          Apollo       ${{ fromJson(needs.read.outputs.result).rps.small_apollo_router }}       ${{ fromJson(needs.read.outputs.result).rps.medium_apollo_router }}       ${{ fromJson(needs.read.outputs.result).rps.big_apollo_router }}
           EOF
-          gnuplot plot_script.gp
+      - name: Create RPS basic plot
+        run: gnuplot -c "files/rps_default.png" "RPS Default"
       - name: Cleanup files
         run: |
           rm "results.md"
+          rm "data.dat"
           rm "plot_script.gp"
       - name: Comment `README.md` file
         if: github.event_name == 'pull_request_target'
