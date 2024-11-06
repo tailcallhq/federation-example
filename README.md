@@ -12,12 +12,18 @@ Explore and compare the performance of the fastest GraphQL federation routers th
 ## Benchmark Results
 
 <!-- PERFORMANCE_RESULTS_START -->
-| Server | [112,838 bytes](./source/big.json) (status/rps/latency) | [12,598 bytes](./source/medium.json) (status/rps/latency) | [362 bytes](./source/small.json) (status/rps/latency) |
+| Server | Status | RPS | Latency |
 | ---: | ---: | ---: | ---: |
-| [Nginx](https://nginx.org/en/) | `✅ / 4,904 RPS / 0.0137 sec` | `✅ / 11,903 RPS / 0.0226 sec` | `✅ / 10,015 RPS / 0.0044 sec` |
-| [Grafbase](https://github.com/grafbase/grafbase) | `✅ / 3,714 RPS / 0.0089 sec` | `✅ / 10,461 RPS / 0.0555 sec` | `✅ / 3,687 RPS / 0.0132 sec` |
-| [Apollo](https://github.com/apollographql/router) | `✅ / 2,086 RPS / 0.0167 sec` | `✅ / 5,181 RPS / 0.0045 sec` | `✅ / 30,275 RPS / 0.0022 sec` |
-| [Grafbase](https://github.com/grafbase/grafbase) | `✅ / 4,853 RPS / 0.0077 sec` | `✅ / 16,529 RPS / 0.0372 sec` | `✅ / 6,129 RPS / 0.011 sec` |
+| [Nginx](https://nginx.org/en/) | ✅ | `5,326 RPS` | `0.0172 sec` |
+| **Base** | | | |
+| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `3,256 RPS` | `0.0224 sec` |
+| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `3,798 RPS` | `0.0196 sec` |
+| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `2,130 RPS` | `0.0548 sec` |
+| [Apollo](https://github.com/apollographql/router) | ✅ | `2,051 RPS` | `0.0372 sec` |
+| **Cached** | | | |
+| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `16,697 RPS` | `0.0047 sec` |
+| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `4,579 RPS` | `0.019 sec` |
+| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `2,920 RPS` | `0.0407 sec` |
 <!-- PERFORMANCE_RESULTS_END -->
 
 ## Introduction
