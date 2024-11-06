@@ -142,8 +142,8 @@ jobs:
           ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
       - name: Collect results table
         run: |
-          echo "### [Small Payload - 362 bytes](./source/small.json)"
-          echo "| Server | Status | RPS | Latency |" > "results.md"
+          echo "### [Small Payload - 362 bytes](./source/small.json)" >> "results.md"
+          echo "| Server | Status | RPS | Latency |" >> "results.md"
           echo "| ---: | ---: | ---: | ---: |" >> "results.md"
           echo "| [Nginx](https://nginx.org/en/) | \
           ${{ fromJson(needs.read.outputs.result).has_error.small_nginx_graphql }} | \
@@ -181,8 +181,8 @@ jobs:
           \`${{ fromJson(needs.read.outputs.result).p95.small_wundergraph_default }} sec\` |" >> "results.md"
 
 
-          echo "### [Medium Payload - 12,598 bytes](./source/medium.json)"
-          echo "| Server | Status | RPS | Latency |" > "results.md"
+          echo "### [Medium Payload - 12,598 bytes](./source/medium.json)" >> "results.md"
+          echo "| Server | Status | RPS | Latency |" >> "results.md"
           echo "| ---: | ---: | ---: | ---: |" >> "results.md"
           echo "| [Nginx](https://nginx.org/en/) | \
           ${{ fromJson(needs.read.outputs.result).has_error.medium_nginx_graphql }} | \
@@ -220,8 +220,8 @@ jobs:
           \`${{ fromJson(needs.read.outputs.result).p95.medium_wundergraph_default }} sec\` |" >> "results.md"
 
 
-          echo "### [Big Payload - 112,838 bytes](./source/big.json)"
-          echo "| Server | Status | RPS | Latency |" > "results.md"
+          echo "### [Big Payload - 112,838 bytes](./source/big.json)" >> "results.md"
+          echo "| Server | Status | RPS | Latency |" >> "results.md"
           echo "| ---: | ---: | ---: | ---: |" >> "results.md"
           echo "| [Nginx](https://nginx.org/en/) | \
           ${{ fromJson(needs.read.outputs.result).has_error.big_nginx_graphql }} | \

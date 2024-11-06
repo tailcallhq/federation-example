@@ -34,7 +34,9 @@ This document presents a comparative analysis of several renowned GraphQL Federa
 
 ## Architecture
 
-![image info](./files/diagram.png)
+| Big Payload | Medium Payload | Small Payload |
+| --- | --- | --- |
+| ![image info](./files/diagram_big.png) | ![image info](./files/diagram_medium.png) | ![image info](./files/diagram_small.png) |
 
 ### Components
 
