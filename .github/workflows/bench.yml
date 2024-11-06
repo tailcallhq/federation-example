@@ -142,111 +142,121 @@ jobs:
           ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
       - name: Collect results table
         run: |
-          # Initialize the Markdown file with headers
-          echo "| Server | [112,838 bytes](./source/big.json) (status/rps/latency) | [12,598 bytes](./source/medium.json) (status/rps/latency) | [362 bytes](./source/small.json) (status/rps/latency) |" > "results.md"
+          echo "### [Small Payload - 362 bytes](./source/small.json)"
+          echo "| Server | Status | RPS | Latency |" > "results.md"
           echo "| ---: | ---: | ---: | ---: |" >> "results.md"
-
-          # Add Nginx row
           echo "| [Nginx](https://nginx.org/en/) | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.big_nginx_graphql }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.big_nginx_graphql }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.big_nginx_graphql }} sec\` | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.medium_nginx_graphql }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.medium_nginx_graphql }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.medium_nginx_graphql }} sec\` | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.small_nginx_graphql }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.small_nginx_graphql }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.small_nginx_graphql }} sec\` |" >> "results.md"
-
-          # Base section header
+          ${{ fromJson(needs.read.outputs.result).has_error.small_nginx_graphql }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.small_nginx_graphql }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.small_nginx_graphql }} sec\` |" >> "results.md"
           echo "| **Base** | | | |" >> "results.md"
-
-          # Add Tailcall row (Base)
           echo "| [Tailcall](https://github.com/tailcallhq/tailcall) | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.big_tailcall_default }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.big_tailcall_default }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.big_tailcall_default }} sec\` | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.medium_tailcall_default }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.medium_tailcall_default }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.medium_tailcall_default }} sec\` | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.small_tailcall_default }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.small_tailcall_default }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.small_tailcall_default }} sec\` |" >> "results.md"
-
-          # Add Grafbase row (Base)
+          ${{ fromJson(needs.read.outputs.result).has_error.small_tailcall_default }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.small_tailcall_default }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.small_tailcall_default }} sec\` |" >> "results.md"
           echo "| [Grafbase](https://github.com/grafbase/grafbase) | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.big_grafbase_default }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.big_grafbase_default }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.big_grafbase_default }} sec\` | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.medium_grafbase_default }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.medium_grafbase_default }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.medium_grafbase_default }} sec\` | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.small_grafbase_default }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.small_grafbase_default }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.small_grafbase_default }} sec\` |" >> "results.md"
-
-          # Add Wundegraph row (Base)
+          ${{ fromJson(needs.read.outputs.result).has_error.small_grafbase_default }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.small_grafbase_default }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.small_grafbase_default }} sec\` |" >> "results.md"
           echo "| [Wundegraph](https://github.com/wundergraph/cosmo) | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.big_wundergraph_no_opt }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.big_wundergraph_no_opt }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.big_wundergraph_no_opt }} sec\` | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.medium_wundergraph_no_opt }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.medium_wundergraph_no_opt }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.medium_wundergraph_no_opt }} sec\` | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.small_wundergraph_no_opt }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.small_wundergraph_no_opt }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.small_wundergraph_no_opt }} sec\` |" >> "results.md"
-
-          # Add Apollo row
+          ${{ fromJson(needs.read.outputs.result).has_error.small_wundergraph_no_opt }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.small_wundergraph_no_opt }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.small_wundergraph_no_opt }} sec\` |" >> "results.md"
           echo "| [Apollo](https://github.com/apollographql/router) | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.big_apollo_router }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.big_apollo_router }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.big_apollo_router }} sec\` | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.medium_apollo_router }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.medium_apollo_router }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.medium_apollo_router }} sec\` | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.small_apollo_router }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.small_apollo_router }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.small_apollo_router }} sec\` |" >> "results.md"
-
-          # Cached section header
+          ${{ fromJson(needs.read.outputs.result).has_error.small_apollo_router }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.small_apollo_router }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.small_apollo_router }} sec\` |" >> "results.md"
           echo "| **Cached** | | | |" >> "results.md"
-
-          # Add Tailcall row (Cached)
           echo "| [Tailcall](https://github.com/tailcallhq/tailcall) | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.big_tailcall_full_conf }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.big_tailcall_full_conf }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.big_tailcall_full_conf }} sec\` | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.medium_tailcall_full_conf }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.medium_tailcall_full_conf }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.medium_tailcall_full_conf }} sec\` | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.small_tailcall_full_conf }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.small_tailcall_full_conf }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.small_tailcall_full_conf }} sec\` |" >> "results.md"
-
-          # Add Grafbase row (Cached)
+          ${{ fromJson(needs.read.outputs.result).has_error.small_tailcall_full_conf }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.small_tailcall_full_conf }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.small_tailcall_full_conf }} sec\` |" >> "results.md"
           echo "| [Grafbase](https://github.com/grafbase/grafbase) | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.big_grafbase_cache }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.big_grafbase_cache }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.big_grafbase_cache }} sec\` | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.medium_grafbase_cache }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.medium_grafbase_cache }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.medium_grafbase_cache }} sec\` | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.small_grafbase_cache }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.small_grafbase_cache }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.small_grafbase_cache }} sec\` |" >> "results.md"
-
-          # Add Wundegraph row (Cached)
+          ${{ fromJson(needs.read.outputs.result).has_error.small_grafbase_cache }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.small_grafbase_cache }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.small_grafbase_cache }} sec\` |" >> "results.md"
           echo "| [Wundegraph](https://github.com/wundergraph/cosmo) | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.big_wundergraph_default }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.big_wundergraph_default }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.big_wundergraph_default }} sec\` | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.medium_wundergraph_default }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.medium_wundergraph_default }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.medium_wundergraph_default }} sec\` | \
-          \`${{ fromJson(needs.read.outputs.result).has_error.small_wundergraph_default }} \
-          / ${{ fromJson(needs.read.outputs.result).rps.small_wundergraph_default }} RPS` \
-          / ${{ fromJson(needs.read.outputs.result).p95.small_wundergraph_default }} sec\` |" >> "results.md"
+          ${{ fromJson(needs.read.outputs.result).has_error.small_wundergraph_default }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.small_wundergraph_default }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.small_wundergraph_default }} sec\` |" >> "results.md"
+
+
+          echo "### [Medium Payload - 12,598 bytes](./source/medium.json)"
+          echo "| Server | Status | RPS | Latency |" > "results.md"
+          echo "| ---: | ---: | ---: | ---: |" >> "results.md"
+          echo "| [Nginx](https://nginx.org/en/) | \
+          ${{ fromJson(needs.read.outputs.result).has_error.medium_nginx_graphql }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.medium_nginx_graphql }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.medium_nginx_graphql }} sec\` |" >> "results.md"
+          echo "| **Base** | | | |" >> "results.md"
+          echo "| [Tailcall](https://github.com/tailcallhq/tailcall) | \
+          ${{ fromJson(needs.read.outputs.result).has_error.medium_tailcall_default }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.medium_tailcall_default }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.medium_tailcall_default }} sec\` |" >> "results.md"
+          echo "| [Grafbase](https://github.com/grafbase/grafbase) | \
+          ${{ fromJson(needs.read.outputs.result).has_error.medium_grafbase_default }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.medium_grafbase_default }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.medium_grafbase_default }} sec\` |" >> "results.md"
+          echo "| [Wundegraph](https://github.com/wundergraph/cosmo) | \
+          ${{ fromJson(needs.read.outputs.result).has_error.medium_wundergraph_no_opt }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.medium_wundergraph_no_opt }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.medium_wundergraph_no_opt }} sec\` |" >> "results.md"
+          echo "| [Apollo](https://github.com/apollographql/router) | \
+          ${{ fromJson(needs.read.outputs.result).has_error.medium_apollo_router }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.medium_apollo_router }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.medium_apollo_router }} sec\` |" >> "results.md"
+          echo "| **Cached** | | | |" >> "results.md"
+          echo "| [Tailcall](https://github.com/tailcallhq/tailcall) | \
+          ${{ fromJson(needs.read.outputs.result).has_error.medium_tailcall_full_conf }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.medium_tailcall_full_conf }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.medium_tailcall_full_conf }} sec\` |" >> "results.md"
+          echo "| [Grafbase](https://github.com/grafbase/grafbase) | \
+          ${{ fromJson(needs.read.outputs.result).has_error.medium_grafbase_cache }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.medium_grafbase_cache }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.medium_grafbase_cache }} sec\` |" >> "results.md"
+          echo "| [Wundegraph](https://github.com/wundergraph/cosmo) | \
+          ${{ fromJson(needs.read.outputs.result).has_error.medium_wundergraph_default }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.medium_wundergraph_default }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.medium_wundergraph_default }} sec\` |" >> "results.md"
+
+
+          echo "### [Big Payload - 112,838 bytes](./source/big.json)"
+          echo "| Server | Status | RPS | Latency |" > "results.md"
+          echo "| ---: | ---: | ---: | ---: |" >> "results.md"
+          echo "| [Nginx](https://nginx.org/en/) | \
+          ${{ fromJson(needs.read.outputs.result).has_error.big_nginx_graphql }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.big_nginx_graphql }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.big_nginx_graphql }} sec\` |" >> "results.md"
+          echo "| **Base** | | | |" >> "results.md"
+          echo "| [Tailcall](https://github.com/tailcallhq/tailcall) | \
+          ${{ fromJson(needs.read.outputs.result).has_error.big_tailcall_default }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.big_tailcall_default }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.big_tailcall_default }} sec\` |" >> "results.md"
+          echo "| [Grafbase](https://github.com/grafbase/grafbase) | \
+          ${{ fromJson(needs.read.outputs.result).has_error.big_grafbase_default }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.big_grafbase_default }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.big_grafbase_default }} sec\` |" >> "results.md"
+          echo "| [Wundegraph](https://github.com/wundergraph/cosmo) | \
+          ${{ fromJson(needs.read.outputs.result).has_error.big_wundergraph_no_opt }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.big_wundergraph_no_opt }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.big_wundergraph_no_opt }} sec\` |" >> "results.md"
+          echo "| [Apollo](https://github.com/apollographql/router) | \
+          ${{ fromJson(needs.read.outputs.result).has_error.big_apollo_router }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.big_apollo_router }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.big_apollo_router }} sec\` |" >> "results.md"
+          echo "| **Cached** | | | |" >> "results.md"
+          echo "| [Tailcall](https://github.com/tailcallhq/tailcall) | \
+          ${{ fromJson(needs.read.outputs.result).has_error.big_tailcall_full_conf }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.big_tailcall_full_conf }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.big_tailcall_full_conf }} sec\` |" >> "results.md"
+          echo "| [Grafbase](https://github.com/grafbase/grafbase) | \
+          ${{ fromJson(needs.read.outputs.result).has_error.big_grafbase_cache }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.big_grafbase_cache }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.big_grafbase_cache }} sec\` |" >> "results.md"
+          echo "| [Wundegraph](https://github.com/wundergraph/cosmo) | \
+          ${{ fromJson(needs.read.outputs.result).has_error.big_wundergraph_default }} | \
+          \`${{ fromJson(needs.read.outputs.result).rps.big_wundergraph_default }} RPS\` | \
+          \`${{ fromJson(needs.read.outputs.result).p95.big_wundergraph_default }} sec\` |" >> "results.md"
       - name: Update `README.md` file with table data
         run: |
           sed -i '/<!-- PERFORMANCE_RESULTS_START -->/,/<!-- PERFORMANCE_RESULTS_END -->/ {
