@@ -15,52 +15,45 @@ Explore and compare the performance of the fastest GraphQL federation routers th
 ## Benchmark Results
 
 <!-- PERFORMANCE_RESULTS_START -->
-
 ### [Small Payload - 362 bytes](./source/small.json)
-
-|                                             Server | Status |          RPS |      Latency |
-| -------------------------------------------------: | -----: | -----------: | -----------: |
-|                     [Nginx](https://nginx.org/en/) |     ✅ | `12,077 RPS` | `0.0082 sec` |
-|                                           **Base** |        |              |              |
-| [Tailcall](https://github.com/tailcallhq/tailcall) |     ✅ | `16,685 RPS` | `0.0048 sec` |
-|   [Grafbase](https://github.com/grafbase/grafbase) |     ✅ | `10,412 RPS` | `0.0069 sec` |
-| [Wundegraph](https://github.com/wundergraph/cosmo) |     ✅ |  `7,595 RPS` | `0.0114 sec` |
-|  [Apollo](https://github.com/apollographql/router) |     ✅ |  `4,700 RPS` | `0.0157 sec` |
-|                                         **Cached** |        |              |              |
-| [Tailcall](https://github.com/tailcallhq/tailcall) |     ✅ | `41,546 RPS` | `0.0022 sec` |
-|   [Grafbase](https://github.com/grafbase/grafbase) |     ✅ | `18,144 RPS` | `0.0051 sec` |
-| [Wundegraph](https://github.com/wundergraph/cosmo) |     ✅ | `11,048 RPS` | `0.0106 sec` |
-
+| Server | Status | RPS | Latency |
+| ---: | ---: | ---: | ---: |
+| [Nginx](https://nginx.org/en/) | ✅ | `5,034 RPS` | `0.0193 sec` |
+| **Base** | | | |
+| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `7,084 RPS` | `0.0099 sec` |
+| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `5,018 RPS` | `0.0138 sec` |
+| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `2,858 RPS` | `0.0323 sec` |
+| [Apollo](https://github.com/apollographql/router) | ✅ | `1,856 RPS` | `0.0449 sec` |
+| **Cached** | | | |
+| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `17,214 RPS` | `0.01 sec` |
+| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `7,456 RPS` | `0.0108 sec` |
+| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `4,869 RPS` | `0.0267 sec` |
 ### [Medium Payload - 12,598 bytes](./source/medium.json)
-
-|                                             Server | Status |          RPS |      Latency |
-| -------------------------------------------------: | -----: | -----------: | -----------: |
-|                     [Nginx](https://nginx.org/en/) |     ✅ |  `9,797 RPS` | `0.0084 sec` |
-|                                           **Base** |        |              |              |
-| [Tailcall](https://github.com/tailcallhq/tailcall) |     ✅ | `10,082 RPS` | `0.0073 sec` |
-|   [Grafbase](https://github.com/grafbase/grafbase) |     ✅ |  `8,062 RPS` | `0.0092 sec` |
-| [Wundegraph](https://github.com/wundergraph/cosmo) |     ✅ |  `3,674 RPS` | `0.0228 sec` |
-|  [Apollo](https://github.com/apollographql/router) |     ✅ |  `4,198 RPS` | `0.0172 sec` |
-|                                         **Cached** |        |              |              |
-| [Tailcall](https://github.com/tailcallhq/tailcall) |     ✅ | `30,504 RPS` | `0.0028 sec` |
-|   [Grafbase](https://github.com/grafbase/grafbase) |     ✅ | `11,677 RPS` | `0.0075 sec` |
-| [Wundegraph](https://github.com/wundergraph/cosmo) |     ✅ |  `6,332 RPS` | `0.0181 sec` |
-
+| Server | Status | RPS | Latency |
+| ---: | ---: | ---: | ---: |
+| [Nginx](https://nginx.org/en/) | ✅ | `4,675 RPS` | `0.0193 sec` |
+| **Base** | | | |
+| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `4,563 RPS` | `0.0185 sec` |
+| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `4,140 RPS` | `0.0163 sec` |
+| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `1,511 RPS` | `0.0675 sec` |
+| [Apollo](https://github.com/apollographql/router) | ✅ | `2,029 RPS` | `0.042 sec` |
+| **Cached** | | | |
+| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `13,629 RPS` | `0.0068 sec` |
+| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `5,437 RPS` | `0.015 sec` |
+| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `2,797 RPS` | `0.0439 sec` |
 ### [Big Payload - 112,838 bytes](./source/big.json)
-
-|                                             Server | Status |          RPS |      Latency |
-| -------------------------------------------------: | -----: | -----------: | -----------: |
-|                     [Nginx](https://nginx.org/en/) |     ✅ |  `5,065 RPS` | `0.0235 sec` |
-|                                           **Base** |        |              |              |
-| [Tailcall](https://github.com/tailcallhq/tailcall) |     ✅ |  `3,204 RPS` | `0.0227 sec` |
-|   [Grafbase](https://github.com/grafbase/grafbase) |     ✅ |  `3,780 RPS` | `0.0198 sec` |
-| [Wundegraph](https://github.com/wundergraph/cosmo) |     ✅ |  `2,144 RPS` | `0.0551 sec` |
-|  [Apollo](https://github.com/apollographql/router) |     ✅ |  `2,017 RPS` | `0.0381 sec` |
-|                                         **Cached** |        |              |              |
-| [Tailcall](https://github.com/tailcallhq/tailcall) |     ✅ | `17,820 RPS` | `0.0044 sec` |
-|   [Grafbase](https://github.com/grafbase/grafbase) |     ✅ |  `4,592 RPS` |  `0.019 sec` |
-| [Wundegraph](https://github.com/wundergraph/cosmo) |     ✅ |  `2,903 RPS` |  `0.041 sec` |
-
+| Server | Status | RPS | Latency |
+| ---: | ---: | ---: | ---: |
+| [Nginx](https://nginx.org/en/) | ✅ | `2,049 RPS` | `0.0403 sec` |
+| **Base** | | | |
+| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `1,579 RPS` | `0.0482 sec` |
+| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `1,828 RPS` | `0.048 sec` |
+| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `886 RPS` | `0.106 sec` |
+| [Apollo](https://github.com/apollographql/router) | ✅ | `1,199 RPS` | `0.0591 sec` |
+| **Cached** | | | |
+| [Tailcall](https://github.com/tailcallhq/tailcall) | ✅ | `7,465 RPS` | `0.0117 sec` |
+| [Grafbase](https://github.com/grafbase/grafbase) | ✅ | `2,371 RPS` | `0.0331 sec` |
+| [Wundegraph](https://github.com/wundergraph/cosmo) | ✅ | `1,368 RPS` | `0.0876 sec` |
 <!-- PERFORMANCE_RESULTS_END -->
 
 Specifications of the machine used for benchmarking:
