@@ -140,6 +140,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
+      - name: Install gnuplot
+        run: sudo apt-get update && sudo apt-get install -y gnuplot
       - name: Collect results table
         run: |
           echo "### [Small Payload - 362 bytes](./source/small.json)" >> "results.md"
@@ -269,9 +271,39 @@ jobs:
         run: |
           echo "### Results" >> "$GITHUB_STEP_SUMMARY"
           cat "results.md" >> "$GITHUB_STEP_SUMMARY"
+      - name: Run gnuplot script
+        run: |
+          cat << 'EOF' > plot_script.gp
+          set terminal png size 800,500 enhanced font "Helvetica,20"
+          set output 'files/rps_default.png'
+
+          small = "#D81B60"; medium = "#1E88E5"; big = "#FFC107"";
+          set yrange [0:20]
+          set style data histogram
+          set style histogram cluster gap 1
+          set style fill solid
+          set boxwidth 0.9
+          set xtics format ""
+          set grid ytics
+
+          set title "RPS Default"
+          plot '-' using 2:xtic(1) title "Small" linecolor rgb small, \
+              '' using 3 title "Medium" linecolor rgb medium, \
+              '' using 4 title "Big" linecolor rgb big
+
+          # Inline data
+          #            Small                                                                    Medium                                                                   Big
+          Tailcall     ${{ fromJson(needs.read.outputs.result).rps.small_tailcall_default }}    ${{ fromJson(needs.read.outputs.result).rps.medium_tailcall_default }}    ${{ fromJson(needs.read.outputs.result).rps.big_tailcall_default }}
+          Grafbase     ${{ fromJson(needs.read.outputs.result).rps.small_grafbase_default }}    ${{ fromJson(needs.read.outputs.result).rps.medium_grafbase_default }}    ${{ fromJson(needs.read.outputs.result).rps.big_grafbase_default }}
+          Wundergraph  ${{ fromJson(needs.read.outputs.result).rps.small_wundergraph_no_opt }}  ${{ fromJson(needs.read.outputs.result).rps.medium_wundergraph_no_opt }}  ${{ fromJson(needs.read.outputs.result).rps.big_wundergraph_no_opt }}
+          Apollo       ${{ fromJson(needs.read.outputs.result).rps.small_apollo_router }}       ${{ fromJson(needs.read.outputs.result).rps.medium_apollo_router }}       ${{ fromJson(needs.read.outputs.result).rps.big_apollo_router }}
+          e
+          EOF
+          gnuplot plot_script.gp
       - name: Cleanup files
         run: |
           rm "results.md"
+          rm "plot_script.gp"
       - name: Comment `README.md` file
         if: github.event_name == 'pull_request_target'
         uses: peter-evans/commit-comment@v3
