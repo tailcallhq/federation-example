@@ -77,9 +77,7 @@ Explore and compare the performance of the fastest GraphQL federation routers th
 
 ## Architecture
 
-<div style="background-color: white;">
-  <img src="./files/architecture.svg" alt="Architecture Image" />
-</div>
+![Architecture Image](./files/architecture.svg)
 
 ### Components
 
