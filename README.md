@@ -7,6 +7,8 @@ Explore and compare the performance of the fastest GraphQL federation routers th
     - [Small Payload - 362 bytes](#small-payload---362-bytes)
     - [Medium Payload - 12,598 bytes](#medium-payload---12598-bytes)
     - [Big Payload - 112,838 bytes](#big-payload---112838-bytes)
+    - [RPS Plots](#rps-plots)
+    - [Latency 95% Plots](#latency-95-plots)
   - [Architecture](#architecture)
     - [Components](#components)
   - [Quick Start](#quick-start)
