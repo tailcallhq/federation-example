@@ -58,21 +58,20 @@ Explore and compare the performance of the fastest GraphQL federation routers th
 
 ### RPS Plots
 
-![Requests Per Second: bar plot, default configuration](./files/rps_default.png)
-![Requests Per Second: bar plot, cached configuration](./files/rps_cached.png)
+![Requests Per Second: small payload](./files/rps_small.png)
 
-### Latency 95%
+![Requests Per Second: medium payload](./files/rps_medium.png)
 
-![Latency 95%: bar plot, default configuration](./files/p95_default.png)
-![Latency 95%: bar plot, cached configuration](./files/p95_cached.png)
+![Requests Per Second: big payload](./files/rps_big.png)
 
-Specifications of the machine used for benchmarking:
+### Latency 95% Plots
 
-```
-Platform: Linux x64
-Size:
-2-cores · 8 GB RAM · 75 GB SSD
-```
+![Latency 95%: small payload](./files/p95_small.png)
+
+![Latency 95%: medium payload](./files/p95_medium.png)
+
+![Latency 95%: big payload](./files/p95_big.png)
+
 
 ## Architecture
 
@@ -83,6 +82,16 @@ Size:
 1. `hey`: We use `hey` cli benchmarking tool to cause synthetic load to benchmark the different router `implementations`. We benchmark for '10 seconds`using`200 connections`. We constructed three different request payload configurations: [big](./scripts/bench-hey-big.json), [medium](./scripts/bench-hey-medium.json), [small](./scripts/bench-hey-small.json). Each configuration queries a response of payload size of [112,838 bytes](./source/big.json), [12598 bytes](./source/medium.json), and [362 bytes](./source/small.json) respectively.
 2. `Implementations`: We use a collection of different federation implementations, and for each of them, we also have different configuration setups located in the [configurations folder](./configurations/). We benchmark each implementation with varying configurations for every data configuration setup (big, medium, small).
 3. `Mock`: This component provides data to the `implementations`. It mocks a GraphQL subgraph and an equivalent Rest API. This component is written in Rust and serves static data. We do that to eliminate any overheads caused by processing the request in a real GraphQL subgraph.
+
+### Specifications
+
+Specifications of the machine used for benchmarking:
+
+```
+Platform: Linux x64
+Size:
+2-cores · 8 GB RAM · 75 GB SSD
+```
 
 ## Quick Start
 
