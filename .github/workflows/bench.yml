@@ -274,10 +274,9 @@ jobs:
       - name: Write plot script
         run: |
           cat << 'EOF' > plot_script.gp
-          set terminal png size 800,500 enhanced font "Arial,20"
+          set terminal png size 800,500 enhanced font "Arial,14"
           set output file_name
-
-          small = "#D81B60"; medium = "#1E88E5"; big = "#FFC107";
+          set yrange [0:]
           set style data histogram
           set style histogram cluster gap 1
           set style fill solid
@@ -285,80 +284,100 @@ jobs:
           set xtics format ""
           set xtics rotate by 45 right
           set grid ytics
-
+          set nokey
           set title title_text
-          plot 'data.dat' using 2:xtic(1) title "Small" linecolor rgb small, \
-               'data.dat' using 3 title "Medium" linecolor rgb medium, \
-               'data.dat' using 4 title "Big" linecolor rgb big
+          plot 'data.dat' using 2:xtic(1) linecolor rgb color
           EOF
-      - name: Save RPS basic plot data
+      - name: Save RPS small payload data
         run: |
           cat << 'EOF' > data.dat
-          #            Small          Medium         Big
-          Tailcall     ${{ fromJson(needs.read.outputs.result).rps.small_tailcall_default }}    ${{ fromJson(needs.read.outputs.result).rps.medium_tailcall_default }}    ${{ fromJson(needs.read.outputs.result).rps.big_tailcall_default }}
-          Grafbase     ${{ fromJson(needs.read.outputs.result).rps.small_grafbase_default }}    ${{ fromJson(needs.read.outputs.result).rps.medium_grafbase_default }}    ${{ fromJson(needs.read.outputs.result).rps.big_grafbase_default }}
-          Wundergraph  ${{ fromJson(needs.read.outputs.result).rps.small_wundergraph_no_opt }}  ${{ fromJson(needs.read.outputs.result).rps.medium_wundergraph_no_opt }}  ${{ fromJson(needs.read.outputs.result).rps.big_wundergraph_no_opt }}
-          Apollo       ${{ fromJson(needs.read.outputs.result).rps.small_apollo_router }}       ${{ fromJson(needs.read.outputs.result).rps.medium_apollo_router }}       ${{ fromJson(needs.read.outputs.result).rps.big_apollo_router }}
+          #                     Small
+          Tailcall              ${{ fromJson(needs.read.outputs.result).rps.small_tailcall_default }}
+          Grafbase              ${{ fromJson(needs.read.outputs.result).rps.small_grafbase_default }}
+          Wundergraph           ${{ fromJson(needs.read.outputs.result).rps.small_wundergraph_no_opt }}
+          Apollo                ${{ fromJson(needs.read.outputs.result).rps.small_apollo_router }}
+          "Tailcall Cached"     ${{ fromJson(needs.read.outputs.result).rps.small_tailcall_full_conf }}
+          "Grafbase Cached"     ${{ fromJson(needs.read.outputs.result).rps.small_grafbase_cache }}
+          "Wundergraph Cached"  ${{ fromJson(needs.read.outputs.result).rps.small_wundergraph_default }}
           EOF
           tr -d ',' < data.dat > data1.dat && mv data1.dat data.dat
-      - name: Create RPS basic plot
-        run: gnuplot -e "file_name='files/rps_default.png'; title_text='RPS Default'" plot_script.gp
-      - name: Save RPS cached plot data
+      - name: Create RPS small payload data
+        run: gnuplot -e "file_name='files/rps_small.png'; title_text='RPS Small Payload'; color='#D81B60'" plot_script.gp
+      - name: Save RPS medium payload data
         run: |
           cat << 'EOF' > data.dat
-          #            Small          Medium         Big
-          Tailcall     ${{ fromJson(needs.read.outputs.result).rps.small_tailcall_full_conf }}    ${{ fromJson(needs.read.outputs.result).rps.medium_tailcall_full_conf }}    ${{ fromJson(needs.read.outputs.result).rps.big__tailcall_full_conf }}
-          Grafbase     ${{ fromJson(needs.read.outputs.result).rps.small_grafbase_cache }}    ${{ fromJson(needs.read.outputs.result).rps.medium_grafbase_cache }}    ${{ fromJson(needs.read.outputs.result).rps.big__grafbase_cache }}
-          Wundergraph  ${{ fromJson(needs.read.outputs.result).rps.small_wundergraph_default }}  ${{ fromJson(needs.read.outputs.result).rps.medium_wundergraph_default }}  ${{ fromJson(needs.read.outputs.result).rps.big__wundergraph_default }}
+          #                     Medium
+          Tailcall              ${{ fromJson(needs.read.outputs.result).rps.medium_tailcall_default }}
+          Grafbase              ${{ fromJson(needs.read.outputs.result).rps.medium_grafbase_default }}
+          Wundergraph           ${{ fromJson(needs.read.outputs.result).rps.medium_wundergraph_no_opt }}
+          Apollo                ${{ fromJson(needs.read.outputs.result).rps.medium_apollo_router }}
+          "Tailcall Cached"     ${{ fromJson(needs.read.outputs.result).rps.medium_tailcall_full_conf }}
+          "Grafbase Cached"     ${{ fromJson(needs.read.outputs.result).rps.medium_grafbase_cache }}
+          "Wundergraph Cached"  ${{ fromJson(needs.read.outputs.result).rps.medium_wundergraph_default }}
           EOF
           tr -d ',' < data.dat > data1.dat && mv data1.dat data.dat
-      - name: Create RPS cached plot
-        run: gnuplot -e "file_name='files/rps_cached.png'; title_text='RPS Cached'" plot_script.gp
-      - name: Write p95 plot script
-        run: |
-          cat << 'EOF' > plot_script.gp
-          set terminal png size 800,500 enhanced font "Arial,20"
-          set output file_name
-
-          small = "#D81B60"; medium = "#1E88E5"; big = "#FFC107";
-          set logscale y
-          set key left top
-          set style data histogram
-          set style histogram cluster gap 1
-          set style fill solid
-          set boxwidth 0.9
-          set xtics format ""
-          set xtics rotate by 45 right
-          set grid ytics
-
-          set title title_text
-          plot 'data.dat' using 2:xtic(1) title "Small" linecolor rgb small, \
-               'data.dat' using 3 title "Medium" linecolor rgb medium, \
-               'data.dat' using 4 title "Big" linecolor rgb big
-          EOF
-      - name: Save P95 Latency basic plot data
+      - name: Create RPS medium payload data
+        run: gnuplot -e "file_name='files/rps_medium.png'; title_text='RPS Medium Payload'; color='#1E88E5'" plot_script.gp
+      - name: Save RPS big payload data
         run: |
           cat << 'EOF' > data.dat
-          #            Small          Medium         Big
-          Tailcall     ${{ fromJson(needs.read.outputs.result).p95.small_tailcall_default }}    ${{ fromJson(needs.read.outputs.result).p95.medium_tailcall_default }}    ${{ fromJson(needs.read.outputs.result).p95.big_tailcall_default }}
-          Grafbase     ${{ fromJson(needs.read.outputs.result).p95.small_grafbase_default }}    ${{ fromJson(needs.read.outputs.result).p95.medium_grafbase_default }}    ${{ fromJson(needs.read.outputs.result).p95.big_grafbase_default }}
-          Wundergraph  ${{ fromJson(needs.read.outputs.result).p95.small_wundergraph_no_opt }}  ${{ fromJson(needs.read.outputs.result).p95.medium_wundergraph_no_opt }}  ${{ fromJson(needs.read.outputs.result).p95.big_wundergraph_no_opt }}
-          Apollo       ${{ fromJson(needs.read.outputs.result).p95.small_apollo_router }}       ${{ fromJson(needs.read.outputs.result).p95.medium_apollo_router }}       ${{ fromJson(needs.read.outputs.result).p95.big_apollo_router }}
+          #                     Big
+          Tailcall              ${{ fromJson(needs.read.outputs.result).rps.big_tailcall_default }}
+          Grafbase              ${{ fromJson(needs.read.outputs.result).rps.big_grafbase_default }}
+          Wundergraph           ${{ fromJson(needs.read.outputs.result).rps.big_wundergraph_no_opt }}
+          Apollo                ${{ fromJson(needs.read.outputs.result).rps.big_apollo_router }}
+          "Tailcall Cached"     ${{ fromJson(needs.read.outputs.result).rps.big_tailcall_full_conf }}
+          "Grafbase Cached"     ${{ fromJson(needs.read.outputs.result).rps.big_grafbase_cache }}
+          "Wundergraph Cached"  ${{ fromJson(needs.read.outputs.result).rps.big_wundergraph_default }}
           EOF
           tr -d ',' < data.dat > data1.dat && mv data1.dat data.dat
-      - name: Create P95 Latency basic plot
-        run: gnuplot -e "file_name='files/p95_default.png'; title_text='Latency 95% Default'" plot_script.gp
-      - name: Save P95 Latency cached plot data
+      - name: Create RPS big payload data
+        run: gnuplot -e "file_name='files/rps_big.png'; title_text='RPS Big Payload'; color='#FFC107'" plot_script.gp
+      - name: Save Latency 95% small payload data
         run: |
           cat << 'EOF' > data.dat
-          #            Small          Medium         Big
-          Tailcall     ${{ fromJson(needs.read.outputs.result).p95.small_tailcall_full_conf }}    ${{ fromJson(needs.read.outputs.result).p95.medium_tailcall_full_conf }}    ${{ fromJson(needs.read.outputs.result).p95.big__tailcall_full_conf }}
-          Grafbase     ${{ fromJson(needs.read.outputs.result).p95.small_grafbase_cache }}    ${{ fromJson(needs.read.outputs.result).p95.medium_grafbase_cache }}    ${{ fromJson(needs.read.outputs.result).p95.big__grafbase_cache }}
-          Wundergraph  ${{ fromJson(needs.read.outputs.result).p95.small_wundergraph_default }}  ${{ fromJson(needs.read.outputs.result).p95.medium_wundergraph_default }}  ${{ fromJson(needs.read.outputs.result).p95.big__wundergraph_default }}
+          #                     Small
+          Tailcall              ${{ fromJson(needs.read.outputs.result).p95.small_tailcall_default }}
+          Grafbase              ${{ fromJson(needs.read.outputs.result).p95.small_grafbase_default }}
+          Wundergraph           ${{ fromJson(needs.read.outputs.result).p95.small_wundergraph_no_opt }}
+          Apollo                ${{ fromJson(needs.read.outputs.result).p95.small_apollo_router }}
+          "Tailcall Cached"     ${{ fromJson(needs.read.outputs.result).p95.small_tailcall_full_conf }}
+          "Grafbase Cached"     ${{ fromJson(needs.read.outputs.result).p95.small_grafbase_cache }}
+          "Wundergraph Cached"  ${{ fromJson(needs.read.outputs.result).p95.small_wundergraph_default }}
           EOF
           tr -d ',' < data.dat > data1.dat && mv data1.dat data.dat
-      - name: Create P95 Latency cached plot
-        run: gnuplot -e "file_name='files/p95_cached.png'; title_text='Latency 95% Cached'" plot_script.gp
+      - name: Create Latency 95% small payload data
+        run: gnuplot -e "file_name='files/p95_small.png'; title_text='Latency 95% Small Payload'; color='#D81B60'" plot_script.gp
+      - name: Save Latency 95% medium payload data
+        run: |
+          cat << 'EOF' > data.dat
+          #                     Medium
+          Tailcall              ${{ fromJson(needs.read.outputs.result).p95.medium_tailcall_default }}
+          Grafbase              ${{ fromJson(needs.read.outputs.result).p95.medium_grafbase_default }}
+          Wundergraph           ${{ fromJson(needs.read.outputs.result).p95.medium_wundergraph_no_opt }}
+          Apollo                ${{ fromJson(needs.read.outputs.result).p95.medium_apollo_router }}
+          "Tailcall Cached"     ${{ fromJson(needs.read.outputs.result).p95.medium_tailcall_full_conf }}
+          "Grafbase Cached"     ${{ fromJson(needs.read.outputs.result).p95.medium_grafbase_cache }}
+          "Wundergraph Cached"  ${{ fromJson(needs.read.outputs.result).p95.medium_wundergraph_default }}
+          EOF
+          tr -d ',' < data.dat > data1.dat && mv data1.dat data.dat
+      - name: Create Latency 95% medium payload data
+        run: gnuplot -e "file_name='files/p95_medium.png'; title_text='Latency 95% Medium Payload'; color='#1E88E5'" plot_script.gp
+      - name: Save Latency 95% big payload data
+        run: |
+          cat << 'EOF' > data.dat
+          #                     Big
+          Tailcall              ${{ fromJson(needs.read.outputs.result).p95.big_tailcall_default }}
+          Grafbase              ${{ fromJson(needs.read.outputs.result).p95.big_grafbase_default }}
+          Wundergraph           ${{ fromJson(needs.read.outputs.result).p95.big_wundergraph_no_opt }}
+          Apollo                ${{ fromJson(needs.read.outputs.result).p95.big_apollo_router }}
+          "Tailcall Cached"     ${{ fromJson(needs.read.outputs.result).p95.big_tailcall_full_conf }}
+          "Grafbase Cached"     ${{ fromJson(needs.read.outputs.result).p95.big_grafbase_cache }}
+          "Wundergraph Cached"  ${{ fromJson(needs.read.outputs.result).p95.big_wundergraph_default }}
+          EOF
+          tr -d ',' < data.dat > data1.dat && mv data1.dat data.dat
+      - name: Create Latency 95% big payload data
+        run: gnuplot -e "file_name='files/p95_big.png'; title_text='Latency 95% Big Payload'; color='#FFC107'" plot_script.gp
       - name: Cleanup files
         run: |
           rm "results.md"
