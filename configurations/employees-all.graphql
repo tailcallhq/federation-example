@@ -4,7 +4,7 @@ schema {
 
 type Query {
   employees: [Employee!]!
-    @http(url: "http://127.0.0.1:4001/employees", dedupe: true)
+    @http(url: "http://127.0.0.1:4006/employees", dedupe: true)
     @cache(maxAge: 40)
 }
 

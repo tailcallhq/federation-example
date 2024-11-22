@@ -736,7 +736,7 @@ scalar join__FieldSet
 
 enum join__Graph {
   AVAILABILITY @join__graph(name: "availability", url: "http://127.0.0.1:4007/graphql")
-  EMPLOYEES @join__graph(name: "employees", url: "http://127.0.0.1:4001/graphql")
+  EMPLOYEES @join__graph(name: "employees", url: "http://127.0.0.1:4006/graphql")
   FAMILY @join__graph(name: "family", url: "http://127.0.0.1:4002/graphql")
   HOBBIES @join__graph(name: "hobbies", url: "http://127.0.0.1:4003/graphql")
   MOOD @join__graph(name: "mood", url: "http://127.0.0.1:4008/graphql")
