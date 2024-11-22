@@ -11,12 +11,14 @@ Explore and compare the performance of the fastest GraphQL federation routers th
     - [Latency 95% Plots](#latency-95-plots)
   - [Architecture](#architecture)
     - [Components](#components)
+    - [Specifications](#specifications)
   - [Quick Start](#quick-start)
   - [Resources](#resources)
 
 ## Benchmark Results
 
 <!-- PERFORMANCE_RESULTS_START -->
+
 ### [Small Payload - 362 bytes](./source/small.json)
 | Server | Status | RPS | Latency |
 | ---: | ---: | ---: | ---: |
@@ -74,7 +76,6 @@ Explore and compare the performance of the fastest GraphQL federation routers th
 
 ![Latency 95%: big payload](./files/p95_big.png)
 
-
 ## Architecture
 
 ![Architecture Image](./files/architecture.svg)
@@ -97,14 +98,21 @@ Size:
 
 ## Quick Start
 
-To run the benchmarks, you have to install Docker on your computer. We advise using Docker because it eliminates the hassle of managing benchmark dependencies. Follow the instructions provided on the official website: https://docs.docker.com/engine/install/
+1. Clone the repository
 
-```bash
-git clone git@github.com:tailcallhq/federation-example.git
-cd federation-example
-sudo docker build -t tailcallhq/federation-benchmark .
-sudo Docker run tailcallhq/federation-benchmark:latest ./benchmark_all.sh
-```
+   ```bash
+   git clone git@github.com:tailcallhq/federation-example.git
+   cd federation-example
+   ```
+
+2. Ensure you have the latest version of [Docker](https://docs.docker.com/engine/install/)
+
+3. Run the following command:
+   ```bash
+   docker build -t tailcallhq/federation-benchmark .
+   docker run tailcallhq/federation-benchmark:latest ./benchmark_all.sh
+   ```
+4. Wait for benchmarks to complete.
 
 ## Resources
 
