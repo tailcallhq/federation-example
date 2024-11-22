@@ -1,14 +1,10 @@
 FROM debian:trixie-slim
-ARG WUNDER_URL="https://github.com/wundergraph/cosmo/releases/download/router%400.136.1/router-router@0.136.1-linux-amd64.tar.gz"
-ARG APOLLO_URL="https://github.com/apollographql/router/releases/download/v1.57.1/router-v1.57.1-x86_64-unknown-linux-gnu.tar.gz"
-ARG GRAFBASE_URL="https://github.com/grafbase/grafbase/releases/download/gateway-0.17.0/grafbase-gateway-x86_64-unknown-linux-musl"
-ARG TAILCALL_URL="https://github.com/tailcallhq/tailcall/releases/download/v0.124.0/tailcall-x86_64-unknown-linux-gnu"
 
 WORKDIR /usr/src/benchmarks
 
 # Update, upgrade, and install dependencies
 RUN apt update && apt upgrade -y && \
-    apt install -y hey curl gcc musl-dev build-essential nginx=1.26.0-3+b1 wget && \
+    apt install -y hey lsof curl gcc musl-dev build-essential nginx=1.26.0-3+b1 wget nodejs npm && \
     rm -rf /var/lib/apt/lists/*
 
 # Setup Rust
@@ -25,21 +21,24 @@ RUN cargo build --release
 # Configure NGINX
 COPY nginx/nginx.conf /etc/nginx/sites-available/default
 
-# Setup Wundergraph
-RUN wget -O wunder.tar.gz "$WUNDER_URL" && \
-    tar -xvf wunder.tar.gz && rm wunder.tar.gz && \
-    mv router wunder && chmod +x wunder
+# Install WunderGraph CLI and Router
+RUN npm install -g wgc@latest && \
+    wgc router download-binary -o . && \
+    mv router wunder && \
+    chmod +x wunder
 
-# Setup Apollo
-RUN wget -O apollo.tar.gz "$APOLLO_URL" && \
-    tar -xvf apollo.tar.gz && rm apollo.tar.gz && \
-    mv dist/router apollo && chmod +x apollo
+# Install Apollo Router
+RUN curl -sSL https://router.apollo.dev/download/nix/latest | sh && \
+    mv router apollo && chmod +x apollo
+
 
 # Setup Grafbase
-RUN wget -O grafbase "$GRAFBASE_URL" && chmod +x grafbase
+RUN curl -fsSL https://grafbase.com/downloads/gateway | bash && \
+    mv ~/.grafbase/bin/grafbase-gateway grafbase && chmod +x grafbase
+
 
 # Setup Tailcall
-RUN wget -O tailcall "$TAILCALL_URL" && chmod +x tailcall
+RUN npm install -g @tailcallhq/tailcall
 
 # Copy Configurations and Scripts
 COPY configurations/* .

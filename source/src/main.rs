@@ -7,7 +7,9 @@ use axum::{
     Router,
 };
 use resource::resource_str;
-use std::env;
+use std::{env, net::SocketAddr};
+use tokio::signal;
+use axum_server::Handle;
 
 #[tokio::main]
 async fn main() {
@@ -31,18 +33,34 @@ async fn main() {
             .route("/graphql", post(employees)),
         _ => panic!("Invalid args: {:?}. Use big|medium|small", args),
     }
-    .layer(axum::middleware::from_fn(http_cache_middleware));
+        .layer(axum::middleware::from_fn(http_cache_middleware));
 
-    let addr = match args[1].as_str() {
-        "big" => "127.0.0.1:4006",
-        "medium" => "127.0.0.1:4006",
-        "small" => "127.0.0.1:4001",
-        _ => panic!("Invalid args: {:?}. Use big|medium|small", args),
-    };
 
-    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
-    println!("listening on {}", listener.local_addr().unwrap());
-    axum::serve(listener, app).await.unwrap();
+    let addr: SocketAddr = "127.0.0.1:4006".parse().unwrap();
+
+    let handle = Handle::new();
+
+    let server = axum_server::bind(addr)
+        .handle(handle.clone())
+        .serve(app.into_make_service());
+
+    println!("Listening on {}", addr);
+
+    tokio::select! {
+        _ = server => {
+            eprintln!("Server exited unexpectedly");
+        }
+        _ = shutdown_signal() => {
+            println!("Shutdown signal received, initiating graceful shutdown...");
+            handle.graceful_shutdown(Some(std::time::Duration::from_secs(30)));
+        }
+    }
+}
+
+async fn shutdown_signal() {
+    signal::ctrl_c()
+        .await
+        .expect("Failed to install CTRL+C signal handler");
 }
 
 async fn big() -> Response<String> {
@@ -73,13 +91,13 @@ async fn http_cache_middleware(request: Request, next: Next) -> Response {
     let mut response = next.run(request).await;
 
     response.headers_mut().insert(
-        "Cache-control",
-        HeaderValue::from_str("max-age=180, public").unwrap(),
+        "Cache-Control",
+        HeaderValue::from_static("max-age=180, public"),
     );
 
     response.headers_mut().insert(
-        "Content-type",
-        HeaderValue::from_str("application/json").unwrap(),
+        "Content-Type",
+        HeaderValue::from_static("application/json"),
     );
 
     response
