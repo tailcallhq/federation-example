@@ -4,7 +4,7 @@ WORKDIR /usr/src/benchmarks
 
 # Update, upgrade, and install dependencies
 RUN apt update && apt upgrade -y && \
-    apt install -y hey curl gcc musl-dev build-essential nginx=1.26.0-3+b1 wget nodejs npm && \
+    apt install -y hey lsof curl gcc musl-dev build-essential nginx=1.26.0-3+b1 wget nodejs npm && \
     rm -rf /var/lib/apt/lists/*
 
 # Setup Rust
