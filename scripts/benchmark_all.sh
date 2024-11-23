@@ -1,52 +1,17 @@
 #!/bin/bash
 
-./benchmark.sh big source_graphql
-./benchmark.sh big source_rest_api
-./benchmark.sh big nginx_graphql
-./benchmark.sh big nginx_rest_api
-./benchmark.sh big tailcall_default
-./benchmark.sh big tailcall_tweaks
-./benchmark.sh big tailcall_http_cache
-./benchmark.sh big tailcall_cache_dir
-./benchmark.sh big tailcall_dedupe_op
-./benchmark.sh big tailcall_full_conf
-./benchmark.sh big wundergraph_no_opt
-./benchmark.sh big wundergraph_dedupe
-./benchmark.sh big wundergraph_default
-./benchmark.sh big apollo_router
-./benchmark.sh big grafbase_default
-./benchmark.sh big grafbase_cache
+# Create an output file
+OUTPUT_FILE="output.log"
+: > $OUTPUT_FILE
 
-./benchmark.sh medium source_graphql
-./benchmark.sh medium source_rest_api
-./benchmark.sh medium nginx_graphql
-./benchmark.sh medium nginx_rest_api
-./benchmark.sh medium tailcall_default
-./benchmark.sh medium tailcall_tweaks
-./benchmark.sh medium tailcall_http_cache
-./benchmark.sh medium tailcall_cache_dir
-./benchmark.sh medium tailcall_dedupe_op
-./benchmark.sh medium tailcall_full_conf
-./benchmark.sh medium wundergraph_no_opt
-./benchmark.sh medium wundergraph_dedupe
-./benchmark.sh medium wundergraph_default
-./benchmark.sh medium apollo_router
-./benchmark.sh medium grafbase_default
-./benchmark.sh medium grafbase_cache
+# Benchmark configurations
+declare -a payloads=("big" "medium" "small")
+declare -a services=("nginx_graphql" "tailcall_default" "tailcall_full_conf" "wundergraph_no_opt" "wundergraph_default" "apollo_router" "grafbase_default" "grafbase_cache")
 
-./benchmark.sh small source_graphql
-./benchmark.sh small source_rest_api
-./benchmark.sh small nginx_graphql
-./benchmark.sh small nginx_rest_api
-./benchmark.sh small tailcall_default
-./benchmark.sh small tailcall_tweaks
-./benchmark.sh small tailcall_http_cache
-./benchmark.sh small tailcall_cache_dir
-./benchmark.sh small tailcall_dedupe_op
-./benchmark.sh small tailcall_full_conf
-./benchmark.sh small wundergraph_no_opt
-./benchmark.sh small wundergraph_dedupe
-./benchmark.sh small wundergraph_default
-./benchmark.sh small apollo_router
-./benchmark.sh small grafbase_default
-./benchmark.sh small grafbase_cache
+# Run benchmarks and append results to the log
+for payload in "${payloads[@]}"; do
+  for service in "${services[@]}"; do
+    echo "Running benchmark for payload: $payload, service: $service"
+    ./benchmark.sh $payload $service | tee -a $OUTPUT_FILE
+  done
+done

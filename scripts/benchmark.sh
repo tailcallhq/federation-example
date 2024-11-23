@@ -1,30 +1,22 @@
 #!/bin/bash
 
 benchmark_file="bench-hey-$1.json"
-echo "Script executed from: ${PWD}"
 
 # Define a function to kill processes running on a specific port
 kill_port_process() {
     local port=$1
-    echo "Checking for process on port $port..."
     pid=$(lsof -ti:$port)
     if [ -n "$pid" ]; then
-        echo "Killing process $pid running on port $port..."
         kill -9 "$pid"
-        echo "Process terminated."
-    else
-        echo "No process found on port $port."
     fi
 }
 cleanup() {
-    echo "Cleaning up..."
     # List of processes to terminate
     processes=("tailcall" "nginx" "wunder" "apollo" "grafbase")
 
     for process in "${processes[@]}"; do
         for pid in $(ls /proc | grep -E '^[0-9]+$' | xargs -I {} sh -c "grep -l '$process' /proc/{}/comm 2>/dev/null" | sed 's|/proc/||g' | sed 's|/comm||g'); do
-            echo "Terminating $process with PID $pid..."
-            kill -9 "$pid" 2>/dev/null || echo "Failed to terminate PID $pid"
+            kill -9 "$pid" 2>/dev/null || true
         done
     done
     kill_port_process 4006
@@ -45,7 +37,6 @@ echo "Setup Benchmark (payload=$1) (project=$2)"
 source_port="4006"
 nginx_port="8090"
 
-echo "Running Benchmark (payload=$1) (project=$2)"
 
 if [ "$2" = "source_graphql" ]; then
     hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' http://127.0.0.1:$source_port/graphql
