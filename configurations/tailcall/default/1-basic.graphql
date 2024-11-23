@@ -1,11 +1,7 @@
 schema
   @link(type: Config, src: "./employees-basic.graphql")
   @link(type: Config, src: "./test1-basic.graphql")
-  @server(port: 8030)
-  @upstream(
-    poolMaxIdlePerHost: 200
-    tcpKeepAlive: 60
-  ) {
+  @server(port: 8030) {
   query: Query
 }
 

@@ -31,7 +31,6 @@ type Query {
         }
       ]
     )
-    @cache(maxAge: 40)
 }
 
 type BigObject {

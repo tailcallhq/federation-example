@@ -40,6 +40,5 @@ RUN curl -fsSL https://grafbase.com/downloads/gateway | bash && \
 # Setup Tailcall
 RUN npm install -g @tailcallhq/tailcall
 
-# Copy Configurations and Scripts
-COPY configurations/* .
+COPY configurations/ ./configurations/
 COPY scripts/* .

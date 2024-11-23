@@ -1,8 +1,7 @@
 schema
   @link(url: "https://specs.apollo.dev/link/v1.0")
   @link(url: "https://specs.apollo.dev/join/v0.3", for: EXECUTION)
-  @link(url: "https://specs.apollo.dev/tag/v0.3", import: ["@tag"])
-{
+  @link(url: "https://specs.apollo.dev/tag/v0.3", import: ["@tag"]) {
   query: Query
   mutation: Mutation
   subscription: Subscription
@@ -12,25 +11,52 @@ directive @authenticated on FIELD_DEFINITION | OBJECT | INTERFACE | SCALAR | ENU
 
 directive @join__enumValue(graph: join__Graph!) repeatable on ENUM_VALUE
 
-directive @join__field(graph: join__Graph, requires: join__FieldSet, provides: join__FieldSet, type: String, external: Boolean, override: String, usedOverridden: Boolean) repeatable on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
+directive @join__field(
+  graph: join__Graph
+  requires: join__FieldSet
+  provides: join__FieldSet
+  type: String
+  external: Boolean
+  override: String
+  usedOverridden: Boolean
+) repeatable on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 
 directive @join__graph(name: String!, url: String!) on ENUM_VALUE
 
-directive @join__implements(graph: join__Graph!, interface: String!) repeatable on OBJECT | INTERFACE
+directive @join__implements(
+  graph: join__Graph!
+  interface: String!
+) repeatable on OBJECT | INTERFACE
 
-directive @join__type(graph: join__Graph!, key: join__FieldSet, extension: Boolean! = false, resolvable: Boolean! = true, isInterfaceObject: Boolean! = false) repeatable on OBJECT | INTERFACE | UNION | ENUM | INPUT_OBJECT | SCALAR
+directive @join__type(
+  graph: join__Graph!
+  key: join__FieldSet
+  extension: Boolean! = false
+  resolvable: Boolean! = true
+  isInterfaceObject: Boolean! = false
+) repeatable on OBJECT | INTERFACE | UNION | ENUM | INPUT_OBJECT | SCALAR
 
-directive @join__unionMember(graph: join__Graph!, member: String!) repeatable on UNION
+directive @join__unionMember(
+  graph: join__Graph!
+  member: String!
+) repeatable on UNION
 
-directive @link(url: String, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
+directive @link(
+  url: String
+  as: String
+  for: link__Purpose
+  import: [link__Import]
+) repeatable on SCHEMA
 
-directive @requiresScopes(scopes: [[requiresScopes__Scope!]!]!) on FIELD_DEFINITION | OBJECT | INTERFACE | SCALAR | ENUM
+directive @requiresScopes(
+  scopes: [[requiresScopes__Scope!]!]!
+) on FIELD_DEFINITION | OBJECT | INTERFACE | SCALAR | ENUM
 
-directive @tag(name: String!) repeatable on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION | SCHEMA
+directive @tag(
+  name: String!
+) repeatable on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION | SCHEMA
 
-type ABigObject
-  @join__type(graph: TEST1)
-{
+type ABigObject @join__type(graph: TEST1) {
   aFieldOnABigObject: String!
   bFieldOnABigObject: Int!
   cFieldOnABigObject: Boolean!
@@ -62,24 +88,19 @@ type ABigObject
 type Alligator implements Pet & Animal
   @join__implements(graph: FAMILY, interface: "Pet")
   @join__implements(graph: FAMILY, interface: "Animal")
-  @join__type(graph: FAMILY)
-{
+  @join__type(graph: FAMILY) {
   class: Class!
   dangerous: String!
   gender: Gender!
   name: String!
 }
 
-interface Animal
-  @join__type(graph: FAMILY)
-{
+interface Animal @join__type(graph: FAMILY) {
   class: Class!
   gender: Gender!
 }
 
-type BBigObject
-  @join__type(graph: TEST1)
-{
+type BBigObject @join__type(graph: TEST1) {
   aFieldOnBBigObject: String!
   bFieldOnBBigObject: Int!
   cFieldOnBBigObject: Boolean!
@@ -135,36 +156,54 @@ union BigAbstractResponse
   @join__unionMember(graph: TEST1, member: "WBigObject")
   @join__unionMember(graph: TEST1, member: "XBigObject")
   @join__unionMember(graph: TEST1, member: "YBigObject")
-  @join__unionMember(graph: TEST1, member: "ZBigObject")
- = ABigObject | BBigObject | CBigObject | DBigObject | EBigObject | FBigObject | GBigObject | HBigObject | IBigObject | JBigObject | KBigObject | LBigObject | MBigObject | NBigObject | OBigObject | PBigObject | QBigObject | RBigObject | SBigObject | TBigObject | UBigObject | VBigObject | WBigObject | XBigObject | YBigObject | ZBigObject
+  @join__unionMember(graph: TEST1, member: "ZBigObject") =
+  | ABigObject
+  | BBigObject
+  | CBigObject
+  | DBigObject
+  | EBigObject
+  | FBigObject
+  | GBigObject
+  | HBigObject
+  | IBigObject
+  | JBigObject
+  | KBigObject
+  | LBigObject
+  | MBigObject
+  | NBigObject
+  | OBigObject
+  | PBigObject
+  | QBigObject
+  | RBigObject
+  | SBigObject
+  | TBigObject
+  | UBigObject
+  | VBigObject
+  | WBigObject
+  | XBigObject
+  | YBigObject
+  | ZBigObject
 
-type BigObject
-  @join__type(graph: TEST1)
-{
+type BigObject @join__type(graph: TEST1) {
   nestedObjects: [NestedObject!]!
 }
 
 type Cat implements Pet & Animal
   @join__implements(graph: FAMILY, interface: "Pet")
   @join__implements(graph: FAMILY, interface: "Animal")
-  @join__type(graph: FAMILY)
-{
+  @join__type(graph: FAMILY) {
   class: Class!
   gender: Gender!
   name: String!
   type: CatType!
 }
 
-enum CatType
-  @join__type(graph: FAMILY)
-{
+enum CatType @join__type(graph: FAMILY) {
   HOME @join__enumValue(graph: FAMILY)
   STREET @join__enumValue(graph: FAMILY)
 }
 
-type CBigObject
-  @join__type(graph: TEST1)
-{
+type CBigObject @join__type(graph: TEST1) {
   aFieldOnCBigObject: String!
   bFieldOnCBigObject: Int!
   cFieldOnCBigObject: Boolean!
@@ -193,17 +232,13 @@ type CBigObject
   zFieldOnCBigObject: Int!
 }
 
-type City
-  @join__type(graph: EMPLOYEES)
-{
+type City @join__type(graph: EMPLOYEES) {
   type: String!
   name: String!
   country: Country
 }
 
-enum Class
-  @join__type(graph: FAMILY)
-{
+enum Class @join__type(graph: FAMILY) {
   FISH @join__enumValue(graph: FAMILY)
   MAMMAL @join__enumValue(graph: FAMILY)
   REPTILE @join__enumValue(graph: FAMILY)
@@ -211,19 +246,18 @@ enum Class
 
 type Consultancy
   @join__type(graph: EMPLOYEES, key: "upc")
-  @join__type(graph: PRODUCTS, key: "upc")
-{
+  @join__type(graph: PRODUCTS, key: "upc") {
   upc: ID!
   lead: Employee! @join__field(graph: EMPLOYEES)
-  isLeadAvailable: Boolean @join__field(graph: EMPLOYEES, requires: "lead { isAvailable }")
+  isLeadAvailable: Boolean
+    @join__field(graph: EMPLOYEES, requires: "lead { isAvailable }")
   name: ProductName! @join__field(graph: PRODUCTS)
 }
 
 type Cosmo implements IProduct
   @join__implements(graph: EMPLOYEES, interface: "IProduct")
   @join__type(graph: EMPLOYEES, key: "upc")
-  @join__type(graph: PRODUCTS, key: "upc")
-{
+  @join__type(graph: PRODUCTS, key: "upc") {
   upc: ID!
   engineers: [Employee!]! @join__field(graph: EMPLOYEES)
   lead: Employee! @join__field(graph: EMPLOYEES)
@@ -233,21 +267,15 @@ type Cosmo implements IProduct
 
 type Country
   @join__type(graph: EMPLOYEES, key: "key { name }", resolvable: false)
-  @join__type(graph: HOBBIES, key: "key { name }", resolvable: false)
-{
+  @join__type(graph: HOBBIES, key: "key { name }", resolvable: false) {
   key: CountryKey!
 }
 
-type CountryKey
-  @join__type(graph: EMPLOYEES)
-  @join__type(graph: HOBBIES)
-{
+type CountryKey @join__type(graph: EMPLOYEES) @join__type(graph: HOBBIES) {
   name: String!
 }
 
-type DBigObject
-  @join__type(graph: TEST1)
-{
+type DBigObject @join__type(graph: TEST1) {
   aFieldOnDBigObject: String!
   bFieldOnDBigObject: Int!
   cFieldOnDBigObject: Boolean!
@@ -276,9 +304,7 @@ type DBigObject
   zFieldOnDBigObject: Int!
 }
 
-type DeeplyNestedObject
-  @join__type(graph: TEST1)
-{
+type DeeplyNestedObject @join__type(graph: TEST1) {
   aFieldOnDeeplyNestedObject: String!
   bFieldOnDeeplyNestedObject: Int!
   cFieldOnDeeplyNestedObject: Boolean!
@@ -307,18 +333,13 @@ type DeeplyNestedObject
   zFieldOnDeeplyNestedObject: Int!
 }
 
-enum Department
-  @join__type(graph: EMPLOYEES)
-{
+enum Department @join__type(graph: EMPLOYEES) {
   ENGINEERING @join__enumValue(graph: EMPLOYEES)
   MARKETING @join__enumValue(graph: EMPLOYEES)
   OPERATIONS @join__enumValue(graph: EMPLOYEES)
 }
 
-type Details
-  @join__type(graph: EMPLOYEES)
-  @join__type(graph: FAMILY)
-{
+type Details @join__type(graph: EMPLOYEES) @join__type(graph: FAMILY) {
   forename: String!
   location: Country! @join__field(graph: EMPLOYEES)
   surname: String!
@@ -333,16 +354,13 @@ type Details
 type DirectiveFact implements TopSecretFact
   @join__implements(graph: PRODUCTS, interface: "TopSecretFact")
   @join__type(graph: PRODUCTS)
-  @authenticated
-{
+  @authenticated {
   title: String!
   description: FactContent!
   factType: TopSecretFactType
 }
 
-type Documentation
-  @join__type(graph: PRODUCTS)
-{
+type Documentation @join__type(graph: PRODUCTS) {
   url(product: ProductName!): String!
   urls(products: [ProductName!]!): [String!]!
 }
@@ -350,26 +368,21 @@ type Documentation
 type Dog implements Pet & Animal
   @join__implements(graph: FAMILY, interface: "Pet")
   @join__implements(graph: FAMILY, interface: "Animal")
-  @join__type(graph: FAMILY)
-{
+  @join__type(graph: FAMILY) {
   breed: DogBreed!
   class: Class!
   gender: Gender!
   name: String!
 }
 
-enum DogBreed
-  @join__type(graph: FAMILY)
-{
+enum DogBreed @join__type(graph: FAMILY) {
   GOLDEN_RETRIEVER @join__enumValue(graph: FAMILY)
   POODLE @join__enumValue(graph: FAMILY)
   ROTTWEILER @join__enumValue(graph: FAMILY)
   YORKSHIRE_TERRIER @join__enumValue(graph: FAMILY)
 }
 
-type EBigObject
-  @join__type(graph: TEST1)
-{
+type EBigObject @join__type(graph: TEST1) {
   aFieldOnEBigObject: String!
   bFieldOnEBigObject: Int!
   cFieldOnEBigObject: Boolean!
@@ -406,17 +419,24 @@ type Employee implements Identifiable
   @join__type(graph: HOBBIES, key: "id")
   @join__type(graph: MOOD, key: "id")
   @join__type(graph: PRODUCTS, key: "id")
-  @join__type(graph: TEST1, key: "id")
-{
+  @join__type(graph: TEST1, key: "id") {
   id: Int!
-  isAvailable: Boolean! @join__field(graph: AVAILABILITY) @join__field(graph: EMPLOYEES, external: true)
-  details: Details @join__field(graph: EMPLOYEES, type: "Details!") @join__field(graph: FAMILY, type: "Details")
+  isAvailable: Boolean!
+    @join__field(graph: AVAILABILITY)
+    @join__field(graph: EMPLOYEES, external: true)
+  details: Details
+    @join__field(graph: EMPLOYEES, type: "Details!")
+    @join__field(graph: FAMILY, type: "Details")
   tag: String! @join__field(graph: EMPLOYEES)
   role: RoleType! @join__field(graph: EMPLOYEES)
   notes: String @join__field(graph: PRODUCTS, override: "employees")
   updatedAt: String! @join__field(graph: EMPLOYEES)
-  startDate: String! @join__field(graph: EMPLOYEES) @requiresScopes(scopes: [["read:employee", "read:private"], ["read:all"]])
-  currentMood: Mood! @join__field(graph: EMPLOYEES, external: true) @join__field(graph: MOOD)
+  startDate: String!
+    @join__field(graph: EMPLOYEES)
+    @requiresScopes(scopes: [["read:employee", "read:private"], ["read:all"]])
+  currentMood: Mood!
+    @join__field(graph: EMPLOYEES, external: true)
+    @join__field(graph: MOOD)
   derivedMood: Mood! @join__field(graph: EMPLOYEES, requires: "currentMood")
   rootFieldThrowsError: String @join__field(graph: EMPLOYEES)
   rootFieldErrorWrapper: ErrorWrapper @join__field(graph: EMPLOYEES)
@@ -427,17 +447,14 @@ type Employee implements Identifiable
 
 type Engineer implements RoleType
   @join__implements(graph: EMPLOYEES, interface: "RoleType")
-  @join__type(graph: EMPLOYEES)
-{
+  @join__type(graph: EMPLOYEES) {
   departments: [Department!]!
   title: [String!]!
   employees: [Employee!]!
   engineerType: EngineerType!
 }
 
-enum EngineerType
-  @join__type(graph: EMPLOYEES)
-{
+enum EngineerType @join__type(graph: EMPLOYEES) {
   BACKEND @join__enumValue(graph: EMPLOYEES)
   FRONTEND @join__enumValue(graph: EMPLOYEES)
   FULLSTACK @join__enumValue(graph: EMPLOYEES)
@@ -446,48 +463,38 @@ enum EngineerType
 type EntityFact implements TopSecretFact
   @join__implements(graph: PRODUCTS, interface: "TopSecretFact")
   @join__type(graph: PRODUCTS)
-  @requiresScopes(scopes: [["read:entity"]])
-{
+  @requiresScopes(scopes: [["read:entity"]]) {
   title: String!
   description: FactContent!
   factType: TopSecretFactType
 }
 
-enum EnumType
-  @join__type(graph: TEST1)
-{
+enum EnumType @join__type(graph: TEST1) {
   A @join__enumValue(graph: TEST1)
   B @join__enumValue(graph: TEST1)
   C @join__enumValue(graph: TEST1)
 }
 
-type ErrorWrapper
-  @join__type(graph: EMPLOYEES)
-{
+type ErrorWrapper @join__type(graph: EMPLOYEES) {
   okField: String
   errorField: String
 }
 
 type Exercise implements Hobby
   @join__implements(graph: HOBBIES, interface: "Hobby")
-  @join__type(graph: HOBBIES)
-{
+  @join__type(graph: HOBBIES) {
   employees: [Employee!]!
   category: ExerciseType!
 }
 
-enum ExerciseType
-  @join__type(graph: HOBBIES)
-{
+enum ExerciseType @join__type(graph: HOBBIES) {
   CALISTHENICS @join__enumValue(graph: HOBBIES)
   HIKING @join__enumValue(graph: HOBBIES)
   SPORT @join__enumValue(graph: HOBBIES)
   STRENGTH_TRAINING @join__enumValue(graph: HOBBIES)
 }
 
-interface Experience
-  @join__type(graph: HOBBIES)
-{
+interface Experience @join__type(graph: HOBBIES) {
   yearsOfExperience: Float!
 }
 
@@ -495,9 +502,7 @@ scalar FactContent
   @join__type(graph: PRODUCTS)
   @requiresScopes(scopes: [["read:scalar"], ["read:all"]])
 
-type FBigObject
-  @join__type(graph: TEST1)
-{
+type FBigObject @join__type(graph: TEST1) {
   aFieldOnFBigObject: String!
   bFieldOnFBigObject: Int!
   cFieldOnFBigObject: Boolean!
@@ -529,16 +534,13 @@ type FBigObject
 type Flying implements Experience & Hobby
   @join__implements(graph: HOBBIES, interface: "Experience")
   @join__implements(graph: HOBBIES, interface: "Hobby")
-  @join__type(graph: HOBBIES)
-{
+  @join__type(graph: HOBBIES) {
   employees: [Employee!]!
   planeModels: [String!]!
   yearsOfExperience: Float!
 }
 
-enum GameGenre
-  @join__type(graph: HOBBIES)
-{
+enum GameGenre @join__type(graph: HOBBIES) {
   ADVENTURE @join__enumValue(graph: HOBBIES)
   BOARD @join__enumValue(graph: HOBBIES)
   FPS @join__enumValue(graph: HOBBIES)
@@ -552,17 +554,14 @@ enum GameGenre
 type Gaming implements Experience & Hobby
   @join__implements(graph: HOBBIES, interface: "Experience")
   @join__implements(graph: HOBBIES, interface: "Hobby")
-  @join__type(graph: HOBBIES)
-{
+  @join__type(graph: HOBBIES) {
   employees: [Employee!]!
   genres: [GameGenre!]!
   name: String!
   yearsOfExperience: Float!
 }
 
-type GBigObject
-  @join__type(graph: TEST1)
-{
+type GBigObject @join__type(graph: TEST1) {
   aFieldOnGBigObject: String!
   bFieldOnGBigObject: Int!
   cFieldOnGBigObject: Boolean!
@@ -591,17 +590,13 @@ type GBigObject
   zFieldOnGBigObject: Int!
 }
 
-enum Gender
-  @join__type(graph: FAMILY)
-{
+enum Gender @join__type(graph: FAMILY) {
   FEMALE @join__enumValue(graph: FAMILY)
   MALE @join__enumValue(graph: FAMILY)
   UNKNOWN @join__enumValue(graph: FAMILY)
 }
 
-type HBigObject
-  @join__type(graph: TEST1)
-{
+type HBigObject @join__type(graph: TEST1) {
   aFieldOnHBigObject: String!
   bFieldOnHBigObject: Int!
   cFieldOnHBigObject: Boolean!
@@ -630,15 +625,11 @@ type HBigObject
   zFieldOnHBigObject: Int!
 }
 
-interface Hobby
-  @join__type(graph: HOBBIES)
-{
+interface Hobby @join__type(graph: HOBBIES) {
   employees: [Employee!]!
 }
 
-type IBigObject
-  @join__type(graph: TEST1)
-{
+type IBigObject @join__type(graph: TEST1) {
   aFieldOnIBigObject: String!
   bFieldOnIBigObject: Int!
   cFieldOnIBigObject: Boolean!
@@ -667,43 +658,31 @@ type IBigObject
   zFieldOnIBigObject: Int!
 }
 
-interface Identifiable
-  @join__type(graph: EMPLOYEES)
-{
+interface Identifiable @join__type(graph: EMPLOYEES) {
   id: Int!
 }
 
-input InputArg
-  @join__type(graph: TEST1)
-{
+input InputArg @join__type(graph: TEST1) {
   enums: [EnumType!]
   enum: EnumType
   string: String
   strings: [String!]
 }
 
-type InputResponse
-  @join__type(graph: TEST1)
-{
+type InputResponse @join__type(graph: TEST1) {
   arg: String!
 }
 
-input InputType
-  @join__type(graph: TEST1)
-{
+input InputType @join__type(graph: TEST1) {
   arg: String!
 }
 
-interface IProduct
-  @join__type(graph: EMPLOYEES)
-{
+interface IProduct @join__type(graph: EMPLOYEES) {
   upc: ID!
   engineers: [Employee!]!
 }
 
-type JBigObject
-  @join__type(graph: TEST1)
-{
+type JBigObject @join__type(graph: TEST1) {
   aFieldOnJBigObject: String!
   bFieldOnJBigObject: Int!
   cFieldOnJBigObject: Boolean!
@@ -735,8 +714,10 @@ type JBigObject
 scalar join__FieldSet
 
 enum join__Graph {
-  AVAILABILITY @join__graph(name: "availability", url: "http://127.0.0.1:4007/graphql")
-  EMPLOYEES @join__graph(name: "employees", url: "http://127.0.0.1:4006/graphql")
+  AVAILABILITY
+    @join__graph(name: "availability", url: "http://127.0.0.1:4007/graphql")
+  EMPLOYEES
+    @join__graph(name: "employees", url: "http://127.0.0.1:4006/graphql")
   FAMILY @join__graph(name: "family", url: "http://127.0.0.1:4002/graphql")
   HOBBIES @join__graph(name: "hobbies", url: "http://127.0.0.1:4003/graphql")
   MOOD @join__graph(name: "mood", url: "http://127.0.0.1:4008/graphql")
@@ -744,9 +725,7 @@ enum join__Graph {
   TEST1 @join__graph(name: "test1", url: "http://127.0.0.1:4006/graphql")
 }
 
-type KBigObject
-  @join__type(graph: TEST1)
-{
+type KBigObject @join__type(graph: TEST1) {
   aFieldOnKBigObject: String!
   bFieldOnKBigObject: Int!
   cFieldOnKBigObject: Boolean!
@@ -775,9 +754,7 @@ type KBigObject
   zFieldOnKBigObject: Int!
 }
 
-type LBigObject
-  @join__type(graph: TEST1)
-{
+type LBigObject @join__type(graph: TEST1) {
   aFieldOnLBigObject: String!
   bFieldOnLBigObject: Int!
   cFieldOnLBigObject: Boolean!
@@ -820,28 +797,22 @@ enum link__Purpose {
   EXECUTION
 }
 
-scalar Map
-  @join__type(graph: TEST1)
+scalar Map @join__type(graph: TEST1)
 
-enum MaritalStatus
-  @join__type(graph: FAMILY)
-{
+enum MaritalStatus @join__type(graph: FAMILY) {
   ENGAGED @join__enumValue(graph: FAMILY)
   MARRIED @join__enumValue(graph: FAMILY)
 }
 
 type Marketer implements RoleType
   @join__implements(graph: EMPLOYEES, interface: "RoleType")
-  @join__type(graph: EMPLOYEES)
-{
+  @join__type(graph: EMPLOYEES) {
   departments: [Department!]!
   title: [String!]!
   employees: [Employee!]!
 }
 
-type MBigObject
-  @join__type(graph: TEST1)
-{
+type MBigObject @join__type(graph: TEST1) {
   aFieldOnMBigObject: String!
   bFieldOnMBigObject: Int!
   cFieldOnMBigObject: Boolean!
@@ -872,17 +843,13 @@ type MBigObject
 
 type MiscellaneousFact implements TopSecretFact
   @join__implements(graph: PRODUCTS, interface: "TopSecretFact")
-  @join__type(graph: PRODUCTS)
-{
+  @join__type(graph: PRODUCTS) {
   title: String!
   description: FactContent! @requiresScopes(scopes: [["read:miscellaneous"]])
   factType: TopSecretFactType
 }
 
-enum Mood
-  @join__type(graph: EMPLOYEES)
-  @join__type(graph: MOOD)
-{
+enum Mood @join__type(graph: EMPLOYEES) @join__type(graph: MOOD) {
   HAPPY @join__enumValue(graph: EMPLOYEES) @join__enumValue(graph: MOOD)
   SAD @join__enumValue(graph: EMPLOYEES) @join__enumValue(graph: MOOD)
 }
@@ -890,8 +857,7 @@ enum Mood
 type Mouse implements Pet & Animal
   @join__implements(graph: FAMILY, interface: "Pet")
   @join__implements(graph: FAMILY, interface: "Animal")
-  @join__type(graph: FAMILY)
-{
+  @join__type(graph: FAMILY) {
   class: Class!
   gender: Gender!
   name: String!
@@ -901,19 +867,20 @@ type Mutation
   @join__type(graph: AVAILABILITY)
   @join__type(graph: EMPLOYEES)
   @join__type(graph: MOOD)
-  @join__type(graph: PRODUCTS)
-{
-  updateAvailability(employeeID: Int!, isAvailable: Boolean!): Employee! @join__field(graph: AVAILABILITY)
-  updateEmployeeTag(id: Int!, tag: String!): Employee @join__field(graph: EMPLOYEES)
+  @join__type(graph: PRODUCTS) {
+  updateAvailability(employeeID: Int!, isAvailable: Boolean!): Employee!
+    @join__field(graph: AVAILABILITY)
+  updateEmployeeTag(id: Int!, tag: String!): Employee
+    @join__field(graph: EMPLOYEES)
   singleUpload(file: Upload!): Boolean! @join__field(graph: EMPLOYEES)
   multipleUpload(files: [Upload!]!): Boolean! @join__field(graph: EMPLOYEES)
   updateMood(employeeID: Int!, mood: Mood!): Employee! @join__field(graph: MOOD)
-  addFact(fact: TopSecretFactInput!): TopSecretFact! @join__field(graph: PRODUCTS) @requiresScopes(scopes: [["write:fact"], ["write:all"]])
+  addFact(fact: TopSecretFactInput!): TopSecretFact!
+    @join__field(graph: PRODUCTS)
+    @requiresScopes(scopes: [["write:fact"], ["write:all"]])
 }
 
-enum Nationality
-  @join__type(graph: FAMILY)
-{
+enum Nationality @join__type(graph: FAMILY) {
   AMERICAN @join__enumValue(graph: FAMILY)
   DUTCH @join__enumValue(graph: FAMILY)
   ENGLISH @join__enumValue(graph: FAMILY)
@@ -923,9 +890,7 @@ enum Nationality
   UKRAINIAN @join__enumValue(graph: FAMILY)
 }
 
-type NBigObject
-  @join__type(graph: TEST1)
-{
+type NBigObject @join__type(graph: TEST1) {
   aFieldOnNBigObject: String!
   bFieldOnNBigObject: Int!
   cFieldOnNBigObject: Boolean!
@@ -954,22 +919,16 @@ type NBigObject
   zFieldOnNBigObject: Int!
 }
 
-type NestedObject
-  @join__type(graph: TEST1)
-{
+type NestedObject @join__type(graph: TEST1) {
   deeplyNestedObjects: [DeeplyNestedObject!]!
 }
 
-input NestedSearchInput
-  @join__type(graph: FAMILY)
-{
+input NestedSearchInput @join__type(graph: FAMILY) {
   maritalStatus: MaritalStatus
   hasChildren: Boolean
 }
 
-type OBigObject
-  @join__type(graph: TEST1)
-{
+type OBigObject @join__type(graph: TEST1) {
   aFieldOnOBigObject: String!
   bFieldOnOBigObject: Int!
   cFieldOnOBigObject: Boolean!
@@ -998,17 +957,14 @@ type OBigObject
   zFieldOnOBigObject: Int!
 }
 
-enum OperationType
-  @join__type(graph: EMPLOYEES)
-{
+enum OperationType @join__type(graph: EMPLOYEES) {
   FINANCE @join__enumValue(graph: EMPLOYEES)
   HUMAN_RESOURCES @join__enumValue(graph: EMPLOYEES)
 }
 
 type Operator implements RoleType
   @join__implements(graph: EMPLOYEES, interface: "RoleType")
-  @join__type(graph: EMPLOYEES)
-{
+  @join__type(graph: EMPLOYEES) {
   departments: [Department!]!
   title: [String!]!
   employees: [Employee!]!
@@ -1017,15 +973,12 @@ type Operator implements RoleType
 
 type Other implements Hobby
   @join__implements(graph: HOBBIES, interface: "Hobby")
-  @join__type(graph: HOBBIES)
-{
+  @join__type(graph: HOBBIES) {
   employees: [Employee!]!
   name: String!
 }
 
-type PBigObject
-  @join__type(graph: TEST1)
-{
+type PBigObject @join__type(graph: TEST1) {
   aFieldOnPBigObject: String!
   bFieldOnPBigObject: Int!
   cFieldOnPBigObject: Boolean!
@@ -1056,8 +1009,7 @@ type PBigObject
 
 interface Pet implements Animal
   @join__implements(graph: FAMILY, interface: "Animal")
-  @join__type(graph: FAMILY)
-{
+  @join__type(graph: FAMILY) {
   class: Class!
   gender: Gender!
   name: String!
@@ -1066,16 +1018,13 @@ interface Pet implements Animal
 type Pony implements Pet & Animal
   @join__implements(graph: FAMILY, interface: "Pet")
   @join__implements(graph: FAMILY, interface: "Animal")
-  @join__type(graph: FAMILY)
-{
+  @join__type(graph: FAMILY) {
   class: Class!
   gender: Gender!
   name: String!
 }
 
-enum ProductName
-  @join__type(graph: PRODUCTS)
-{
+enum ProductName @join__type(graph: PRODUCTS) {
   CONSULTANCY @join__enumValue(graph: PRODUCTS)
   COSMO @join__enumValue(graph: PRODUCTS)
   ENGINE @join__enumValue(graph: PRODUCTS)
@@ -1093,29 +1042,27 @@ union Products
   @join__unionMember(graph: EMPLOYEES, member: "Cosmo")
   @join__unionMember(graph: PRODUCTS, member: "Cosmo")
   @join__unionMember(graph: EMPLOYEES, member: "SDK")
-  @join__unionMember(graph: PRODUCTS, member: "Documentation")
- = Consultancy | Cosmo | SDK | Documentation
+  @join__unionMember(graph: PRODUCTS, member: "Documentation") =
+  | Consultancy
+  | Cosmo
+  | SDK
+  | Documentation
 
 type Programming implements Hobby
   @join__implements(graph: HOBBIES, interface: "Hobby")
-  @join__type(graph: HOBBIES)
-{
+  @join__type(graph: HOBBIES) {
   employees: [Employee!]!
   languages: [ProgrammingLanguage!]!
 }
 
-enum ProgrammingLanguage
-  @join__type(graph: HOBBIES)
-{
+enum ProgrammingLanguage @join__type(graph: HOBBIES) {
   CSHARP @join__enumValue(graph: HOBBIES)
   GO @join__enumValue(graph: HOBBIES)
   RUST @join__enumValue(graph: HOBBIES)
   TYPESCRIPT @join__enumValue(graph: HOBBIES)
 }
 
-type QBigObject
-  @join__type(graph: TEST1)
-{
+type QBigObject @join__type(graph: TEST1) {
   aFieldOnQBigObject: String!
   bFieldOnQBigObject: Int!
   cFieldOnQBigObject: Boolean!
@@ -1151,8 +1098,7 @@ type Query
   @join__type(graph: HOBBIES)
   @join__type(graph: MOOD)
   @join__type(graph: PRODUCTS)
-  @join__type(graph: TEST1)
-{
+  @join__type(graph: TEST1) {
   employee(id: Int!): Employee @join__field(graph: EMPLOYEES)
   employeeAsList(id: Int!): [Employee] @join__field(graph: EMPLOYEES)
   employees: [Employee] @join__field(graph: EMPLOYEES)
@@ -1161,30 +1107,44 @@ type Query
   firstEmployee: Employee! @join__field(graph: EMPLOYEES) @tag(name: "internal")
   findEmployees(criteria: SearchInput): [Employee!]! @join__field(graph: FAMILY)
   productTypes: [Products!]! @join__field(graph: PRODUCTS)
-  topSecretFederationFacts: [TopSecretFact!]! @join__field(graph: PRODUCTS) @requiresScopes(scopes: [["read:fact"], ["read:all"]])
+  topSecretFederationFacts: [TopSecretFact!]!
+    @join__field(graph: PRODUCTS)
+    @requiresScopes(scopes: [["read:fact"], ["read:all"]])
   factTypes: [TopSecretFactType!] @join__field(graph: PRODUCTS)
 
-  """Returns the value of the received HTTP header."""
+  """
+  Returns the value of the received HTTP header.
+  """
   headerValue(name: String!): String! @join__field(graph: TEST1)
 
-  """Returns the value of the given key in the WS initial payload."""
+  """
+  Returns the value of the given key in the WS initial payload.
+  """
   initPayloadValue(key: String!): String! @join__field(graph: TEST1)
   initialPayload: Map @join__field(graph: TEST1)
 
-  """Returns response after the given delay"""
+  """
+  Returns response after the given delay
+  """
   delay(response: String!, ms: Int!): String! @join__field(graph: TEST1)
-  bigResponse(artificialDelay: Int! = 0, bigObjects: Int! = 100, nestedObjects: Int! = 100, deeplyNestedObjects: Int! = 100): [BigObject!]! @join__field(graph: TEST1)
+  bigResponse(
+    artificialDelay: Int! = 0
+    bigObjects: Int! = 100
+    nestedObjects: Int! = 100
+    deeplyNestedObjects: Int! = 100
+  ): [BigObject!]! @join__field(graph: TEST1)
   bigAbstractResponse: BigAbstractResponse @join__field(graph: TEST1)
   rootFieldWithListArg(arg: [String!]!): [String!]! @join__field(graph: TEST1)
-  rootFieldWithNestedListArg(arg: [[String!]!]!): [[String!]!]! @join__field(graph: TEST1)
-  rootFieldWithListOfInputArg(arg: [InputType!]!): [InputResponse!]! @join__field(graph: TEST1)
-  rootFieldWithListOfEnumArg(arg: [EnumType!]!): [EnumType!]! @join__field(graph: TEST1)
+  rootFieldWithNestedListArg(arg: [[String!]!]!): [[String!]!]!
+    @join__field(graph: TEST1)
+  rootFieldWithListOfInputArg(arg: [InputType!]!): [InputResponse!]!
+    @join__field(graph: TEST1)
+  rootFieldWithListOfEnumArg(arg: [EnumType!]!): [EnumType!]!
+    @join__field(graph: TEST1)
   rootFieldWithInput(arg: InputArg!): String! @join__field(graph: TEST1)
 }
 
-type RBigObject
-  @join__type(graph: TEST1)
-{
+type RBigObject @join__type(graph: TEST1) {
   aFieldOnRBigObject: String!
   bFieldOnRBigObject: Int!
   cFieldOnRBigObject: Boolean!
@@ -1215,17 +1175,13 @@ type RBigObject
 
 scalar requiresScopes__Scope
 
-interface RoleType
-  @join__type(graph: EMPLOYEES)
-{
+interface RoleType @join__type(graph: EMPLOYEES) {
   departments: [Department!]!
   title: [String!]!
   employees: [Employee!]!
 }
 
-type SBigObject
-  @join__type(graph: TEST1)
-{
+type SBigObject @join__type(graph: TEST1) {
   aFieldOnSBigObject: String!
   bFieldOnSBigObject: Int!
   cFieldOnSBigObject: Boolean!
@@ -1257,8 +1213,7 @@ type SBigObject
 type SDK implements IProduct
   @join__implements(graph: EMPLOYEES, interface: "IProduct")
   @join__type(graph: EMPLOYEES, key: "upc")
-  @join__type(graph: HOBBIES, key: "upc")
-{
+  @join__type(graph: HOBBIES, key: "upc") {
   upc: ID!
   engineers: [Employee!]! @join__field(graph: EMPLOYEES)
   owner: Employee! @join__field(graph: EMPLOYEES)
@@ -1266,9 +1221,7 @@ type SDK implements IProduct
   clientLanguages: [ProgrammingLanguage!]! @join__field(graph: HOBBIES)
 }
 
-input SearchInput
-  @join__type(graph: FAMILY)
-{
+input SearchInput @join__type(graph: FAMILY) {
   hasPets: Boolean
   nationality: Nationality
   nested: NestedSearchInput
@@ -1277,30 +1230,38 @@ input SearchInput
 type Subscription
   @join__type(graph: EMPLOYEES)
   @join__type(graph: HOBBIES)
-  @join__type(graph: TEST1)
-{
-  """`currentTime` will return a stream of `Time` objects."""
+  @join__type(graph: TEST1) {
+  """
+  `currentTime` will return a stream of `Time` objects.
+  """
   currentTime: Time! @join__field(graph: EMPLOYEES)
-  countEmp(max: Int!, intervalMilliseconds: Int!): Int! @join__field(graph: EMPLOYEES)
-  countEmp2(max: Int!, intervalMilliseconds: Int!): Int! @join__field(graph: EMPLOYEES)
-  countHob(max: Int!, intervalMilliseconds: Int!): Int! @join__field(graph: HOBBIES)
+  countEmp(max: Int!, intervalMilliseconds: Int!): Int!
+    @join__field(graph: EMPLOYEES)
+  countEmp2(max: Int!, intervalMilliseconds: Int!): Int!
+    @join__field(graph: EMPLOYEES)
+  countHob(max: Int!, intervalMilliseconds: Int!): Int!
+    @join__field(graph: HOBBIES)
 
-  """Returns a stream with the value of the received HTTP header."""
-  headerValue(name: String!, repeat: Int): TimestampedString! @join__field(graph: TEST1)
+  """
+  Returns a stream with the value of the received HTTP header.
+  """
+  headerValue(name: String!, repeat: Int): TimestampedString!
+    @join__field(graph: TEST1)
 
   """
   Returns a stream with the value of value of the given key in the WS initial payload.
   """
-  initPayloadValue(key: String!, repeat: Int): TimestampedString! @join__field(graph: TEST1)
+  initPayloadValue(key: String!, repeat: Int): TimestampedString!
+    @join__field(graph: TEST1)
 
-  """Returns a stream with the value of the WS initial payload."""
+  """
+  Returns a stream with the value of the WS initial payload.
+  """
   initialPayload(repeat: Int): Map @join__field(graph: TEST1)
   returnsError: String @join__field(graph: TEST1)
 }
 
-type TBigObject
-  @join__type(graph: TEST1)
-{
+type TBigObject @join__type(graph: TEST1) {
   aFieldOnTBigObject: String!
   bFieldOnTBigObject: Int!
   cFieldOnTBigObject: Boolean!
@@ -1329,50 +1290,46 @@ type TBigObject
   zFieldOnTBigObject: Int!
 }
 
-type Time
-  @join__type(graph: EMPLOYEES)
-{
+type Time @join__type(graph: EMPLOYEES) {
   unixTime: Int!
   timeStamp: String!
 }
 
-type TimestampedString
-  @join__type(graph: TEST1)
-{
-  """The value of the string."""
+type TimestampedString @join__type(graph: TEST1) {
+  """
+  The value of the string.
+  """
   value: String!
 
-  """The timestamp when the response was generated."""
+  """
+  The timestamp when the response was generated.
+  """
   unixTime: Int!
 
-  """Sequence number"""
+  """
+  Sequence number
+  """
   seq: Int!
 
-  """Total number of responses to be sent"""
+  """
+  Total number of responses to be sent
+  """
   total: Int!
   initialPayload: Map
 }
 
-interface TopSecretFact
-  @join__type(graph: PRODUCTS)
-  @authenticated
-{
+interface TopSecretFact @join__type(graph: PRODUCTS) @authenticated {
   description: FactContent!
   factType: TopSecretFactType
 }
 
-input TopSecretFactInput
-  @join__type(graph: PRODUCTS)
-{
+input TopSecretFactInput @join__type(graph: PRODUCTS) {
   title: String!
   description: FactContent!
   factType: TopSecretFactType!
 }
 
-enum TopSecretFactType
-  @join__type(graph: PRODUCTS)
-  @authenticated
-{
+enum TopSecretFactType @join__type(graph: PRODUCTS) @authenticated {
   DIRECTIVE @join__enumValue(graph: PRODUCTS)
   ENTITY @join__enumValue(graph: PRODUCTS)
   MISCELLANEOUS @join__enumValue(graph: PRODUCTS)
@@ -1380,15 +1337,12 @@ enum TopSecretFactType
 
 type Travelling implements Hobby
   @join__implements(graph: HOBBIES, interface: "Hobby")
-  @join__type(graph: HOBBIES)
-{
+  @join__type(graph: HOBBIES) {
   employees: [Employee!]!
   countriesLived: [Country!]!
 }
 
-type UBigObject
-  @join__type(graph: TEST1)
-{
+type UBigObject @join__type(graph: TEST1) {
   aFieldOnUBigObject: String!
   bFieldOnUBigObject: Int!
   cFieldOnUBigObject: Boolean!
@@ -1417,12 +1371,9 @@ type UBigObject
   zFieldOnUBigObject: Int!
 }
 
-scalar Upload
-  @join__type(graph: EMPLOYEES)
+scalar Upload @join__type(graph: EMPLOYEES)
 
-type VBigObject
-  @join__type(graph: TEST1)
-{
+type VBigObject @join__type(graph: TEST1) {
   aFieldOnVBigObject: String!
   bFieldOnVBigObject: Int!
   cFieldOnVBigObject: Boolean!
@@ -1451,9 +1402,7 @@ type VBigObject
   zFieldOnVBigObject: Int!
 }
 
-type WBigObject
-  @join__type(graph: TEST1)
-{
+type WBigObject @join__type(graph: TEST1) {
   aFieldOnWBigObject: String!
   bFieldOnWBigObject: Int!
   cFieldOnWBigObject: Boolean!
@@ -1482,9 +1431,7 @@ type WBigObject
   zFieldOnWBigObject: Int!
 }
 
-type XBigObject
-  @join__type(graph: TEST1)
-{
+type XBigObject @join__type(graph: TEST1) {
   aFieldOnXBigObject: String!
   bFieldOnXBigObject: Int!
   cFieldOnXBigObject: Boolean!
@@ -1513,9 +1460,7 @@ type XBigObject
   zFieldOnXBigObject: Int!
 }
 
-type YBigObject
-  @join__type(graph: TEST1)
-{
+type YBigObject @join__type(graph: TEST1) {
   aFieldOnYBigObject: String!
   bFieldOnYBigObject: Int!
   cFieldOnYBigObject: Boolean!
@@ -1544,9 +1489,7 @@ type YBigObject
   zFieldOnYBigObject: Int!
 }
 
-type ZBigObject
-  @join__type(graph: TEST1)
-{
+type ZBigObject @join__type(graph: TEST1) {
   aFieldOnZBigObject: String!
   bFieldOnZBigObject: Int!
   cFieldOnZBigObject: Boolean!
