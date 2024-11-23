@@ -121,15 +121,15 @@ jobs:
             rps: ${{ steps.extract_rps.outputs.rps }}
             p95: ${{ steps.extract_p95.outputs.p95 }}
   read:
-      runs-on: ubuntu-latest
-      needs: [benchmark]
-      steps:
-        - uses: cloudposse/github-action-matrix-outputs-read@v1
-          id: read
-          with:
-            matrix-step-name: benchmark
-      outputs:
-        result: "${{ steps.read.outputs.result }}"
+    runs-on: ubuntu-latest
+    needs: [benchmark]
+    steps:
+      - uses: cloudposse/github-action-matrix-outputs-read@v1
+        id: read
+        with:
+          matrix-step-name: benchmark
+    outputs:
+      result: "${{ steps.read.outputs.result }}"
   analyze:
     if: github.event.head_commit.message != 'Update performance results in README.md'
     needs: read
