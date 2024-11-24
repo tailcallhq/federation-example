@@ -58,10 +58,6 @@ elif [ "$2" = "wundergraph_no_opt" ]; then
     ./wunder --config configurations/wundergraph/wundergraph_1_basic.json > /dev/null &
     sleep 5
     hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D "bench-hey-$1.json" http://127.0.0.1:3002/graphql
-elif [ "$2" = "wundergraph_dedupe" ]; then
-    ./wunder --config configurations/wundergraph/wundergraph_2_dedupe.json > /dev/null &
-    sleep 5
-    hey -n 200 -z 10s -m POST -H 'Accept: application/json' -H 'Content-Type: application/json' -D "bench-hey-$1.json" http://127.0.0.1:3002/graphql
 elif [ "$2" = "wundergraph_default" ]; then
     ./wunder --config configurations/wundergraph/wundergraph_3_cached.json > /dev/null &
     sleep 5

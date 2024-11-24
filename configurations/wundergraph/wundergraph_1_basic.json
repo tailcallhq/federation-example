@@ -2,7 +2,7 @@
   "version": "1",
   "execution_config": {
     "file": {
-      "path": "./wundergraph_config.json"
+      "path": "configurations/wundergraph/wundergraph_config.json"
     }
   },
   "cache_control_policy": {
